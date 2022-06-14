@@ -1,8 +1,7 @@
-import yaml
+from pathlib import Path
 
 import xmltodict
-
-from pathlib import Path
+import yaml
 
 
 def post_process(xml_str):

@@ -1,8 +1,7 @@
-import xmltodict
-import ruamel.yaml
-
 from pathlib import Path
 
+import ruamel.yaml
+import xmltodict
 
 with open('in.xml', 'r+b') as xfile:
     payload = xmltodict.parse(xfile, process_comments=True)
