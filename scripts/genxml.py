@@ -1,11 +1,8 @@
-import sys
-import json
 import yaml
 
 import xmltodict
 
 from pathlib import Path
-from pprint import pprint
 
 
 def post_process(xml_str):
@@ -13,7 +10,7 @@ def post_process(xml_str):
     Turn comment elements back into xml comments.
     :param xml_str: xml (file) string output from ``unparse``
     """
-    
+
     s = xml_str
     for r in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         s = s.replace(*r)
@@ -35,6 +32,3 @@ new_xml = post_process(xml)
 with open('out.xml', 'w+') as xfile:
     xfile.write(new_xml)
     xfile.write('\n')
-
-#print('Output xml:')
-#print(xml)
