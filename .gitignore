@@ -6,6 +6,9 @@ __pycache__/
 # generated test files
 in.*
 out.*
+munch/
+.*.yaml
+*.xml
 
 # C extensions
 *.so

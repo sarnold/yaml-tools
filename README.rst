@@ -17,6 +17,10 @@ Both mavlink and pymavlink require a (host) GCC toolchain for full builds,
 however, the basic workflow to generate the library headers requires only
 Git, Python, and Tox.
 
+.. _Tox: https://github.com/tox-dev/tox
+.. _XML: https://en.wikipedia.org/wiki/Extensible_Markup_Language
+.. _YAML: https://en.wikipedia.org/wiki/YAML
+
 
 In-repo workflow with Tox
 -------------------------
@@ -28,7 +32,6 @@ package manager, eg::
   $ sudo apt-get update
   $ sudo apt-get install tox
 
-.. _Tox: https://github.com/tox-dev/tox
 
 After cloning the repository, you can run the repo checks with the
 ``tox`` command.  It will build a virtual python environment with

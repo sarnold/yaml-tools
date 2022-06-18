@@ -1,0 +1,10 @@
+file_encoding: 'utf-8'
+process_comments: True
+yml_opts:
+  - mapping: 2
+  - sequence: 4
+  - offset: 2
+xml_opts:
+  - short_empty_elements: False
+  - pretty: True
+  - indent: '  '
