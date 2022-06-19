@@ -7,7 +7,6 @@ custom markup for attributes and comments. See xmltodict docs for details.
 """
 import os
 import sys
-from contextlib import contextmanager
 from pathlib import Path
 
 import xmltodict
@@ -16,8 +15,6 @@ from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
 from munch import Munch
-
-DEBUG = False
 
 
 class StrYAML(YAML):
@@ -49,24 +46,25 @@ def load_config(file_encoding='utf-8'):
     return Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
 
-@contextmanager
-def open_handle(filename, mode='r', file_encoding='utf-8'):
+def get_input_type(filepath):
     """
-    Context manager for input data using file or pipe.
+    Check filename extension, open and process by file type, return type
+    flag and data from appropriate loader.
+    :param filepath: filename as Path obj
+    :return: tuple with file data and destination type flag
     """
-    if filename == '-':
-        fhandle = sys.stdin.buffer
-        fname = fhandle.name
-    else:
-        # make sure filename str is a Path obj
-        filename = Path(filename)
-        fhandle = open(filename, mode, encoding=file_encoding)
-        fname = filename.name
-    try:
-        yield (fhandle, fname)
-    finally:
-        if filename != '-':
-            fhandle.close()
+    to_xml = False
+    data_in = None
+
+    if filepath.name.lower().endswith(('.yml', '.yaml')):
+        with filepath.open() as infile:
+            data_in = yaml_loader.load(infile, Loader=yaml_loader.Loader)
+        to_xml = True
+    elif filepath.name.lower().endswith('.xml'):
+        with filepath.open('r+b') as infile:
+            data_in = xmltodict.parse(infile, process_comments=True)
+
+    return to_xml, data_in
 
 
 def restore_xml_comments(xmls):
@@ -75,21 +73,20 @@ def restore_xml_comments(xmls):
     :param xmls: xml (file) string output from ``unparse``
     :return xmls: processed xml string
     """
-
     for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         xmls = xmls.replace(*rep)
     return xmls
 
 
-def transform_data(payload, direction='to_xml'):
+def transform_data(payload, to_xml=True):
     """
     Produce output data from dict-ish object using ``direction``.
     :param payload: dict: output from xmltodict or yaml loader.
-    :param direction: output format, either to_yml or to_xml
-    :return: xml
+    :param to_xml: output format, ie, XML if to_xml is True
+    :return result: output data in to_format
     """
     res = ''
-    if 'xml' in direction:
+    if to_xml:
         xml = xmltodict.unparse(payload,
                                 short_empty_elements=False,
                                 pretty=True,
@@ -111,38 +108,32 @@ def transform_data(payload, direction='to_xml'):
 
 if __name__ == '__main__':
     VERSION = '0.0.0'
+    DEBUG = False
+
+    if os.getenv('VERBOSE') and os.getenv('VERBOSE') == '1':
+        DEBUG = True
 
     cfg = load_config()
 
-    REDIRECT = '>'
     args = sys.argv[1:]
-    if REDIRECT in args:
-        redirect_idx = args.index(REDIRECT)
-        redirect_args = args[redirect_idx:]
-        del args[redirect_idx:]
 
     if args == ['--version']:
         print(f'[ymltoxml {VERSION}]')
         sys.exit(0)
-    if not args:
-        args = ['-']
-    elif args == ['--verbose']:
-        DEBUG = True
     elif args == ['--selftest']:
         print(f'cfg from yaml: {cfg}')
         sys.exit(0)
 
-    # for filearg in args:
-    #     with open_handle(filearg) as handle:
-    #         if DEBUG:
-    #             print("Processing data from {}".format(handle[1]))
-    #         process_file(handle[0], handle[1], debug=DEBUG)
-
-    with open_handle('in.yaml') as handle:
-        data_in = yaml_loader.load(handle[0], Loader=yaml_loader.Loader)
-
-    data_out = transform_data(data_in)
-
-    with open_handle('out.xml', 'w+') as handle:
-        handle[0].write(data_out)
-        handle[0].write('\n')
+    for filearg in args:
+        fpath = Path(filearg)
+        if not fpath.exists():
+            print(f'Input file {fpath} not found! Skipping...')
+        else:
+            if DEBUG:
+                print(f'Processing data from {filearg}')
+            from_yml, indata = get_input_type(fpath)
+            outdata = transform_data(indata, to_xml=from_yml)
+            if from_yml:
+                fpath.with_suffix('.xml').write_text(outdata + '\n', encoding='utf-8')
+            else:
+                fpath.with_suffix('.yaml').write_text(outdata, encoding='utf-8')

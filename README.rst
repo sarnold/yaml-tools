@@ -4,7 +4,8 @@
 
 Some scripts, and eventually a package, to convert real-world XML_ files
 to YAML_ and back again, preserving attributes and comments (with minor
-corrections).  
+corrections).  The default file encoding for both types is UTF-8 without
+a Byte-Order Marker.
 
 Developer workflow
 ==================
