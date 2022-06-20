@@ -6,7 +6,7 @@
 # available in the accompanying LICENSE file.
 
 """
-Converts YAML to XML and XML to YAML.
+Transform YAML to XML and XML to YAML.
 """
 
 import os
