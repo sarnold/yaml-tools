@@ -50,14 +50,15 @@ def load_config(file_encoding='utf-8'):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
-    :param str file_encoding:
-    :return Munch: cfg obj
+    :param str file_encoding: cfg file encoding
+    :return tuple: Munch cfg obj and cfg file as Path obj
     """
     cfgfile = Path('.ymltoxml.yaml')
     if not cfgfile.exists():
         cfgfile = files('ymltoxml.data').joinpath('ymltoxml.yaml')
+    cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
-    return Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
+    return cfgobj, cfgfile
 
 
 def get_input_type(filepath, prog_opts):
@@ -136,7 +137,7 @@ def main(argv=None):
     if os.getenv('VERBOSE') and os.getenv('VERBOSE') == '1':
         debug = True
 
-    cfg = load_config()
+    cfg, pfile = load_config()
     popts = Munch.toDict(cfg)
 
     if argv is None:
@@ -146,9 +147,8 @@ def main(argv=None):
     if args == ['--version']:
         print(f'[ymltoxml {VERSION}]')
         sys.exit(0)
-    elif args == ['--selftest']:
-        print('cfg items from yaml:')
-        print(f'  {cfg}')
+    elif args == ['--dump-config']:
+        sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
 
     for filearg in args:
