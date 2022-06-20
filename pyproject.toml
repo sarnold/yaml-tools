@@ -45,4 +45,4 @@ dirty = "{version}+d{build_date:%Y%m%d}"
 distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
-file = "_version.py"
+file = "src/ymltoxml/_version.py"
