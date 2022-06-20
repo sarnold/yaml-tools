@@ -14,9 +14,13 @@ import sys
 from pathlib import Path
 
 try:
-    from importlib.metadata import version
-except ImportError:
     from importlib_metadata import version
+except ImportError:
+    from importlib.metadata import version
+try:
+    from importlib_resources import files
+except ImportError:
+    from importlib.resources import files  # type: ignore
 
 import xmltodict
 import yaml as yaml_loader
@@ -50,8 +54,7 @@ def load_config(file_encoding='utf-8'):
     """
     cfgfile = Path('.ymltoxml.yaml')
     if not cfgfile.exists():
-        pkg_path = os.path.dirname(sys.modules['ymltoxml'])
-        cfgfile = Path(os.path.join(pkg_path, 'data', 'ymltoxml.yaml'))
+        cfgfile = files('ymltoxml.data').joinpath('ymltoxml.yaml')
 
     return Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
