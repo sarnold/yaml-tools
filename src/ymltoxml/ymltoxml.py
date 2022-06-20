@@ -50,7 +50,8 @@ def load_config(file_encoding='utf-8'):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
-    :return: Munch cfg obj
+    :param str file_encoding:
+    :return Munch: cfg obj
     """
     cfgfile = Path('.ymltoxml.yaml')
     if not cfgfile.exists():
@@ -63,8 +64,8 @@ def get_input_type(filepath, prog_opts):
     """
     Check filename extension, open and process by file type, return type
     flag and data from appropriate loader.
-    :param filepath: filename as Path obj
-    :return: tuple with file data and destination type flag
+    :param Path filepath: filename as Path obj
+    :return tuple: destination type flag and file data
     """
     to_xml = False
     data_in = None
@@ -84,37 +85,39 @@ def get_input_type(filepath, prog_opts):
 
 def restore_xml_comments(xmls):
     """
-    Turn comment elements back into xml comments.
-    :param xmls: xml (file) string output from ``unparse``
-    :return xmls: processed xml string
+    Turn tagged comment elements back into xml comments.
+    :param str xmls: xml (file) output from ``unparse``
+    :return str xmls: processed xml string
     """
     for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         xmls = xmls.replace(*rep)
     return xmls
 
 
-def transform_data(payload, yml_opts, xml_opts, to_xml=True):
+def transform_data(payload, prog_opts, to_xml=True):
     """
     Produce output data from dict-ish object using ``direction``.
     :param payload: input from xmltodict or yaml loader.
-    :param to_xml: output direction, ie, if to_xml is True then output
-                   data is XML format.
-    :return result: output file (str) in specified format.
+    :param dict prog_opts: configuration options
+    :param bool to_xml: output direction, ie, if to_xml is True then output
+                        data is XML format.
+    :return str res: output file data in specified format.
     """
     res = ''
     if to_xml:
         xml = xmltodict.unparse(payload,
-                                short_empty_elements=xml_opts['short_empty_elements'],
-                                pretty=xml_opts['pretty'],
-                                indent=xml_opts['indent'])
+                                short_empty_elements=prog_opts['short_empty_elements'],
+                                pretty=prog_opts['pretty'],
+                                indent=prog_opts['indent'])
 
-        res = restore_xml_comments(xml)
+        if prog_opts['process_comments']:
+            res = restore_xml_comments(xml)
 
     else:
         yaml = StrYAML()
-        yaml.indent(mapping=yml_opts['mapping'],
-                    sequence=yml_opts['sequence'],
-                    offset=yml_opts['offset'])
+        yaml.indent(mapping=prog_opts['mapping'],
+                    sequence=prog_opts['sequence'],
+                    offset=prog_opts['offset'])
 
         yaml.preserve_quotes = True  # type: ignore
         res = yaml.dump(payload)
@@ -134,9 +137,7 @@ def main(argv=None):
         debug = True
 
     cfg = load_config()
-    popts = Munch.toDict(cfg.prog_opts[0])
-    yopts = Munch.toDict(cfg.yml_opts[0])
-    xopts = Munch.toDict(cfg.xml_opts[0])
+    popts = Munch.toDict(cfg)
 
     if argv is None:
         argv = sys.argv
@@ -164,7 +165,7 @@ def main(argv=None):
                 print(f'{exc} => {fpath}')
                 break
 
-            outdata = transform_data(indata, yopts, xopts, to_xml=from_yml)
+            outdata = transform_data(indata, popts, to_xml=from_yml)
 
             if from_yml:
                 fpath.with_suffix('.xml').write_text(outdata + '\n',
