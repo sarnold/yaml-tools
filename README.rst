@@ -4,7 +4,8 @@
 
 Some scripts, and eventually a package, to convert real-world XML_ files
 to YAML_ and back again, preserving attributes and comments (with minor
-corrections).  
+corrections).  The default file encoding for both types is UTF-8 without
+a Byte-Order Marker.
 
 Developer workflow
 ==================
@@ -17,6 +18,10 @@ Both mavlink and pymavlink require a (host) GCC toolchain for full builds,
 however, the basic workflow to generate the library headers requires only
 Git, Python, and Tox.
 
+.. _Tox: https://github.com/tox-dev/tox
+.. _XML: https://en.wikipedia.org/wiki/Extensible_Markup_Language
+.. _YAML: https://en.wikipedia.org/wiki/YAML
+
 
 In-repo workflow with Tox
 -------------------------
@@ -28,7 +33,6 @@ package manager, eg::
   $ sudo apt-get update
   $ sudo apt-get install tox
 
-.. _Tox: https://github.com/tox-dev/tox
 
 After cloning the repository, you can run the repo checks with the
 ``tox`` command.  It will build a virtual python environment with

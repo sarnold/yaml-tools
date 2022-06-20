@@ -3,9 +3,13 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# generated test files
+# generated/user files
+src/ymltoxml/_version.py
 in.*
 out.*
+munch/
+.*.yaml
+*.xml
 
 # C extensions
 *.so

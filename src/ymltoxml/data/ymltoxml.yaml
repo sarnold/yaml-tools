@@ -1,0 +1,8 @@
+file_encoding: 'utf-8'
+process_comments: True
+mapping: 2
+sequence: 4
+offset: 2
+short_empty_elements: False
+pretty: True
+indent: '  '

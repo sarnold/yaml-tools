@@ -23,7 +23,7 @@ fail_under = 50
 show_missing = true
 
 [tool.black]
-line-length = 85
+line-length = 90
 
 [tool.pycln]
 all = true
@@ -45,4 +45,4 @@ dirty = "{version}+d{build_date:%Y%m%d}"
 distance-dirty = "{next_version}.dev{distance}"
 
 [tool.versioningit.write]
-file = "_version.py"
+file = "src/ymltoxml/_version.py"
