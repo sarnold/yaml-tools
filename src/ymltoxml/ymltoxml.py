@@ -96,7 +96,7 @@ def get_input_type(filepath, prog_opts):
 def restore_xml_comments(xmls):
     """
     Turn tagged comment elements back into xml comments.
-    
+
     :param xmls: xml (file) output from ``unparse``
     :type xmls: str
     :return xmls: processed xml string
@@ -147,7 +147,7 @@ def main(argv=None):
     Usage:
         ymltoxml file1.yaml file2.yaml ...
         ymltoxml file1.xml file2.xml ...
-    
+
     Each output file is named for the corresponding input file using
     the output extension (more options coming soon).
     """

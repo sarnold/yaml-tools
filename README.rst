@@ -95,7 +95,7 @@ To build/lint the api docs, use the following tox commands:
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml
     :alt: Release Status
 
-.. |pylint| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/master/pylint-score.svg
+.. |pylint| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/pylint-score.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
     :alt: Pylint score
 
