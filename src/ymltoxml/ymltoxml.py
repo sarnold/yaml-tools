@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # Copyright 2022 Stephen L Arnold
 #
@@ -26,14 +27,14 @@ except ImportError:
 
 import xmltodict
 import yaml as yaml_loader
+from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
-
-from munch import Munch
 
 
 class FileTypeError(Exception):
     """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
+
     __module__ = Exception.__module__
 
 
@@ -42,6 +43,7 @@ class StrYAML(YAML):
     New API likes dumping straight to file/stdout, so we subclass and
     create 'inefficient' custom string dumper.
     """
+
     def dump(self, data, stream=None, **kw):
         stream = StringIO()
         YAML.dump(self, data, stream, **kw)
@@ -82,12 +84,13 @@ def get_input_type(filepath, prog_opts):
 
     if filepath.name.lower().endswith(('.yml', '.yaml')):
         with filepath.open() as infile:
-            data_in = yaml_loader.load(infile, Loader=yaml_loader.Loader)
+            data_in = yaml_loader.safe_load(infile)
         to_xml = True
     elif filepath.name.lower().endswith('.xml'):
         with filepath.open('r+b') as infile:
-            data_in = xmltodict.parse(infile,
-                                      process_comments=prog_opts['process_comments'])
+            data_in = xmltodict.parse(
+                infile, process_comments=prog_opts['process_comments']
+            )
     else:
         raise FileTypeError("FileTypeError: unknown input file extension")
     return to_xml, data_in
@@ -120,19 +123,23 @@ def transform_data(payload, prog_opts, to_xml=True):
     """
     res = ''
     if to_xml:
-        xml = xmltodict.unparse(payload,
-                                short_empty_elements=prog_opts['short_empty_elements'],
-                                pretty=prog_opts['pretty'],
-                                indent=prog_opts['indent'])
+        xml = xmltodict.unparse(
+            payload,
+            short_empty_elements=prog_opts['short_empty_elements'],
+            pretty=prog_opts['pretty'],
+            indent=prog_opts['indent'],
+        )
 
         if prog_opts['process_comments']:
             res = restore_xml_comments(xml)
 
     else:
         yaml = StrYAML()
-        yaml.indent(mapping=prog_opts['mapping'],
-                    sequence=prog_opts['sequence'],
-                    offset=prog_opts['offset'])
+        yaml.indent(
+            mapping=prog_opts['mapping'],
+            sequence=prog_opts['sequence'],
+            offset=prog_opts['offset'],
+        )
 
         yaml.preserve_quotes = True  # type: ignore
         res = yaml.dump(payload)
@@ -191,11 +198,13 @@ def main(argv=None):
             outdata = transform_data(indata, popts, to_xml=from_yml)
 
             if from_yml:
-                fpath.with_suffix('.xml').write_text(outdata + '\n',
-                                                     encoding=popts['file_encoding'])
+                fpath.with_suffix('.xml').write_text(
+                    outdata + '\n', encoding=popts['file_encoding']
+                )
             else:
-                fpath.with_suffix('.yaml').write_text(outdata,
-                                                      encoding=popts['file_encoding'])
+                fpath.with_suffix('.yaml').write_text(
+                    outdata, encoding=popts['file_encoding']
+                )
 
 
 VERSION = version("ymltoxml")

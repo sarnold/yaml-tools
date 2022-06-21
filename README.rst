@@ -1,10 +1,10 @@
-=========================================
- ymltoxml (and xmltoyml) for mavlink xml
-=========================================
+=========================
+ ymltoxml (and xmltoyml)
+=========================
 
 |ci| |wheels| |release| |badge|
 
-|pylint|
+|pre| |pylint|
 
 |tag| |license| |python|
 
@@ -78,6 +78,59 @@ To build/lint the api docs, use the following tox commands:
 * ``tox -e docs`` build the documentation using sphinx and the api-doc plugin
 * ``tox -e docs-lint`` build the docs and run the sphinx link checking
 
+Pre-commit
+----------
+
+This repo is now pre-commit_ enabled for python/rst source and file-type
+linting. The checks run automatically on commit and will fail the commit
+(if not clean) and perform simple file corrections.  For example, if the
+mypy check fails on commit, you must first fix any fatal errors for the
+commit to succeed. That said, pre-commit does nothing if you don't install
+it first (both the program itself and the hooks in your local repository
+copy).
+
+You will need to install pre-commit before contributing any changes;
+installing it using your system's package manager is recommended,
+otherwise install with pip into your usual virtual environment using
+something like::
+
+  $ sudo emerge pre-commit  --or--
+  $ pip install pre-commit
+
+then install it into the repo you just cloned::
+
+  $ git clone https://github.com/sarnold/ymltoxml
+  $ cd ymltoxml/
+  $ pre-commit install
+
+It's usually a good idea to update the hooks to the latest version::
+
+    $ pre-commit autoupdate
+
+Most (but not all) of the pre-commit checks will make corrections for you,
+however, some will only report errors, so these you will need to correct
+manually.
+
+Automatic-fix checks include ffffff, isort, autoflake, the yaml/xml format
+checks, and the miscellaneous file fixers. If any of these fail, you can
+review the changes with ``git diff`` and just add them to your commit and
+continue.
+
+If any of the mypy, bandit, or rst source checks fail, you will get a report,
+and you must fix any errors before you can continue adding/committing.
+
+To see a "replay" of any ``rst`` check errors, run::
+
+  $ pre-commit run rst-backticks -a
+  $ pre-commit run rst-directive-colons -a
+  $ pre-commit run rst-inline-touching-normal -a
+
+To run all ``pre-commit`` checks manually, try::
+
+  $ pre-commit run -a
+
+.. _pre-commit: https://pre-commit.com/index.html
+
 
 .. |ci| image:: https://github.com/sarnold/ymltoxml/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/ci.yml
@@ -110,3 +163,7 @@ To build/lint the api docs, use the following tox commands:
 .. |python| image:: https://img.shields.io/badge/python-3.6+-blue.svg
     :target: https://www.python.org/downloads/
     :alt: Python
+
+.. |pre| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
+   :target: https://github.com/pre-commit/pre-commit
+   :alt: pre-commit
