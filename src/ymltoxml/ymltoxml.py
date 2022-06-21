@@ -6,7 +6,9 @@
 # available in the accompanying LICENSE file.
 
 """
-Transform YAML to XML and XML to YAML.
+Transform mavlink-style xml files to/from xml and yaml. Note yaml
+format uses custom markup for attributes and comments. See xmltodict
+docs for details.
 """
 
 import os
@@ -38,7 +40,7 @@ class FileTypeError(Exception):
 class StrYAML(YAML):
     """
     New API likes dumping straight to file/stdout, so we subclass and
-    create 'inefficient' custom string dumper.  <shrug>
+    create 'inefficient' custom string dumper.
     """
     def dump(self, data, stream=None, **kw):
         stream = StringIO()
@@ -50,8 +52,11 @@ def load_config(file_encoding='utf-8'):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
-    :param str file_encoding: cfg file encoding
-    :return tuple: Munch cfg obj and cfg file as Path obj
+
+    :param file_encoding: file encoding of config file
+    :type file_encoding: str
+    :return: Munch cfg obj and cfg file as Path obj
+    :rtype tuple:
     """
     cfgfile = Path('.ymltoxml.yaml')
     if not cfgfile.exists():
@@ -65,8 +70,12 @@ def get_input_type(filepath, prog_opts):
     """
     Check filename extension, open and process by file type, return type
     flag and data from appropriate loader.
-    :param Path filepath: filename as Path obj
+
+    :param filepath: filename as Path obj
+    :param prog_opts: configuration options
+    :type prog_opts: dict
     :return tuple: destination type flag and file data
+    :raises FileTypeError: if the input file is not xml or yml
     """
     to_xml = False
     data_in = None
@@ -87,8 +96,11 @@ def get_input_type(filepath, prog_opts):
 def restore_xml_comments(xmls):
     """
     Turn tagged comment elements back into xml comments.
-    :param str xmls: xml (file) output from ``unparse``
-    :return str xmls: processed xml string
+    
+    :param xmls: xml (file) output from ``unparse``
+    :type xmls: str
+    :return xmls: processed xml string
+    :rtype: str
     """
     for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         xmls = xmls.replace(*rep)
@@ -98,11 +110,13 @@ def restore_xml_comments(xmls):
 def transform_data(payload, prog_opts, to_xml=True):
     """
     Produce output data from dict-ish object using ``direction``.
+
     :param payload: input from xmltodict or yaml loader.
-    :param dict prog_opts: configuration options
-    :param bool to_xml: output direction, ie, if to_xml is True then output
-                        data is XML format.
-    :return str res: output file data in specified format.
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :param to_xml: output direction, ie, if to_xml is True then output is XML.
+    :type to_xml: bool
+    :return res: output file data in specified format.
     """
     res = ''
     if to_xml:
@@ -128,8 +142,14 @@ def transform_data(payload, prog_opts, to_xml=True):
 
 def main(argv=None):
     """
-    Transform mavlink-style xml files to/from xml and yaml. Note yaml format uses
-    custom markup for attributes and comments. See xmltodict docs for details.
+    Transform YAML to XML and XML to YAML.
+
+    Usage:
+        ymltoxml file1.yaml file2.yaml ...
+        ymltoxml file1.xml file2.xml ...
+    
+    Each output file is named for the corresponding input file using
+    the output extension (more options coming soon).
     """
 
     debug = False
@@ -144,7 +164,10 @@ def main(argv=None):
         argv = sys.argv
     args = argv[1:]
 
-    if args == ['--version']:
+    if not args:
+        print(main.__doc__)
+        sys.exit(1)
+    elif args == ['--version']:
         print(f'[ymltoxml {VERSION}]')
         sys.exit(0)
     elif args == ['--dump-config']:
