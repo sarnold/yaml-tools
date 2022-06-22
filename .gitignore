@@ -5,11 +5,10 @@ __pycache__/
 
 # generated/user files
 src/ymltoxml/_version.py
+.ymltoxml.yaml
 in.*
 out.*
 munch/
-.*.yaml
-*.xml
 
 # C extensions
 *.so
