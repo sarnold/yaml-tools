@@ -157,6 +157,8 @@ def main(argv=None):
 
     Each output file is named for the corresponding input file using
     the output extension (more options coming soon).
+    Create the config with:
+        ymltoxml --dump-config > .ymltoxml.yaml
     """
 
     debug = False

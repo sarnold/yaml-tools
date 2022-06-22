@@ -13,12 +13,90 @@ preserving attributes and comments (with minor corrections).  The default
 file encoding for both types is UTF-8 without a BOM.  The main intent is
 to support YAML-based development of custom mavlink_ dialects.
 
+Quick Start
+===========
+
+Install with pip
+----------------
+
+This package is *not* yet published on PyPI, thus use one of the
+following to install the latest ymltoxml on any platform::
+
+  $ pip install -U -f https://github.com/sarnold/ymltoxml/releases/ ymltoxml
+
+or use this command to install a specific version::
+
+  $ pip install git+https://github.com/sarnold/ymltoxml.git@0.1.0
+
+The full package provides the ``ymltoxml.py`` executable as well as
+a reference configuration file that provides defaults for all values.
+
+If you'd rather work from the source repository, it supports the common
+idiom to install it on your system in a virtual env after cloning::
+
+  $ python3 -m venv env
+  $ source env/bin/activate
+  $ pip install .
+  $ ymltoxml --version
+  $ ymltoxml --dump-config
+  $ deactivate
+
+The alternative to python venv is the ``tox`` test driver.  If you have it
+installed already, see the example tox commands below.
+
+Usage
+-----
+
+The current version reads very minimal command options, and the only
+required command arguments are one or more files of a single type::
+
+  $ ymltoxml
+  Transform YAML to XML and XML to YAML.
+
+  Usage:
+      ymltoxml file1.yaml file2.yaml ...
+      ymltoxml file1.xml file2.xml ...
+
+  Each output file is named for the corresponding input file using
+  the output extension (more options coming soon).
+
+The main processing tweaks for yml/xml output formatting are specified
+in the default configuration file; if you need to change something, you
+can use your own config file in the working directory; note the local
+copy must be named ``.ymltoxml.yaml``.  To get a copy of the default
+configuration file, do::
+
+  $ cd path/to/work/dir/
+  $ ymltoxml --dump-config > .ymltoxml.yaml
+  $ $EDITOR .ymltoxml.yaml
+
+
+Features and limitations
+------------------------
+
+We only test on mavlink XML message definitions, so it probably *will not*
+work at all on arbitrarily complex XML files with namespaces, etc.  The
+current round-trip is not exact, due to the following:
+
+* missing encoding is added to version tag
+* leading/trailing whitespace in text elements and comments is not preserved
+* elements with self-closing tags are converted to full closing tags
+* empty elements on more than one line are not preserved
+
+For the files tested (eg, mavlink) the end result is cleaner/shinier XML.
+
 Local workflow
 ===============
 
-Tool requirements:
+This tool is intended to be part of larger workflow, ie, developing a
+custom mavlink message dialect and generating/deploying the resulting
+mavlink language interfaces.  To be more specific, for this example we
+use a mavlink-compatible component running on a micro-controller, thus
+the target language bindings are C and C++.
 
-* initially just recent Python and Tox_
+Tool requirements for the full mavlink workflow:
+
+* initially just recent pymavlink, Python, and Tox_
 
 Both mavlink and pymavlink require a (host) GCC toolchain for full builds,
 however, the basic workflow to generate mavlink library headers requires
