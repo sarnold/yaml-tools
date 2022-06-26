@@ -50,15 +50,25 @@ Usage
 The current version reads very minimal command options, and the only
 required command arguments are one or more files of a single type::
 
-  $ ymltoxml
+  (py) user@host ymltoxml (main) $ ymltoxml 
+  Usage: ymltoxml [options] arg1 arg2
+
   Transform YAML to XML and XML to YAML.
 
-  Usage:
-      ymltoxml file1.yaml file2.yaml ...
-      ymltoxml file1.xml file2.xml ...
+  Options:
+    --version             show program's version number and exit
+    -h, --help            show this help message and exit
+    -i FILE, --infile=FILE
+                          Path to input file (use with --outfile)
+    -o FILE, --outfile=FILE
+                          Path to output file (use with --infile)
+    -v, --verbose         Display more processing info
+    -d, --dump-config     Dump default configuration file to stdout
 
-  Each output file is named for the corresponding input file using
-  the output extension (more options coming soon).
+By default it will process one more input files as command args, typically
+in the current directory, however, the the ``--infile`` option will only
+process a single file path, optionally with an output file path, with no
+extra arguments.
 
 The main processing tweaks for yml/xml output formatting are specified
 in the default configuration file; if you need to change something, you
