@@ -1,5 +1,8 @@
 file_encoding: 'utf-8'
+default_xml_ext: '.xml'
+default_yml_ext: '.yaml'
 process_comments: True
+preserve_quotes: True
 mapping: 2
 sequence: 4
 offset: 2

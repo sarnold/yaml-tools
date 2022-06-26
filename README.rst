@@ -47,10 +47,11 @@ installed already, see the example tox commands below.
 Usage
 -----
 
-The current version reads very minimal command options, and the only
-required command arguments are one or more files of a single type::
+The current version supports minimal command options; if no options are
+provided, the only required arguments are one or more files of a single
+type::
 
-  (py) user@host ymltoxml (main) $ ymltoxml 
+  (py) user@host ymltoxml (main) $ ymltoxml
   Usage: ymltoxml [options] arg1 arg2
 
   Transform YAML to XML and XML to YAML.
@@ -65,10 +66,19 @@ required command arguments are one or more files of a single type::
     -v, --verbose         Display more processing info
     -d, --dump-config     Dump default configuration file to stdout
 
+
+* for processing individual files/paths, use the ``--infile`` option,
+  either with or without the ``--outfile`` option
+* for processing multiple files, pass all files as arguments (paths
+  can be relative or absolute)
+
+  + when passing input files as arguments, the output file names/paths
+    are the same as the input files but with the output extension
+
 By default it will process one more input files as command args, typically
-in the current directory, however, the the ``--infile`` option will only
+in the current directory, however, the ``--infile`` option will only
 process a single file path, optionally with an output file path, with no
-extra arguments.
+extra (file) arguments.
 
 The main processing tweaks for yml/xml output formatting are specified
 in the default configuration file; if you need to change something, you

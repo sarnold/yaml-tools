@@ -40,7 +40,7 @@ repos:
     rev: 5.10.1
     hooks:
       - id: isort
-        args: [--settings-path=pyproject.toml]
+        args: ["--settings-path=pyproject.toml"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.961
@@ -50,12 +50,12 @@ repos:
         - importlib_metadata
         - importlib_resources
         - munch
+        - munch-stubs
         - ruamel.yaml
       args:
         - --follow-imports=normal
         - --install-types
         - --non-interactive
-        - --ignore-missing-imports
       files: src/ymltoxml/ymltoxml.py
 
   - repo: "https://github.com/asottile/blacken-docs"

@@ -27,10 +27,9 @@ except ImportError:
 
 import xmltodict
 import yaml as yaml_loader
+from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
-
-from munch import Munch
 
 
 class FileTypeError(Exception):
@@ -142,7 +141,7 @@ def transform_data(payload, prog_opts, to_xml=True):
             offset=prog_opts['offset'],
         )
 
-        yaml.preserve_quotes = True  # type: ignore
+        yaml.preserve_quotes = prog_opts['preserve_quotes']
         res = yaml.dump(payload)
 
     return res
@@ -181,16 +180,14 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
         outdata = transform_data(indata, prog_opts, to_xml=from_yml)
 
         if from_yml:
-            new_opath = opath.with_suffix('.xml')
+            new_opath = opath.with_suffix(prog_opts['default_xml_ext'])
             outdata = outdata + '\n'
         else:
-            new_opath = opath.with_suffix('.yaml')
+            new_opath = opath.with_suffix(prog_opts['default_yml_ext'])
 
         if debug:
             print(f'Writing processed data to {new_opath}')
-        new_opath.write_text(
-            outdata, encoding=prog_opts['file_encoding']
-        )
+        new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
 
 
 def main(argv=None):
@@ -203,21 +200,40 @@ def main(argv=None):
 
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(usage="usage: %prog [options] arg1 arg2",
-                          version=f"%prog {VERSION}")
+    parser = OptionParser(
+        usage="usage: %prog [options] arg1 arg2", version=f"%prog {VERSION}"
+    )
     parser.description = 'Transform YAML to XML and XML to YAML.'
-    parser.add_option('-i', '--infile', metavar="FILE",
-                      action='store', dest='infile',
-                      help='Path to input file (use with --outfile)')
-    parser.add_option('-o', '--outfile', metavar="FILE",
-                      action='store', dest='outfile',
-                      help='Path to output file (use with --infile)')
-    parser.add_option("-v", "--verbose",
-                      action="store_true", dest="verbose",
-                      help="Display more processing info")
-    parser.add_option('-d', '--dump-config',
-                      action='store_true', dest="dump",
-                      help='Dump default configuration file to stdout')
+    parser.add_option(
+        '-i',
+        '--infile',
+        metavar="FILE",
+        action='store',
+        dest='infile',
+        help='Path to input file (use with --outfile)',
+    )
+    parser.add_option(
+        '-o',
+        '--outfile',
+        metavar="FILE",
+        action='store',
+        dest='outfile',
+        help='Path to output file (use with --infile)',
+    )
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        dest="verbose",
+        help="Display more processing info",
+    )
+    parser.add_option(
+        '-d',
+        '--dump-config',
+        action='store_true',
+        dest="dump",
+        help='Dump default configuration file to stdout',
+    )
 
     (options, args) = parser.parse_args()
 
