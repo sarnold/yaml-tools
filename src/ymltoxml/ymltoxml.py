@@ -8,12 +8,12 @@
 
 """
 Transform mavlink-style xml files to/from xml and yaml. Note yaml
-format uses custom markup for attributes and comments. See xmltodict
-docs for details.
+format uses custom markup for XML attributes and comments. See the
+xmltodict docs for details.
 """
 
-import os
 import sys
+from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 try:
@@ -27,9 +27,10 @@ except ImportError:
 
 import xmltodict
 import yaml as yaml_loader
-from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
+
+from munch import Munch
 
 
 class FileTypeError(Exception):
@@ -147,70 +148,100 @@ def transform_data(payload, prog_opts, to_xml=True):
     return res
 
 
+def process_inputs(filepath, prog_opts, outpath=None, debug=False):
+    """
+    Handle file arguments and process them.
+
+    :param filepath: filename as Path obj
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :param outpath: output file name/path if provided
+    :type outpath: str
+    :param debug: enable extra processing info
+    :return None:
+    :handlles FileTypeError: input file is not xml or yml
+    """
+    fpath = Path(filepath)
+    opath = fpath
+    if outpath:
+        opath = Path(outpath)
+
+    if not fpath.exists():
+        print(f'Input file {fpath} not found! Skipping...')
+    else:
+        if debug:
+            print(f'Processing data from {fpath}')
+
+        try:
+            from_yml, indata = get_input_type(fpath, prog_opts)
+        except FileTypeError as exc:
+            print(f'{exc} => {fpath}')
+            sys.exit(1)
+
+        outdata = transform_data(indata, prog_opts, to_xml=from_yml)
+
+        if from_yml:
+            new_opath = opath.with_suffix('.xml')
+            outdata = outdata + '\n'
+        else:
+            new_opath = opath.with_suffix('.yaml')
+
+        if debug:
+            print(f'Writing processed data to {new_opath}')
+        new_opath.write_text(
+            outdata, encoding=prog_opts['file_encoding']
+        )
+
+
 def main(argv=None):
     """
     Transform YAML to XML and XML to YAML.
-
-    Usage:
-        ymltoxml file1.yaml file2.yaml ...
-        ymltoxml file1.xml file2.xml ...
-
-    Each output file is named for the corresponding input file using
-    the output extension (more options coming soon).
-    Create the config with:
-        ymltoxml --dump-config > .ymltoxml.yaml
     """
-
     debug = False
-
-    if os.getenv('VERBOSE') and os.getenv('VERBOSE') == '1':
-        debug = True
-
     cfg, pfile = load_config()
     popts = Munch.toDict(cfg)
 
     if argv is None:
         argv = sys.argv
-    args = argv[1:]
+    parser = OptionParser(usage="usage: %prog [options] arg1 arg2",
+                          version=f"%prog {VERSION}")
+    parser.description = 'Transform YAML to XML and XML to YAML.'
+    parser.add_option('-i', '--infile', metavar="FILE",
+                      action='store', dest='infile',
+                      help='Path to input file (use with --outfile)')
+    parser.add_option('-o', '--outfile', metavar="FILE",
+                      action='store', dest='outfile',
+                      help='Path to output file (use with --infile)')
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose",
+                      help="Display more processing info")
+    parser.add_option('-d', '--dump-config',
+                      action='store_true', dest="dump",
+                      help='Dump default configuration file to stdout')
 
-    if not args:
-        print(main.__doc__)
-        sys.exit(1)
-    elif args == ['--version']:
-        print(f'[ymltoxml {VERSION}]')
+    (options, args) = parser.parse_args()
+
+    if options.outfile and not options.infile:
+        parser.error("missing --infile argument")
+    if options.verbose:
+        debug = True
+    if options.infile and not args:
+        outname = options.outfile
+        process_inputs(options.infile, popts, outname, debug=debug)
         sys.exit(0)
-    elif args == ['--dump-config']:
+    elif options.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
+    if not args:
+        parser.print_help()
+        sys.exit(1)
 
-    for filearg in args:
-        fpath = Path(filearg)
-        if not fpath.exists():
-            print(f'Input file {fpath} not found! Skipping...')
-        else:
-            if debug:
-                print(f'Processing data from {filearg}')
-
-            try:
-                from_yml, indata = get_input_type(fpath, popts)
-            except FileTypeError as exc:
-                print(f'{exc} => {fpath}')
-                break
-
-            outdata = transform_data(indata, popts, to_xml=from_yml)
-
-            if from_yml:
-                fpath.with_suffix('.xml').write_text(
-                    outdata + '\n', encoding=popts['file_encoding']
-                )
-            else:
-                fpath.with_suffix('.yaml').write_text(
-                    outdata, encoding=popts['file_encoding']
-                )
+    if len(args) > 0:
+        for filearg in args:
+            process_inputs(filearg, popts, debug=debug)
 
 
 VERSION = version("ymltoxml")
-
 
 if __name__ == '__main__':
     main()
