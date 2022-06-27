@@ -47,10 +47,11 @@ installed already, see the example tox commands below.
 Usage
 -----
 
-The current version reads very minimal command options, and the only
-required command arguments are one or more files of a single type::
+The current version supports minimal command options; if no options are
+provided, the only required arguments are one or more files of a single
+type::
 
-  (py) user@host ymltoxml (main) $ ymltoxml 
+  (py) user@host ymltoxml (main) $ ymltoxml
   Usage: ymltoxml [options] arg1 arg2
 
   Transform YAML to XML and XML to YAML.
@@ -65,10 +66,19 @@ required command arguments are one or more files of a single type::
     -v, --verbose         Display more processing info
     -d, --dump-config     Dump default configuration file to stdout
 
+
+* for processing individual files/paths, use the ``--infile`` option,
+  either with or without the ``--outfile`` option
+* for processing multiple files, pass all files as arguments (paths
+  can be relative or absolute)
+
+  + when passing input files as arguments, the output file names/paths
+    are the same as the input files but with the output extension
+
 By default it will process one more input files as command args, typically
-in the current directory, however, the the ``--infile`` option will only
+in the current directory, however, the ``--infile`` option will only
 process a single file path, optionally with an output file path, with no
-extra arguments.
+extra (file) arguments.
 
 The main processing tweaks for yml/xml output formatting are specified
 in the default configuration file; if you need to change something, you
@@ -166,16 +176,36 @@ To build/lint the api docs, use the following tox commands:
 * ``tox -e docs`` build the documentation using sphinx and the api-doc plugin
 * ``tox -e docs-lint`` build the docs and run the sphinx link checking
 
-Pre-commit
-----------
 
-This repo is now pre-commit_ enabled for python/rst source and file-type
-linting. The checks run automatically on commit and will fail the commit
-(if not clean) and perform simple file corrections.  For example, if the
-mypy check fails on commit, you must first fix any fatal errors for the
-commit to succeed. That said, pre-commit does nothing if you don't install
-it first (both the program itself and the hooks in your local repository
-copy).
+Making Changes & Contributing
+=============================
+
+We use the gitchangelog_ action to generate our github Release page, as
+well as the gitchangelog message format to help it categorize/filter
+commits for a tidier release page. Please use the appropriate ACTION
+modifiers in any Pull Requests.
+
+This repo is also pre-commit_ enabled for various linting and format
+checks.  The checks run automatically on commit and will fail the
+commit (if not clean) with some checks performing simple file corrections.
+
+If other checks fail on commit, the failure display should explain the error
+types and line numbers. Note you must fix any fatal errors for the
+commit to succeed; some errors should be fixed automatically (use
+``git status`` and ``git diff`` to review any changes).
+
+See the following pages for more information on gitchangelog and pre-commit.
+
+.. inclusion-marker-1
+
+* generate-changelog_
+* pre-commit-config_
+* pre-commit-usage_
+
+.. _generate-changelog:  docs/dev/generate-changelog.rst
+.. _pre-commit-config: docs/dev/pre-commit-config.rst
+.. _pre-commit-usage: docs/dev/pre-commit-usage.rst
+.. inclusion-marker-2
 
 You will need to install pre-commit before contributing any changes;
 installing it using your system's package manager is recommended,
@@ -193,31 +223,11 @@ then install it into the repo you just cloned::
 
 It's usually a good idea to update the hooks to the latest version::
 
-    $ pre-commit autoupdate
+    pre-commit autoupdate
 
-Most (but not all) of the pre-commit checks will make corrections for you,
-however, some will only report errors, so these you will need to correct
-manually.
 
-Automatic-fix checks include ffffff, isort, autoflake, the yaml/xml format
-checks, and the miscellaneous file fixers. If any of these fail, you can
-review the changes with ``git diff`` and just add them to your commit and
-continue.
-
-If any of the mypy, bandit, or rst source checks fail, you will get a report,
-and you must fix any errors before you can continue adding/committing.
-
-To see a "replay" of any ``rst`` check errors, run::
-
-  $ pre-commit run rst-backticks -a
-  $ pre-commit run rst-directive-colons -a
-  $ pre-commit run rst-inline-touching-normal -a
-
-To run all ``pre-commit`` checks manually, try::
-
-  $ pre-commit run -a
-
-.. _pre-commit: https://pre-commit.com/index.html
+.. _gitchangelog: https://github.com/sarnold/gitchangelog-action
+.. _pre-commit: http://pre-commit.com/
 
 
 .. |ci| image:: https://github.com/sarnold/ymltoxml/actions/workflows/ci.yml/badge.svg
