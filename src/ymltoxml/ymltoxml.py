@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # Copyright 2022 Stephen L Arnold
 #
 # This is free software, licensed under the LGPL-2.1 license
@@ -16,54 +14,17 @@ import sys
 from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
-if sys.version_info < (3, 9):
-    import importlib_resources
-else:
-    import importlib.resources as importlib_resources
-
 import xmltodict
 import yaml as yaml_loader
 from munch import Munch
-from ruamel.yaml import YAML
-from ruamel.yaml.compat import StringIO
 
 from ._version import __version__
-
-
-class FileTypeError(Exception):
-    """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
-
-    __module__ = Exception.__module__
-
-
-class StrYAML(YAML):
-    """
-    New API likes dumping straight to file/stdout, so we subclass and
-    create 'inefficient' custom string dumper.
-    """
-
-    def dump(self, data, stream=None, **kw):
-        stream = StringIO()
-        YAML.dump(self, data, stream, **kw)
-        return stream.getvalue()
-
-
-def load_config(file_encoding='utf-8'):
-    """
-    Load yaml configuration file and munchify the data. If local file is
-    not found in current directory, the default will be loaded.
-
-    :param file_encoding: file encoding of config file
-    :type file_encoding: str
-    :return: Munch cfg obj and cfg file as Path obj
-    :rtype tuple:
-    """
-    cfgfile = Path('.ymltoxml.yaml')
-    if not cfgfile.exists():
-        cfgfile = importlib_resources.files('ymltoxml.data').joinpath('ymltoxml.yaml')
-    cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
-
-    return cfgobj, cfgfile
+from .utils import (
+    FileTypeError,
+    StrYAML,
+    load_config,
+    restore_xml_comments,
+)
 
 
 def get_input_type(filepath, prog_opts):
@@ -92,20 +53,6 @@ def get_input_type(filepath, prog_opts):
     else:
         raise FileTypeError("FileTypeError: unknown input file extension")
     return to_xml, data_in
-
-
-def restore_xml_comments(xmls):
-    """
-    Turn tagged comment elements back into xml comments.
-
-    :param xmls: xml (file) output from ``unparse``
-    :type xmls: str
-    :return xmls: processed xml string
-    :rtype: str
-    """
-    for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
-        xmls = xmls.replace(*rep)
-    return xmls
 
 
 def transform_data(payload, prog_opts, to_xml=True):
