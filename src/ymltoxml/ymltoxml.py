@@ -16,20 +16,18 @@ import sys
 from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
-try:
-    from importlib_metadata import version
-except ImportError:
-    from importlib.metadata import version
-try:
-    from importlib_resources import files
-except ImportError:
-    from importlib.resources import files  # type: ignore
+if sys.version_info < (3, 9):
+    import importlib_resources
+else:
+    import importlib.resources as importlib_resources
 
 import xmltodict
 import yaml as yaml_loader
 from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
+
+from ._version import __version__
 
 
 class FileTypeError(Exception):
@@ -62,7 +60,7 @@ def load_config(file_encoding='utf-8'):
     """
     cfgfile = Path('.ymltoxml.yaml')
     if not cfgfile.exists():
-        cfgfile = files('ymltoxml.data').joinpath('ymltoxml.yaml')
+        cfgfile = importlib_resources.files('ymltoxml.data').joinpath('ymltoxml.yaml')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
     return cfgobj, cfgfile
@@ -201,7 +199,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     parser = OptionParser(
-        usage="usage: %prog [options] arg1 arg2", version=f"%prog {VERSION}"
+        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
     )
     parser.description = 'Transform YAML to XML and XML to YAML.'
     parser.add_option(
@@ -256,8 +254,6 @@ def main(argv=None):
         for filearg in args:
             process_inputs(filearg, popts, debug=debug)
 
-
-VERSION = version("ymltoxml")
 
 if __name__ == '__main__':
     main()

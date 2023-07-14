@@ -43,7 +43,7 @@ jobs:
 
       - name: Build dist pkgs
         run: |
-          tox -e deploy,check
+          tox -e build,check
 
       - name: Upload artifacts
         if: matrix.python-version == 3.8 && runner.os == 'Linux'
