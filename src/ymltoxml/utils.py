@@ -5,14 +5,14 @@ Shared utility code.
 import sys
 from pathlib import Path
 
-if sys.version_info < (3, 9):
-    import importlib_resources
-else:
-    import importlib.resources as importlib_resources
-
 from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
+
+if sys.version_info < (3, 10):
+    import importlib_resources
+else:
+    import importlib.resources as importlib_resources
 
 
 class FileTypeError(Exception):
