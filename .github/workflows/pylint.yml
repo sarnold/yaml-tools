@@ -48,19 +48,19 @@ jobs:
         python -m pip install --upgrade pip wheel
         pip install tox
 
-    - name: Run tox bare-ass
-      run: |
-        tox -e lint
-
-    #- name: Run pylint
-      #id: analyze
-      #env:
-        #BADGE_PATH: badges/pylint-score.svg
+    #- name: Run tox bare-ass
       #run: |
-        #rating=$(bash -c 'tox -e lint' | grep 'Your code has been rated at' | cut -f7 -d " ")
-        #echo "Pylint score: ${rating}"
-        #echo "rating=${rating}" >> $GITHUB_OUTPUT
-        #echo "path=${BADGE_PATH}" >> $GITHUB_OUTPUT
+        #tox -e lint
+
+    - name: Run pylint
+      id: analyze
+      env:
+        BADGE_PATH: badges/pylint-score.svg
+      run: |
+        rating=$(bash -c 'tox -e lint' | grep 'Your code has been rated at' | cut -f7 -d " ")
+        echo "Pylint score: ${rating}"
+        echo "rating=${rating}" >> $GITHUB_OUTPUT
+        echo "path=${BADGE_PATH}" >> $GITHUB_OUTPUT
 
   badge:
     # Only generate and publish if these conditions are met:
