@@ -2,11 +2,12 @@
 file_encoding: 'utf-8'
 default_xml_ext: '.xml'
 default_yml_ext: '.yaml'
+output_dirname: 'sorted-out'
 process_comments: true
 preserve_quotes: true
-mapping: 2
-sequence: 4
-offset: 2
+mapping: 4
+sequence: 6
+offset: 4
 short_empty_elements: false
 pretty: true
-indent: '  '
+indent: '    '

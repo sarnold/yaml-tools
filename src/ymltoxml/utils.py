@@ -33,7 +33,7 @@ class StrYAML(YAML):
         return stream.getvalue()
 
 
-def load_config(file_encoding='utf-8'):
+def load_config(file_encoding='utf-8', yasort=False):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
@@ -43,9 +43,13 @@ def load_config(file_encoding='utf-8'):
     :return: Munch cfg obj and cfg file as Path obj
     :rtype tuple:
     """
-    cfgfile = Path('.ymltoxml.yaml')
+    prog_name = 'ymltoxml'
+    if yasort:
+        prog_name = 'yasort'
+
+    cfgfile = Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
-        cfgfile = importlib_resources.files('ymltoxml.data').joinpath('ymltoxml.yaml')
+        cfgfile = importlib_resources.files('ymltoxml.data').joinpath(f'{prog_name}.yaml')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
     return cfgobj, cfgfile

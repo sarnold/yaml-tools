@@ -120,7 +120,7 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
             from_yml, indata = get_input_type(fpath, prog_opts)
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
-            sys.exit(1)
+            return
 
         outdata = transform_data(indata, prog_opts, to_xml=from_yml)
 
