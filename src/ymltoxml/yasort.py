@@ -10,6 +10,7 @@ from munch import Munch
 from ._version import __version__
 from .utils import FileTypeError, StrYAML, load_config
 
+# pylint: disable=R0801
 
 def get_input_yaml(filepath, prog_opts):
     """
@@ -34,7 +35,7 @@ def sort_list_data(payload, prog_opts):
     """
     Produce output data from dict-ish object.
 
-    :param payload: input data as munchified YAML
+    :param payload: Munch obj representing YAML input data
     :param prog_opts: configuration options
     :type prog_opts: dict
     :return res: yaml dump of sorted input
@@ -49,7 +50,8 @@ def sort_list_data(payload, prog_opts):
     yaml.preserve_quotes = prog_opts['preserve_quotes']
 
     # this assumes specific openscap content structure
-    payload.controls[0].rules = sorted(payload.controls[0].rules)
+    for idx in range(len(payload.controls)):
+        payload['controls'][idx]['rules'] = sorted(payload['controls'][idx]['rules'])
     res = yaml.dump(Munch.toDict(payload))
 
     return res
@@ -65,7 +67,7 @@ def process_inputs(filepath, prog_opts, debug=False):
     :type prog_opts: dict
     :param debug: enable extra processing info
     :return None:
-    :handlles FileTypeError: input file is not xml or yml
+    :handles FileTypeError: if input file is not yml
     """
     fpath = Path(filepath)
     outdir = Path(prog_opts['output_dirname'])
