@@ -1,6 +1,4 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # Copyright 2022 Stephen L Arnold
 #
 # This is free software, licensed under the LGPL-2.1 license
@@ -16,57 +14,17 @@ import sys
 from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
-try:
-    from importlib_metadata import version
-except ImportError:
-    from importlib.metadata import version
-try:
-    from importlib_resources import files
-except ImportError:
-    from importlib.resources import files  # type: ignore
-
 import xmltodict
 import yaml as yaml_loader
-from ruamel.yaml import YAML
-from ruamel.yaml.compat import StringIO
-
 from munch import Munch
 
-
-class FileTypeError(Exception):
-    """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
-
-    __module__ = Exception.__module__
-
-
-class StrYAML(YAML):
-    """
-    New API likes dumping straight to file/stdout, so we subclass and
-    create 'inefficient' custom string dumper.
-    """
-
-    def dump(self, data, stream=None, **kw):
-        stream = StringIO()
-        YAML.dump(self, data, stream, **kw)
-        return stream.getvalue()
-
-
-def load_config(file_encoding='utf-8'):
-    """
-    Load yaml configuration file and munchify the data. If local file is
-    not found in current directory, the default will be loaded.
-
-    :param file_encoding: file encoding of config file
-    :type file_encoding: str
-    :return: Munch cfg obj and cfg file as Path obj
-    :rtype tuple:
-    """
-    cfgfile = Path('.ymltoxml.yaml')
-    if not cfgfile.exists():
-        cfgfile = files('ymltoxml.data').joinpath('ymltoxml.yaml')
-    cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
-
-    return cfgobj, cfgfile
+from ._version import __version__
+from .utils import (
+    FileTypeError,
+    StrYAML,
+    load_config,
+    restore_xml_comments,
+)
 
 
 def get_input_type(filepath, prog_opts):
@@ -95,20 +53,6 @@ def get_input_type(filepath, prog_opts):
     else:
         raise FileTypeError("FileTypeError: unknown input file extension")
     return to_xml, data_in
-
-
-def restore_xml_comments(xmls):
-    """
-    Turn tagged comment elements back into xml comments.
-
-    :param xmls: xml (file) output from ``unparse``
-    :type xmls: str
-    :return xmls: processed xml string
-    :rtype: str
-    """
-    for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
-        xmls = xmls.replace(*rep)
-    return xmls
 
 
 def transform_data(payload, prog_opts, to_xml=True):
@@ -142,7 +86,7 @@ def transform_data(payload, prog_opts, to_xml=True):
             offset=prog_opts['offset'],
         )
 
-        yaml.preserve_quotes = True  # type: ignore
+        yaml.preserve_quotes = prog_opts['preserve_quotes']
         res = yaml.dump(payload)
 
     return res
@@ -176,21 +120,19 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
             from_yml, indata = get_input_type(fpath, prog_opts)
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
-            sys.exit(1)
+            return
 
         outdata = transform_data(indata, prog_opts, to_xml=from_yml)
 
         if from_yml:
-            new_opath = opath.with_suffix('.xml')
+            new_opath = opath.with_suffix(prog_opts['default_xml_ext'])
             outdata = outdata + '\n'
         else:
-            new_opath = opath.with_suffix('.yaml')
+            new_opath = opath.with_suffix(prog_opts['default_yml_ext'])
 
         if debug:
             print(f'Writing processed data to {new_opath}')
-        new_opath.write_text(
-            outdata, encoding=prog_opts['file_encoding']
-        )
+        new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
 
 
 def main(argv=None):
@@ -203,21 +145,40 @@ def main(argv=None):
 
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(usage="usage: %prog [options] arg1 arg2",
-                          version=f"%prog {VERSION}")
+    parser = OptionParser(
+        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
+    )
     parser.description = 'Transform YAML to XML and XML to YAML.'
-    parser.add_option('-i', '--infile', metavar="FILE",
-                      action='store', dest='infile',
-                      help='Path to input file (use with --outfile)')
-    parser.add_option('-o', '--outfile', metavar="FILE",
-                      action='store', dest='outfile',
-                      help='Path to output file (use with --infile)')
-    parser.add_option("-v", "--verbose",
-                      action="store_true", dest="verbose",
-                      help="Display more processing info")
-    parser.add_option('-d', '--dump-config',
-                      action='store_true', dest="dump",
-                      help='Dump default configuration file to stdout')
+    parser.add_option(
+        '-i',
+        '--infile',
+        metavar="FILE",
+        action='store',
+        dest='infile',
+        help='Path to input file (use with --outfile)',
+    )
+    parser.add_option(
+        '-o',
+        '--outfile',
+        metavar="FILE",
+        action='store',
+        dest='outfile',
+        help='Path to output file (use with --infile)',
+    )
+    parser.add_option(
+        "-v",
+        "--verbose",
+        action="store_true",
+        dest="verbose",
+        help="Display more processing info",
+    )
+    parser.add_option(
+        '-d',
+        '--dump-config',
+        action='store_true',
+        dest="dump",
+        help='Dump default configuration file to stdout',
+    )
 
     (options, args) = parser.parse_args()
 
@@ -240,8 +201,6 @@ def main(argv=None):
         for filearg in args:
             process_inputs(filearg, popts, debug=debug)
 
-
-VERSION = version("ymltoxml")
 
 if __name__ == '__main__':
     main()

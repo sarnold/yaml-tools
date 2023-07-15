@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -43,11 +43,11 @@ jobs:
 
       - name: Build dist pkgs
         run: |
-          tox -e deploy,check
+          tox -e build,check
 
       - name: Upload artifacts
         if: matrix.python-version == 3.8 && runner.os == 'Linux'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: wheels
           path: ./dist/*.whl
