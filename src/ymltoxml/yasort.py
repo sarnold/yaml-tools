@@ -12,6 +12,7 @@ from .utils import FileTypeError, StrYAML, load_config
 
 # pylint: disable=R0801
 
+
 def get_input_yaml(filepath, prog_opts):
     """
     Check filename extension, open and munchify contents, return data.
