@@ -19,17 +19,17 @@ Quick Start
 Install with pip
 ----------------
 
-This package is *not* yet published on PyPI, thus use one of the
-following to install the latest ymltoxml on any platform::
+This package is *not* yet published on PyPI, thus use one of the following
+to install ymltoxml on any platform. Install from the main branch::
 
-  $ pip install -U -f https://github.com/sarnold/ymltoxml/releases/ ymltoxml
+  $ https://github.com/sarnold/ymltoxml/archive/refs/heads/main.tar.gz
 
-or use this command to install a specific version::
+or use this command to install a specific release version::
 
-  $ pip install git+https://github.com/sarnold/ymltoxml.git@0.1.0
+  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.1.0/ymltoxml-0.1.0.tar.gz
 
 The full package provides the ``ymltoxml.py`` executable as well as
-a reference configuration file that provides defaults for all values.
+a reference configuration file with defaults for all values.
 
 If you'd rather work from the source repository, it supports the common
 idiom to install it on your system in a virtual env after cloning::
@@ -105,6 +105,9 @@ current round-trip is not exact, due to the following:
 
 For the files tested (eg, mavlink) the end result is cleaner/shinier XML.
 
+An additional helper script is now provided for sorting large (YAML) lists.
+The current parent/sort keys are hard-coded for SCAP product files.
+
 Local workflow
 ===============
 
@@ -165,6 +168,7 @@ the Python version and host OS type, run something like::
 
 Full list of additional ``tox`` commands:
 
+* ``tox -e dev`` pip "developer" install
 * ``tox -e style`` will run flake8 style checks
 * ``tox -e lint`` will run pylint (somewhat less permissive than PEP8/flake8 checks)
 * ``tox -e mypy`` will run mypy import and type checking
