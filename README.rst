@@ -26,7 +26,7 @@ to install ymltoxml on any platform. Install from the main branch::
 
 or use this command to install a specific release version::
 
-  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.1.0/ymltoxml-0.1.0.tar.gz
+  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.2.0/ymltoxml-0.2.0.tar.gz
 
 The full package provides the ``ymltoxml.py`` executable as well as
 a reference configuration file with defaults for all values.
@@ -51,7 +51,7 @@ The current version supports minimal command options; if no options are
 provided, the only required arguments are one or more files of a single
 type::
 
-  (py) user@host ymltoxml (main) $ ymltoxml
+  $ ymltoxml
   Usage: ymltoxml [options] arg1 arg2
 
   Transform YAML to XML and XML to YAML.
@@ -90,6 +90,22 @@ configuration file, do::
   $ ymltoxml --dump-config > .ymltoxml.yaml
   $ $EDITOR .ymltoxml.yaml
 
+An additional helper script is now provided for sorting large (YAML) lists.
+The new ``yasort`` script uses its own configuration file, creatively named
+``yasort.yaml``. The above applies equally to this new config file.
+
+::
+  $ yasort -h
+  Usage: yasort [options] arg1 arg2
+
+  Sort YAML lists and write new files.
+
+  Options:
+    --version          show program's version number and exit
+    -h, --help         show this help message and exit
+    -v, --verbose      Display more processing info
+    -d, --dump-config  Dump default configuration file to stdout
+
 
 Features and limitations
 ------------------------
@@ -105,14 +121,25 @@ current round-trip is not exact, due to the following:
 
 For the files tested (eg, mavlink) the end result is cleaner/shinier XML.
 
-An additional helper script is now provided for sorting large (YAML) lists.
-The current parent/sort keys are hard-coded for SCAP product files.
+.. note:: This project uses versioningit_ to generate and maintain the
+          version file, which only gets included in the sdist/wheel
+          packages. In a fresh clone, running any of the tox_ commands
+          should generate the current version file.
 
-Local workflow
-===============
+.. _versioningit: https://github.com/jwodder/versioningit
 
-This tool is intended to be part of larger workflow, ie, developing a
-custom mavlink message dialect and generating/deploying the resulting
+
+Dev workflows
+=============
+
+The following covers two types of workflows, one for tool usage in other
+(external) projects, and one for (internal) tool development.
+
+Mavlink support
+---------------
+
+The ymltoxml tool is intended to be part of larger workflow, ie, developing
+custom mavlink message dialects and generating/deploying the resulting
 mavlink language interfaces.  To be more specific, for this example we
 use a mavlink-compatible component running on a micro-controller, thus
 the target language bindings are C and C++.
@@ -130,13 +157,30 @@ only Git, Python, and Tox.
 .. _XML: https://en.wikipedia.org/wiki/Extensible_Markup_Language
 .. _YAML: https://en.wikipedia.org/wiki/YAML
 
-.. note:: This project uses versioningit_ to generate and maintain the
-          version file, which only gets included in the sdist/wheel
-          packages. In a fresh clone, running any of the tox_ commands
-          should generate the current version file.
+SCAP support
+------------
 
-.. _versioningit: https://github.com/jwodder/versioningit
+The yasort tool is also intended to be part of a larger workflow, mainly
+working with SCAP content, ie, the scap-security-guide source files (or
+just content_). It is currently used to sort profiles with large numbers
+of rules to make it easier to visually diff and spot duplicates, etc.
 
+The configuration file defaults are based on existing yaml structure, but
+you are free to change them for another use case. To adjust how the sorting
+works, make a local config file (see above) and edit as needed the following
+options:
+
+:output_dirname: directory for output file(s)
+:default_parent_key: parent key if sort target is sublist
+:default_sort_key: the key you want to sort
+:has_parent_key: set true if sorting a sublist
+:default_yml_ext: change the output file extension
+
+The rest of the options are for YAML formatting/flow style (see the ruamel_
+documetation for formatting details)
+
+.. _content: https://complianceascode.readthedocs.io/en/latest/
+.. _ruamel: https://yaml.readthedocs.io/en/latest/
 
 In-repo workflow with Tox
 -------------------------

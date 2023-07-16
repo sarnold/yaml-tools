@@ -34,7 +34,8 @@ def get_input_yaml(filepath, prog_opts):
 
 def sort_list_data(payload, prog_opts):
     """
-    Produce output data from dict-ish object.
+    Set YAML formatting and sort keys from config, produce output data
+    from input dict-ish object.
 
     :param payload: Munch obj representing YAML input data
     :param prog_opts: configuration options
@@ -50,9 +51,19 @@ def sort_list_data(payload, prog_opts):
     )
     yaml.preserve_quotes = prog_opts['preserve_quotes']
 
-    # this assumes specific openscap content structure
-    for idx in range(len(payload.controls)):
-        payload['controls'][idx]['rules'] = sorted(payload['controls'][idx]['rules'])
+    # this should work for list/sublist structure
+    sublist = prog_opts['has_parent_key']
+    pkey_name = prog_opts['default_parent_key']
+    skey_name = prog_opts['default_sort_key']
+
+    if sublist:  # sort one or more sublists
+        for idx in range(len(payload[pkey_name])):
+            payload[pkey_name][idx][skey_name] = sorted(
+                payload[pkey_name][idx][skey_name]
+            )
+    else:  # one top-level list
+        payload[skey_name] = sorted(payload[skey_name])
+
     res = yaml.dump(Munch.toDict(payload))
 
     return res
@@ -96,7 +107,7 @@ def process_inputs(filepath, prog_opts, debug=False):
 
 def main(argv=None):
     """
-    Transform YAML to XML and XML to YAML.
+    Read/write SSG YAML files with sorted rules.
     """
     debug = False
     cfg, pfile = load_config(yasort=True)

@@ -1,13 +1,11 @@
 ---
 file_encoding: 'utf-8'
-default_xml_ext: '.xml'
 default_yml_ext: '.yaml'
 output_dirname: 'sorted-out'
-process_comments: true
+default_parent_key: 'controls'
+default_sort_key: 'rules'
+has_parent_key: true
 preserve_quotes: true
 mapping: 4
 sequence: 6
 offset: 4
-short_empty_elements: false
-pretty: true
-indent: '    '
