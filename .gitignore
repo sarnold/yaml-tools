@@ -8,6 +8,7 @@ src/ymltoxml/_version.py
 .ymltoxml.yaml
 in.*
 out.*
+sorted-out/
 munch/
 
 # C extensions

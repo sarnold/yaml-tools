@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, macos-latest, windows-latest]
-        python-version: [3.7, 3.8, 3.9, '3.10']
+        python-version: [3.7, 3.9, '3.11']
 
     steps:
     - name: Set git crlf/eol
@@ -49,8 +49,8 @@ jobs:
       if: matrix.python-version == 3.8 && runner.os != 'Windows'
       uses: actions/upload-artifact@v3
       with:
-        name: wheels
-        path: ./dist/*.whl
+        name: packages
+        path: dist/ymltoxml*
 
   create_release:
     name: Create Release
@@ -88,4 +88,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            wheels/yml*.whl
+            packages/ymltoxml*
