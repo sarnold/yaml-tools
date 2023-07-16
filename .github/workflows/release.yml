@@ -46,11 +46,11 @@ jobs:
         tox -e build
 
     - name: Upload artifacts
-      if: matrix.python-version == 3.8 && runner.os != 'Windows'
+      if: matrix.python-version == 3.9 && runner.os == 'Linux'
       uses: actions/upload-artifact@v3
       with:
         name: packages
-        path: dist/ymltoxml*
+        path: dist
 
   create_release:
     name: Create Release
@@ -70,6 +70,10 @@ jobs:
 
       # download all artifacts to project dir
       - uses: actions/download-artifact@v3
+
+      - name: check artifacts
+        run: |
+          ls -l packages/
 
       - name: Generate changes file
         uses: sarnold/gitchangelog-action@master
