@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 """Console script for sorting YAML lists."""
 
+import re
 import sys
 from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 from munch import Munch
+from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedSeq
 
 from ._version import __version__
 from .utils import FileTypeError, StrYAML, load_config
@@ -23,10 +26,22 @@ def get_input_yaml(filepath, prog_opts):
     :return data_in: file data
     :raises FileTypeError: if the input file is not yaml
     """
+
+    def replace_curlys(data):
+        """
+        Replace original outside curly brace with angle bracket.
+        """
+        data = re.sub(r'\s{{{\s', ' <{{ ', data)
+        return re.sub(r'\}}}\s', '}}> ', data)
+
     data_in = None
+    yaml = YAML()
 
     if filepath.name.lower().endswith(('.yml', '.yaml')):
-        data_in = Munch.fromYAML(filepath.read_text(encoding=prog_opts['file_encoding']))
+        with open(filepath, encoding=prog_opts['file_encoding']) as fp:
+            file_data = fp.read()
+        munged_data = replace_curlys(str(file_data))
+        data_in = yaml.load(munged_data)
     else:
         raise FileTypeError("FileTypeError: unknown input file extension")
     return data_in
@@ -43,13 +58,6 @@ def sort_list_data(payload, prog_opts):
     :return res: yaml dump of sorted input
     """
     res = ''
-    yaml = StrYAML()
-    yaml.indent(
-        mapping=prog_opts['mapping'],
-        sequence=prog_opts['sequence'],
-        offset=prog_opts['offset'],
-    )
-    yaml.preserve_quotes = prog_opts['preserve_quotes']
 
     # this should work for list/sublist structure
     sublist = prog_opts['has_parent_key']
@@ -57,14 +65,36 @@ def sort_list_data(payload, prog_opts):
     skey_name = prog_opts['default_sort_key']
 
     if sublist:  # sort one or more sublists
-        for idx in range(len(payload[pkey_name])):
-            payload[pkey_name][idx][skey_name] = sorted(
-                payload[pkey_name][idx][skey_name]
-            )
+        if prog_opts['process_comments']:
+            for idx in range(len(payload[pkey_name])):
+                root_comment = payload.ca
+                payload = CommentedSeq(
+                    sorted(payload, key=lambda x: x[pkey_name][idx][skey_name])
+                )
+                payload._yaml_comment = root_comment
+        else:
+            for idx in range(len(payload[pkey_name])):
+                payload[pkey_name][idx][skey_name] = sorted(
+                    payload[pkey_name][idx][skey_name]
+                )
     else:  # one top-level list
-        payload[skey_name] = sorted(payload[skey_name])
+        if prog_opts['process_comments']:
+            root_comment = payload.ca
+            # payload[skey_name] = sorted(payload[skey_name])
+            payload = CommentedSeq(sorted(payload, key=lambda x: x[skey_name]))
+            payload._yaml_comment = root_comment
+        else:
+            payload[skey_name] = sorted(payload[skey_name])
 
-    res = yaml.dump(Munch.toDict(payload))
+    yamld = StrYAML()
+    yamld.indent(
+        mapping=prog_opts['mapping'],
+        sequence=prog_opts['sequence'],
+        offset=prog_opts['offset'],
+    )
+    yamld.preserve_quotes = prog_opts['preserve_quotes']
+
+    res = yamld.dump(payload)
 
     return res
 
@@ -81,6 +111,14 @@ def process_inputs(filepath, prog_opts, debug=False):
     :return None:
     :handles FileTypeError: if input file is not yml
     """
+
+    def replace_angles(data):
+        """
+        Replace left angle bracket and restore original curly brace.
+        """
+        data = re.sub(r'\s<{{\s', ' {{{ ', data)
+        return re.sub(r'\}}>\s', '}}} ', data)
+
     fpath = Path(filepath)
     outdir = Path(prog_opts['output_dirname'])
     opath = outdir.joinpath(fpath.stem)
@@ -99,10 +137,12 @@ def process_inputs(filepath, prog_opts, debug=False):
 
         outdata = sort_list_data(indata, prog_opts)
 
+        restored_data = replace_angles(outdata)
+
         new_opath = opath.with_suffix(prog_opts['default_yml_ext'])
         if debug:
             print(f'Writing processed data to {new_opath}')
-        new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
+        new_opath.write_text(restored_data, encoding=prog_opts['file_encoding'])
 
 
 def main(argv=None):
