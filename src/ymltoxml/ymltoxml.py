@@ -10,8 +10,8 @@ format uses custom markup for XML attributes and comments. See the
 xmltodict docs for details.
 """
 
+import argparse
 import sys
-from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 import xmltodict
@@ -145,60 +145,70 @@ def main(argv=None):
 
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(
-        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='Transform YAML to XML and XML to YAML',
     )
-    parser.description = 'Transform YAML to XML and XML to YAML.'
-    parser.add_option(
-        '-i',
-        '--infile',
-        metavar="FILE",
-        action='store',
-        dest='infile',
-        help='Path to input file (use with --outfile)',
-    )
-    parser.add_option(
-        '-o',
-        '--outfile',
-        metavar="FILE",
-        action='store',
-        dest='outfile',
-        help='Path to output file (use with --infile)',
-    )
-    parser.add_option(
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        dest="verbose",
         help="Display more processing info",
     )
-    parser.add_option(
+    parser.add_argument(
         '-d',
         '--dump-config',
         action='store_true',
         dest="dump",
         help='Dump default configuration file to stdout',
     )
+    parser.add_argument(
+        '-i',
+        '--infile',
+        nargs='?',
+        metavar="FILE",
+        type=str,
+        help="Path to single input file (use with --outfile)",
+    )
+    parser.add_argument(
+        '-o',
+        '--outfile',
+        nargs='?',
+        metavar="FILE",
+        type=str,
+        help="Path to single output file (use with --infile)",
+    )
+    parser.add_argument(
+        'file',
+        nargs='*',
+        metavar="FILE",
+        type=str,
+        help="Process input file (list) to target extension",
+    )
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if options.outfile and not options.infile:
-        parser.error("missing --infile argument")
-    if options.verbose:
+    if args.outfile and not args.infile:
+        parser.error("missing infile argument")
+    if args.verbose:
         debug = True
-    if options.infile and not args:
-        outname = options.outfile
-        process_inputs(options.infile, popts, outname, debug=debug)
-        sys.exit(0)
-    elif options.dump:
+    elif args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
+        sys.stdout.flush()
         sys.exit(0)
     if not args:
         parser.print_help()
         sys.exit(1)
 
-    if len(args) > 0:
-        for filearg in args:
+    if args.infile:
+        if args.outfile:
+            process_inputs(args.infile, popts, args.outfile, debug=debug)
+        else:
+            process_inputs(args.infile, popts, debug=debug)
+
+    if args.file:
+        for filearg in args.file:
             process_inputs(filearg, popts, debug=debug)
 
 

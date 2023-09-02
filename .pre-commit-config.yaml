@@ -26,14 +26,11 @@ repos:
       - id: check-yaml
         exclude: '(conda/meta.yaml|.pep8speaks.yml)'
 
-  # use ffffff (black fork) for single quote normalization
-  # (otherwise switch to black for double quotes)
-  - repo: https://github.com/grktsh/ffffff
-    rev: v2020.8.31
+  - repo: https://github.com/ambv/black
+    rev: 23.7.0
     hooks:
-      - id: ffffff
-        name: "Format code (ffffff)"
-        files: src/ymltoxml/
+      - id: black
+        name: "Format code"
         language_version: python3
 
   - repo: https://github.com/pycqa/isort
@@ -65,7 +62,7 @@ repos:
         name: "Format docs (blacken-docs)"
         args: ["-l", "64"]
         additional_dependencies:
-          - "black==22.1.0"
+          - "black==23.1.0"
 
   - repo: https://github.com/PyCQA/doc8
     rev: v1.1.1

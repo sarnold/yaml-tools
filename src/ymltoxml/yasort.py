@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Console script for sorting YAML lists."""
 
+import argparse
 import re
 import sys
-from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 from munch import Munch
@@ -18,7 +18,9 @@ from .utils import FileTypeError, StrYAML, load_config
 
 def get_input_yaml(filepath, prog_opts):
     """
-    Check filename extension, open and munchify contents, return data.
+    Check filename extension, open and munge the contents, return data
+    (where in this context we "munge" the curly braces to make it valid
+    YAML).
 
     :param filepath: filename as Path obj
     :param prog_opts: configuration options
@@ -52,7 +54,7 @@ def sort_list_data(payload, prog_opts):
     Set YAML formatting and sort keys from config, produce output data
     from input dict-ish object.
 
-    :param payload: Munch obj representing YAML input data
+    :param payload: Dict obj representing YAML input data
     :param prog_opts: configuration options
     :type prog_opts: dict
     :return res: yaml dump of sorted input
@@ -80,7 +82,6 @@ def sort_list_data(payload, prog_opts):
     else:  # one top-level list
         if prog_opts['process_comments']:
             root_comment = payload.ca
-            # payload[skey_name] = sorted(payload[skey_name])
             payload = CommentedSeq(sorted(payload, key=lambda x: x[skey_name]))
             payload._yaml_comment = root_comment
         else:
@@ -147,7 +148,7 @@ def process_inputs(filepath, prog_opts, debug=False):
 
 def main(argv=None):
     """
-    Read/write SSG YAML files with sorted rules.
+    Read/write YAML files with sorted list(s).
     """
     debug = False
     cfg, pfile = load_config(yasort=True)
@@ -155,42 +156,49 @@ def main(argv=None):
 
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(
-        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='Sort YAML lists and write new files.',
     )
-    parser.description = 'Sort YAML lists and write new files.'
-    parser.add_option(
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        dest="verbose",
         help="Display more processing info",
     )
-    parser.add_option(
+    parser.add_argument(
         '-d',
         '--dump-config',
         action='store_true',
         dest="dump",
         help='Dump default configuration file to stdout',
     )
+    parser.add_argument(
+        'file',
+        nargs='*',
+        metavar="FILE",
+        type=str,
+        help="Process input file (list) to target directory",
+    )
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if options.verbose:
+    if args.verbose:
         debug = True
-    if options.dump:
+    if args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
-    if len(args) > 0:
-        output_dir = Path(popts['output_dirname'])
-        if debug:
-            print(f'Creating output directory {output_dir}')
-        output_dir.mkdir(exist_ok=True)
-        for filearg in args:
-            process_inputs(filearg, popts, debug=debug)
-    else:
+    if not args:
         parser.print_help()
         sys.exit(1)
+
+    output_dir = Path(popts['output_dirname'])
+    if debug:
+        print(f'Creating output directory {output_dir}')
+    output_dir.mkdir(exist_ok=True)
+    for filearg in args:
+        process_inputs(filearg, popts, debug=debug)
 
 
 if __name__ == '__main__':
