@@ -10,7 +10,7 @@ from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedSeq
 
-from ._version import __version__
+from .utils import VERSION as __version__
 from .utils import FileTypeError, StrYAML, load_config
 
 # pylint: disable=R0801
@@ -40,8 +40,8 @@ def get_input_yaml(filepath, prog_opts):
     yaml = YAML()
 
     if filepath.name.lower().endswith(('.yml', '.yaml')):
-        with open(filepath, encoding=prog_opts['file_encoding']) as fp:
-            file_data = fp.read()
+        with open(filepath, encoding=prog_opts['file_encoding']) as f_path:
+            file_data = f_path.read()
         munged_data = replace_curlys(str(file_data))
         data_in = yaml.load(munged_data)
     else:
@@ -49,7 +49,7 @@ def get_input_yaml(filepath, prog_opts):
     return data_in
 
 
-def sort_list_data(payload, prog_opts):
+def sort_list_data(payload, prog_opts, debug=False):
     """
     Set YAML formatting and sort keys from config, produce output data
     from input dict-ish object.
@@ -70,6 +70,9 @@ def sort_list_data(payload, prog_opts):
         if prog_opts['process_comments']:
             for idx in range(len(payload[pkey_name])):
                 root_comment = payload.ca
+                if debug:
+                    print(hex(id(idx)))
+                    print(idx)
                 payload = CommentedSeq(
                     sorted(payload, key=lambda x: x[pkey_name][idx][skey_name])
                 )
@@ -135,6 +138,8 @@ def process_inputs(filepath, prog_opts, debug=False):
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
             return
+        if debug:
+            print(indata)
 
         outdata = sort_list_data(indata, prog_opts)
 
@@ -151,9 +156,6 @@ def main(argv=None):
     Read/write YAML files with sorted list(s).
     """
     debug = False
-    cfg, pfile = load_config(yasort=True)
-    popts = Munch.toDict(cfg)
-
     if argv is None:
         argv = sys.argv
     parser = argparse.ArgumentParser(
@@ -175,6 +177,13 @@ def main(argv=None):
         help='Dump default configuration file to stdout',
     )
     parser.add_argument(
+        '-s',
+        '--save-config',
+        action='store_true',
+        dest="save",
+        help='save active config to default filename (.yasort.yml) and exit',
+    )
+    parser.add_argument(
         'file',
         nargs='*',
         metavar="FILE",
@@ -184,21 +193,31 @@ def main(argv=None):
 
     args = parser.parse_args()
 
-    if args.verbose:
-        debug = True
+    cfg, pfile = load_config(yasort=True)
+    popts = Munch.toDict(cfg)
+
+    if args.save:
+        cfg_data = pfile.read_bytes()
+        def_config = Path('.yasort.yml')
+        def_config.write_bytes(cfg_data)
+        sys.exit(0)
     if args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
-    if not args:
-        parser.print_help()
-        sys.exit(1)
+    if args.verbose:
+        debug = True
 
     output_dir = Path(popts['output_dirname'])
     if debug:
         print(f'Creating output directory {output_dir}')
     output_dir.mkdir(exist_ok=True)
-    for filearg in args:
-        process_inputs(filearg, popts, debug=debug)
+
+    if args.file:
+        for filearg in args.file:
+            process_inputs(filearg, popts, debug=debug)
+    else:
+        parser.print_help()
+        sys.exit(1)
 
 
 if __name__ == '__main__':

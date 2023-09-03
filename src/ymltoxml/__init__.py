@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Console tools for YAML processing."""
+"""Console tools for YAML/XML processing with config files in YAML."""
 
-from ._version import __version__
 
-VERSION = __version__
+__description__ = "Console tools for YAML/XML conversion and sorting."
 
-__description__ = "Console tool for bidirectional transformation of YAML and XML files."
-
-__all__ = ["__description__", "__version__", "VERSION"]
+__all__ = ["__description__"]

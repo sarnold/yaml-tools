@@ -9,10 +9,17 @@ from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
-if sys.version_info < (3, 10):
+if sys.version_info < (3, 8):
+    from importlib_metadata import version
+else:
+    from importlib.metadata import version
+
+if sys.version_info < (3, 9):
     import importlib_resources
 else:
     import importlib.resources as importlib_resources
+
+VERSION = version('ymltoxml')
 
 
 class FileTypeError(Exception):
@@ -33,7 +40,7 @@ class StrYAML(YAML):
         return stream.getvalue()
 
 
-def load_config(file_encoding='utf-8', yasort=False):
+def load_config(file_encoding='utf-8', yasort=False, debug=False):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
@@ -46,10 +53,13 @@ def load_config(file_encoding='utf-8', yasort=False):
     prog_name = 'ymltoxml'
     if yasort:
         prog_name = 'yasort'
+    defconfig = Path(f'.{prog_name}.yml')
 
-    cfgfile = Path(f'.{prog_name}.yaml')
+    cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
         cfgfile = importlib_resources.files('ymltoxml.data').joinpath(f'{prog_name}.yaml')
+    if debug:
+        print(f'Using config: {str(cfgfile.resolve())}')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
     return cfgobj, cfgfile

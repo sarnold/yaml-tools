@@ -18,7 +18,7 @@ import xmltodict
 import yaml as yaml_loader
 from munch import Munch
 
-from ._version import __version__
+from .utils import VERSION as __version__
 from .utils import (
     FileTypeError,
     StrYAML,
@@ -140,9 +140,6 @@ def main(argv=None):
     Transform YAML to XML and XML to YAML.
     """
     debug = False
-    cfg, pfile = load_config()
-    popts = Munch.toDict(cfg)
-
     if argv is None:
         argv = sys.argv
     parser = argparse.ArgumentParser(
@@ -162,6 +159,13 @@ def main(argv=None):
         action='store_true',
         dest="dump",
         help='Dump default configuration file to stdout',
+    )
+    parser.add_argument(
+        '-s',
+        '--save-config',
+        action='store_true',
+        dest="save",
+        help='save active config to default filename (.ymltoxml.yml) and exit',
     )
     parser.add_argument(
         '-i',
@@ -189,14 +193,22 @@ def main(argv=None):
 
     args = parser.parse_args()
 
+    pcfg, pfile = load_config(debug=debug)
+    popts = Munch.toDict(pcfg)
+
+    if args.save:
+        cfg_data = pfile.read_bytes()
+        def_config = Path('.ymltoxml.yml')
+        def_config.write_bytes(cfg_data)
+        sys.exit(0)
+    if args.dump:
+        sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
+        sys.stdout.flush()
+        sys.exit(0)
     if args.outfile and not args.infile:
         parser.error("missing infile argument")
     if args.verbose:
         debug = True
-    elif args.dump:
-        sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
-        sys.stdout.flush()
-        sys.exit(0)
     if not args:
         parser.print_help()
         sys.exit(1)
