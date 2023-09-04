@@ -118,12 +118,8 @@ def sort_from_parent(input_data, prog_opts, debug=False):
 
     if is_sublist:  # sort one or more sublists
         if prog_opts['process_comments']:
-            root_comment = input_data.ca
             for i in range(len(pkey_list)):
-                input_data = CommentedSeq(
-                    sorted(input_data, key=lambda x: x[pkey_name][i][skey_name])
-                )
-                input_data._yaml_comment = root_comment  # pylint: disable=W0212
+                input_data[pkey_name][i][skey_name].sort()
         else:
             for _ in range(len(pkey_list)):
                 pkey_list[_][skey_name] = sorted(pkey_list[_][skey_name])

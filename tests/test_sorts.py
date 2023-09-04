@@ -15,7 +15,7 @@ default_parent_key: 'controls'
 default_sort_key: 'rules'
 has_parent_key: true
 preserve_quotes: true
-process_comments: false
+process_comments: true
 mapping: 4
 sequence: 6
 offset: 4
