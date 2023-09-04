@@ -18,6 +18,7 @@ repos:
       - id: debug-statements
       - id: requirements-txt-fixer
       - id: fix-encoding-pragma
+        args: ['--remove']
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: mixed-line-ending

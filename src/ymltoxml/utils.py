@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Shared utility code.
 """
@@ -7,6 +6,7 @@ from pathlib import Path
 
 from munch import Munch
 from ruamel.yaml import YAML
+from ruamel.yaml.comments import CommentedMap, CommentedSeq
 from ruamel.yaml.compat import StringIO
 
 if sys.version_info < (3, 8):
@@ -77,3 +77,61 @@ def restore_xml_comments(xmls):
     for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         xmls = xmls.replace(*rep)
     return xmls
+
+
+def sort_commented_map(commented_map):
+    """
+    Sort a ruamel.yaml commented map.
+
+    :param commented_map: input data to sort
+    :return cmap: sorted output data
+    """
+    cmap = CommentedMap()
+    for key, value in sorted(commented_map.items()):
+        if isinstance(value, CommentedMap):
+            cmap[key] = sort_commented_map(value)
+        elif isinstance(value, list):
+            for i in enumerate(value):
+                if isinstance(value[i[0]], CommentedMap):
+                    value[i[0]] = sort_commented_map(value[i[0]])
+            cmap[key] = value
+        else:
+            cmap[key] = value
+    return cmap
+
+
+def sort_from_parent(input_data, prog_opts, debug=False):
+    """
+    Parent key sort with not-quite-working CommentedSeq sorting.
+
+    :param input_data: Dict obj representing YAML input data
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :return input_data: sorted input
+    """
+    # this should work for list/sublist structure
+    is_sublist = prog_opts['has_parent_key']
+    pkey_name = prog_opts['default_parent_key']
+    skey_name = prog_opts['default_sort_key']
+    pkey_list = input_data[pkey_name]
+
+    if is_sublist:  # sort one or more sublists
+        if prog_opts['process_comments']:
+            root_comment = input_data.ca
+            for i in range(len(pkey_list)):
+                input_data = CommentedSeq(
+                    sorted(input_data, key=lambda x: x[pkey_name][i][skey_name])
+                )
+                input_data._yaml_comment = root_comment
+        else:
+            for _ in range(len(pkey_list)):
+                pkey_list[_][skey_name] = sorted(pkey_list[_][skey_name])
+    else:  # one top-level list
+        if prog_opts['process_comments']:
+            root_comment = input_data.ca
+            input_data = CommentedSeq(sorted(input_data, key=lambda x: x[skey_name]))
+            input_data._yaml_comment = root_comment
+        else:
+            input_data[skey_name] = sorted(input_data[skey_name])
+
+    return input_data

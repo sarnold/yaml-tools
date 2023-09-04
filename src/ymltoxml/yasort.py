@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Console script for sorting YAML lists."""
 
 import argparse
@@ -8,10 +7,9 @@ from pathlib import Path
 
 from munch import Munch
 from ruamel.yaml import YAML
-from ruamel.yaml.comments import CommentedSeq
 
 from .utils import VERSION as __version__
-from .utils import FileTypeError, StrYAML, load_config
+from .utils import FileTypeError, StrYAML, load_config, sort_from_parent
 
 # pylint: disable=R0801
 
@@ -59,48 +57,17 @@ def sort_list_data(payload, prog_opts, debug=False):
     :type prog_opts: dict
     :return res: yaml dump of sorted input
     """
-    res = ''
-
-    # this should work for list/sublist structure
-    sublist = prog_opts['has_parent_key']
-    pkey_name = prog_opts['default_parent_key']
-    skey_name = prog_opts['default_sort_key']
-
-    if sublist:  # sort one or more sublists
-        if prog_opts['process_comments']:
-            for idx in range(len(payload[pkey_name])):
-                root_comment = payload.ca
-                if debug:
-                    print(hex(id(idx)))
-                    print(idx)
-                payload = CommentedSeq(
-                    sorted(payload, key=lambda x: x[pkey_name][idx][skey_name])
-                )
-                payload._yaml_comment = root_comment
-        else:
-            for idx in range(len(payload[pkey_name])):
-                payload[pkey_name][idx][skey_name] = sorted(
-                    payload[pkey_name][idx][skey_name]
-                )
-    else:  # one top-level list
-        if prog_opts['process_comments']:
-            root_comment = payload.ca
-            payload = CommentedSeq(sorted(payload, key=lambda x: x[skey_name]))
-            payload._yaml_comment = root_comment
-        else:
-            payload[skey_name] = sorted(payload[skey_name])
-
-    yamld = StrYAML()
-    yamld.indent(
+    yaml = StrYAML()
+    yaml.indent(
         mapping=prog_opts['mapping'],
         sequence=prog_opts['sequence'],
         offset=prog_opts['offset'],
     )
-    yamld.preserve_quotes = prog_opts['preserve_quotes']
+    yaml.preserve_quotes = prog_opts['preserve_quotes']
 
-    res = yamld.dump(payload)
+    payload_sorted = sort_from_parent(payload, prog_opts, debug)
 
-    return res
+    return yaml.dump(payload_sorted)
 
 
 def process_inputs(filepath, prog_opts, debug=False):

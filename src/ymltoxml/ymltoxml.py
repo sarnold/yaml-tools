@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2022 Stephen L Arnold
 #
 # This is free software, licensed under the LGPL-2.1 license
