@@ -14,7 +14,7 @@ if sys.version_info < (3, 8):
 else:
     from importlib.metadata import version
 
-if sys.version_info < (3, 9):
+if sys.version_info < (3, 10):
     import importlib_resources
 else:
     import importlib.resources as importlib_resources
@@ -100,6 +100,7 @@ def sort_commented_map(commented_map):
     return cmap
 
 
+# pylint: disable=W0640
 def sort_from_parent(input_data, prog_opts, debug=False):
     """
     Parent key sort with not-quite-working CommentedSeq sorting.
@@ -122,7 +123,7 @@ def sort_from_parent(input_data, prog_opts, debug=False):
                 input_data = CommentedSeq(
                     sorted(input_data, key=lambda x: x[pkey_name][i][skey_name])
                 )
-                input_data._yaml_comment = root_comment
+                input_data._yaml_comment = root_comment  # pylint: disable=W0212
         else:
             for _ in range(len(pkey_list)):
                 pkey_list[_][skey_name] = sorted(pkey_list[_][skey_name])
@@ -130,7 +131,7 @@ def sort_from_parent(input_data, prog_opts, debug=False):
         if prog_opts['process_comments']:
             root_comment = input_data.ca
             input_data = CommentedSeq(sorted(input_data, key=lambda x: x[skey_name]))
-            input_data._yaml_comment = root_comment
+            input_data._yaml_comment = root_comment  # pylint: disable=W0212
         else:
             input_data[skey_name] = sorted(input_data[skey_name])
 
