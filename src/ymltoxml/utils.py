@@ -1,6 +1,7 @@
 """
 Shared utility code.
 """
+import re
 import sys
 from pathlib import Path
 
@@ -62,6 +63,14 @@ def load_config(file_encoding='utf-8', yasort=False, debug=False):
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
     return cfgobj, cfgfile
+
+
+def replace_angles(data):
+    """
+    Replace angle bracket with original curly brace.
+    """
+    data = re.sub(r'\s<{{\s', ' {{{ ', data)
+    return re.sub(r'\}}>\s', '}}} ', data)
 
 
 def restore_xml_comments(xmls):

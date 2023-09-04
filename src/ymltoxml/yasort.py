@@ -9,7 +9,13 @@ from munch import Munch
 from ruamel.yaml import YAML
 
 from .utils import VERSION as __version__
-from .utils import FileTypeError, StrYAML, load_config, sort_from_parent
+from .utils import (
+    FileTypeError,
+    StrYAML,
+    load_config,
+    replace_angles,
+    sort_from_parent,
+)
 
 # pylint: disable=R0801
 
@@ -82,13 +88,6 @@ def process_inputs(filepath, prog_opts, debug=False):
     :return None:
     :handles FileTypeError: if input file is not yml
     """
-
-    def replace_angles(data):
-        """
-        Replace left angle bracket and restore original curly brace.
-        """
-        data = re.sub(r'\s<{{\s', ' {{{ ', data)
-        return re.sub(r'\}}>\s', '}}} ', data)
 
     fpath = Path(filepath)
     outdir = Path(prog_opts['output_dirname'])

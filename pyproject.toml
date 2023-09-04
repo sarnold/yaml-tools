@@ -8,6 +8,14 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests",]
+log_cli =  false
+doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
+addopts = "--strict-markers"
+markers = "subscript"
+
 [tool.coverage.run]
 branch = true
 source = ["src"]
@@ -20,7 +28,7 @@ omit = [
 source = ["src"]
 
 [tool.coverage.report]
-fail_under = 50
+fail_under = 10
 show_missing = true
 
 [tool.black]

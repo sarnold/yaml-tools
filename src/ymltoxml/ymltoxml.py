@@ -105,9 +105,7 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
     :handlles FileTypeError: input file is not xml or yml
     """
     fpath = Path(filepath)
-    opath = fpath
-    if outpath:
-        opath = Path(outpath)
+    opath = Path(outpath) if outpath else fpath
 
     if not fpath.exists():
         print(f'Input file {fpath} not found! Skipping...')
@@ -180,7 +178,7 @@ def main(argv=None):
         nargs='?',
         metavar="FILE",
         type=str,
-        help="Path to single output file (use with --infile)",
+        help="Path to single output file (required with --infile)",
     )
     parser.add_argument(
         'file',
@@ -191,6 +189,13 @@ def main(argv=None):
     )
 
     args = parser.parse_args()
+    if len(argv) == 1:
+        parser.print_help()
+        sys.exit(1)
+    if args.outfile and not args.infile:
+        parser.error("missing infile argument")
+    if args.verbose:
+        debug = True
 
     pcfg, pfile = load_config(debug=debug)
     popts = Munch.toDict(pcfg)
@@ -204,13 +209,6 @@ def main(argv=None):
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.stdout.flush()
         sys.exit(0)
-    if args.outfile and not args.infile:
-        parser.error("missing infile argument")
-    if args.verbose:
-        debug = True
-    if not args:
-        parser.print_help()
-        sys.exit(1)
 
     if args.infile:
         if args.outfile:
