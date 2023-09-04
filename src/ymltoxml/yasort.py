@@ -47,7 +47,7 @@ def get_input_yaml(filepath, prog_opts):
     return data_in
 
 
-def sort_list_data(payload, prog_opts, debug=False):
+def sort_list_data(payload, prog_opts):
     """
     Set YAML formatting and sort keys from config, produce output data
     from input dict-ish object.
@@ -65,7 +65,7 @@ def sort_list_data(payload, prog_opts, debug=False):
     )
     yaml.preserve_quotes = prog_opts['preserve_quotes']
 
-    payload_sorted = sort_from_parent(payload, prog_opts, debug)
+    payload_sorted = sort_from_parent(payload, prog_opts)
 
     return yaml.dump(payload_sorted)
 
