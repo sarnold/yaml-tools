@@ -222,6 +222,7 @@ to specify the Python version and host OS type, run something like::
 
 Additional ``tox`` commands:
 
+* ``tox -e changes`` (re)generate the changelog file
 * ``tox -e conv`` round-trip conversion test on mavlink dialect
 * ``tox -e dev`` pip "developer" install
 * ``tox -e style`` will run flake8 style checks
@@ -239,10 +240,10 @@ To build/lint the api docs, use the following tox commands:
 Making Changes & Contributing
 =============================
 
-We use the gitchangelog_ action to generate our github Release page, as
-well as the gitchangelog message format to help it categorize/filter
-commits for a tidier release page. Please use the appropriate ACTION
-modifiers in any Pull Requests.
+We use the gitchangelog_ action to generate our changelog and GH Release
+page, as well as the gitchangelog message format to help it categorize/filter
+commits for a tidier changelog. Please use the appropriate ACTION modifiers
+in any Pull Requests.
 
 This repo is also pre-commit_ enabled for various linting and format
 checks.  The checks run automatically on commit and will fail the
