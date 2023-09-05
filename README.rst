@@ -2,9 +2,9 @@
  ymltoxml (and xmltoyml)
 =========================
 
-|ci| |wheels| |release| |badge|
+|ci| |wheels| |release| |badge| |coverage|
 
-|pre| |pylint|
+|pre| |cov| |pylint|
 
 |tag| |license| |python|
 
@@ -289,6 +289,10 @@ It's usually a good idea to update the hooks to the latest version::
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/wheels.yml
     :alt: Wheel Status
 
+.. |coverage| image:: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml/badge.svg
+    :target: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml
+    :alt: Coverage workflow
+
 .. |badge| image:: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml/badge.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
     :alt: Pylint Status
@@ -296,6 +300,10 @@ It's usually a good idea to update the hooks to the latest version::
 .. |release| image:: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml/badge.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml
     :alt: Release Status
+
+.. |cov| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/master/test-coverage.svg
+    :target: https://github.com/sarnold/ymltoxml/
+    :alt: Test coverage
 
 .. |pylint| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/pylint-score.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
