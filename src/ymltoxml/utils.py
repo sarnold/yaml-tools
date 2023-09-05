@@ -46,9 +46,12 @@ def load_config(file_encoding='utf-8', yasort=False, debug=False):
     not found in current directory, the default will be loaded.
 
     :param file_encoding: file encoding of config file
+    :param yasort: True for yasort config
+    :param debug: enable extra processing info
     :type file_encoding: str
+    :type yasort: bool
     :return: Munch cfg obj and cfg file as Path obj
-    :rtype tuple:
+    :rtype: tuple
     """
     prog_name = 'ymltoxml'
     if yasort:
