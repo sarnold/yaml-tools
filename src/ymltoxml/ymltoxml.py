@@ -178,14 +178,14 @@ def main(argv=None):  # pragma: no cover
         nargs='?',
         metavar="FILE",
         type=str,
-        help="Path to single output file (required with --infile)",
+        help="Path to single output file (use with --infile)",
     )
     parser.add_argument(
         'file',
         nargs='*',
         metavar="FILE",
         type=str,
-        help="Process input file (list) to target extension",
+        help="Process input file(s) to target extension",
     )
 
     args = parser.parse_args()

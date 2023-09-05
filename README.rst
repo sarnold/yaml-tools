@@ -55,20 +55,29 @@ provided, the only required arguments are one or more files of a single
 type::
 
   $ ymltoxml
-  Usage: ymltoxml [options] arg1 arg2
+  usage: ymltoxml [-h] [--version] [-v] [-d] [-s] [-i [FILE]] [-o [FILE]]
+                  [FILE ...]
 
-  Transform YAML to XML and XML to YAML.
+  Transform YAML to XML and XML to YAML
 
-  Options:
-    --version             show program's version number and exit
+  positional arguments:
+    FILE                  Process input file(s) to target extension (default:
+                          None)
+
+  options:
     -h, --help            show this help message and exit
-    -i FILE, --infile=FILE
-                          Path to input file (use with --outfile)
-    -o FILE, --outfile=FILE
-                          Path to output file (use with --infile)
-    -v, --verbose         Display more processing info
-    -d, --dump-config     Dump default configuration file to stdout
-
+    --version             show program's version number and exit
+    -v, --verbose         Display more processing info (default: False)
+    -d, --dump-config     Dump default configuration file to stdout (default:
+                          False)
+    -s, --save-config     save active config to default filename (.ymltoxml.yml)
+                          and exit (default: False)
+    -i [FILE], --infile [FILE]
+                          Path to single input file (use with --outfile)
+                          (default: None)
+    -o [FILE], --outfile [FILE]
+                          Path to single output file (use with --infile)
+                          (default: None)
 
 * for processing individual files/paths, use the ``--infile`` option,
   either with or without the ``--outfile`` option
@@ -98,16 +107,24 @@ The new ``yasort`` script uses its own configuration file, creatively named
 ``yasort.yaml``. The above applies equally to this new config file.
 
 ::
-  $ yasort -h
-  Usage: yasort [options] arg1 arg2
+
+  $ yasort
+  usage: yasort [-h] [--version] [-v] [-d] [-s] [FILE ...]
 
   Sort YAML lists and write new files.
 
-  Options:
-    --version          show program's version number and exit
+  positional arguments:
+    FILE               Process input file(s) to target directory (default:
+                       None)
+
+  options:
     -h, --help         show this help message and exit
-    -v, --verbose      Display more processing info
-    -d, --dump-config  Dump default configuration file to stdout
+    --version          show program's version number and exit
+    -v, --verbose      Display more processing info (default: False)
+    -d, --dump-config  Dump default configuration file to stdout (default:
+                       False)
+    -s, --save-config  save active config to default filename (.yasort.yml) and
+                       exit (default: False)
 
 
 Features and limitations
@@ -198,15 +215,14 @@ all the dependencies and run the specified commands, eg:
   $ cd ymltoxml/
   $ tox -e py
 
-There are no actual unittests yet, but the above will run the base ``tox``
-command against one of the mavlink dialect files. Note this will run the
-round-trip test command using the your (default) system Python; to specify
-the Python version and host OS type, run something like::
+The above will run the tests using your (default) system Python;
+to specify the Python version and host OS type, run something like::
 
   $ tox -e py39-linux
 
-Full list of additional ``tox`` commands:
+Additional ``tox`` commands:
 
+* ``tox -e conv`` round-trip conversion test on mavlink dialect
 * ``tox -e dev`` pip "developer" install
 * ``tox -e style`` will run flake8 style checks
 * ``tox -e lint`` will run pylint (somewhat less permissive than PEP8/flake8 checks)
