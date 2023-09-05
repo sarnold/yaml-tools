@@ -1,21 +1,30 @@
-# -*- coding: utf-8 -*-
 """Console script for sorting YAML lists."""
 
+import argparse
 import sys
-from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 from munch import Munch
+from ruamel.yaml import YAML
 
-from ._version import __version__
-from .utils import FileTypeError, StrYAML, load_config
+from .utils import VERSION as __version__
+from .utils import (
+    FileTypeError,
+    StrYAML,
+    load_config,
+    replace_angles,
+    replace_curlys,
+    sort_from_parent,
+)
 
 # pylint: disable=R0801
 
 
 def get_input_yaml(filepath, prog_opts):
     """
-    Check filename extension, open and munchify contents, return data.
+    Check filename extension, open and munge the contents, return data
+    (where in this context we "munge" the curly braces to make it valid
+    YAML).
 
     :param filepath: filename as Path obj
     :param prog_opts: configuration options
@@ -23,10 +32,15 @@ def get_input_yaml(filepath, prog_opts):
     :return data_in: file data
     :raises FileTypeError: if the input file is not yaml
     """
+
     data_in = None
+    yaml = YAML()
 
     if filepath.name.lower().endswith(('.yml', '.yaml')):
-        data_in = Munch.fromYAML(filepath.read_text(encoding=prog_opts['file_encoding']))
+        with open(filepath, encoding=prog_opts['file_encoding']) as f_path:
+            file_data = f_path.read()
+        munged_data = replace_curlys(str(file_data))
+        data_in = yaml.load(munged_data)
     else:
         raise FileTypeError("FileTypeError: unknown input file extension")
     return data_in
@@ -37,12 +51,11 @@ def sort_list_data(payload, prog_opts):
     Set YAML formatting and sort keys from config, produce output data
     from input dict-ish object.
 
-    :param payload: Munch obj representing YAML input data
+    :param payload: Dict obj representing YAML input data
     :param prog_opts: configuration options
     :type prog_opts: dict
     :return res: yaml dump of sorted input
     """
-    res = ''
     yaml = StrYAML()
     yaml.indent(
         mapping=prog_opts['mapping'],
@@ -51,22 +64,9 @@ def sort_list_data(payload, prog_opts):
     )
     yaml.preserve_quotes = prog_opts['preserve_quotes']
 
-    # this should work for list/sublist structure
-    sublist = prog_opts['has_parent_key']
-    pkey_name = prog_opts['default_parent_key']
-    skey_name = prog_opts['default_sort_key']
+    payload_sorted = sort_from_parent(payload, prog_opts)
 
-    if sublist:  # sort one or more sublists
-        for idx in range(len(payload[pkey_name])):
-            payload[pkey_name][idx][skey_name] = sorted(
-                payload[pkey_name][idx][skey_name]
-            )
-    else:  # one top-level list
-        payload[skey_name] = sorted(payload[skey_name])
-
-    res = yaml.dump(Munch.toDict(payload))
-
-    return res
+    return yaml.dump(payload_sorted)
 
 
 def process_inputs(filepath, prog_opts, debug=False):
@@ -81,6 +81,7 @@ def process_inputs(filepath, prog_opts, debug=False):
     :return None:
     :handles FileTypeError: if input file is not yml
     """
+
     fpath = Path(filepath)
     outdir = Path(prog_opts['output_dirname'])
     opath = outdir.joinpath(fpath.stem)
@@ -96,57 +97,82 @@ def process_inputs(filepath, prog_opts, debug=False):
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
             return
+        if debug:
+            print(indata)
 
         outdata = sort_list_data(indata, prog_opts)
+
+        restored_data = replace_angles(outdata)
 
         new_opath = opath.with_suffix(prog_opts['default_yml_ext'])
         if debug:
             print(f'Writing processed data to {new_opath}')
-        new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
+        new_opath.write_text(restored_data, encoding=prog_opts['file_encoding'])
 
 
-def main(argv=None):
+def main(argv=None):  # pragma: no cover
     """
-    Read/write SSG YAML files with sorted rules.
+    Read/write YAML files with sorted list(s).
     """
     debug = False
-    cfg, pfile = load_config(yasort=True)
-    popts = Munch.toDict(cfg)
-
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(
-        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='Sort YAML lists and write new files.',
     )
-    parser.description = 'Sort YAML lists and write new files.'
-    parser.add_option(
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        dest="verbose",
         help="Display more processing info",
     )
-    parser.add_option(
+    parser.add_argument(
         '-d',
         '--dump-config',
         action='store_true',
         dest="dump",
         help='Dump default configuration file to stdout',
     )
+    parser.add_argument(
+        '-s',
+        '--save-config',
+        action='store_true',
+        dest="save",
+        help='save active config to default filename (.yasort.yml) and exit',
+    )
+    parser.add_argument(
+        'file',
+        nargs='*',
+        metavar="FILE",
+        type=str,
+        help="Process input file (list) to target directory",
+    )
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if options.verbose:
-        debug = True
-    if options.dump:
+    cfg, pfile = load_config(yasort=True)
+    popts = Munch.toDict(cfg)
+
+    if args.save:
+        cfg_data = pfile.read_bytes()
+        def_config = Path('.yasort.yml')
+        def_config.write_bytes(cfg_data)
+        sys.exit(0)
+    if args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
-    if len(args) > 0:
-        output_dir = Path(popts['output_dirname'])
-        if debug:
-            print(f'Creating output directory {output_dir}')
-        output_dir.mkdir(exist_ok=True)
-        for filearg in args:
+    if args.verbose:
+        debug = True
+
+    output_dir = Path(popts['output_dirname'])
+    if debug:
+        print(f'Creating output directory {output_dir}')
+    output_dir.mkdir(exist_ok=True)
+
+    if args.file:
+        for filearg in args.file:
             process_inputs(filearg, popts, debug=debug)
     else:
         parser.print_help()

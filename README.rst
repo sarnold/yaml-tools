@@ -2,16 +2,19 @@
  ymltoxml (and xmltoyml)
 =========================
 
-|ci| |wheels| |release| |badge|
+|ci| |wheels| |release| |badge| |coverage|
 
-|pre| |pylint|
+|pre| |cov| |pylint|
 
 |tag| |license| |python|
 
-A Python command line tool to convert between XML_ files and YAML_ files,
+Python command line tools to convert between XML_ files and YAML_ files,
 preserving attributes and comments (with minor corrections).  The default
-file encoding for both types is UTF-8 without a BOM.  The main intent is
-to support YAML-based development of custom mavlink_ dialects.
+file encoding for both types is UTF-8 without a BOM. Includes another
+console entry point to sort large YAML lists (eg, lists of rules found
+in the `SCAP Security Guide`_).
+
+.. _SCAP Security Guide: https://github.com/ComplianceAsCode/content
 
 Quick Start
 ===========
@@ -26,7 +29,7 @@ to install ymltoxml on any platform. Install from the main branch::
 
 or use this command to install a specific release version::
 
-  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.2.0/ymltoxml-0.2.0.tar.gz
+  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.2.2/ymltoxml-0.2.2.tar.gz
 
 The full package provides the ``ymltoxml.py`` executable as well as
 a reference configuration file with defaults for all values.
@@ -286,6 +289,10 @@ It's usually a good idea to update the hooks to the latest version::
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/wheels.yml
     :alt: Wheel Status
 
+.. |coverage| image:: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml/badge.svg
+    :target: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml
+    :alt: Coverage workflow
+
 .. |badge| image:: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml/badge.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
     :alt: Pylint Status
@@ -293,6 +300,10 @@ It's usually a good idea to update the hooks to the latest version::
 .. |release| image:: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml/badge.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml
     :alt: Release Status
+
+.. |cov| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/master/test-coverage.svg
+    :target: https://github.com/sarnold/ymltoxml/
+    :alt: Test coverage
 
 .. |pylint| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/pylint-score.svg
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml

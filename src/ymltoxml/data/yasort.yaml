@@ -1,4 +1,5 @@
 ---
+# comments should be preserved
 file_encoding: 'utf-8'
 default_yml_ext: '.yaml'
 output_dirname: 'sorted-out'
@@ -6,6 +7,7 @@ default_parent_key: 'controls'
 default_sort_key: 'rules'
 has_parent_key: true
 preserve_quotes: true
+process_comments: false
 mapping: 4
 sequence: 6
 offset: 4

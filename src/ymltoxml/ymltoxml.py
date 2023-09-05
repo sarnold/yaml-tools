@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2022 Stephen L Arnold
 #
 # This is free software, licensed under the LGPL-2.1 license
@@ -10,15 +9,15 @@ format uses custom markup for XML attributes and comments. See the
 xmltodict docs for details.
 """
 
+import argparse
 import sys
-from optparse import OptionParser  # pylint: disable=W0402
 from pathlib import Path
 
 import xmltodict
 import yaml as yaml_loader
 from munch import Munch
 
-from ._version import __version__
+from .utils import VERSION as __version__
 from .utils import (
     FileTypeError,
     StrYAML,
@@ -106,9 +105,7 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
     :handlles FileTypeError: input file is not xml or yml
     """
     fpath = Path(filepath)
-    opath = fpath
-    if outpath:
-        opath = Path(outpath)
+    opath = Path(outpath) if outpath else fpath
 
     if not fpath.exists():
         print(f'Input file {fpath} not found! Skipping...')
@@ -135,70 +132,92 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
         new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
 
 
-def main(argv=None):
+def main(argv=None):  # pragma: no cover
     """
     Transform YAML to XML and XML to YAML.
     """
     debug = False
-    cfg, pfile = load_config()
-    popts = Munch.toDict(cfg)
-
     if argv is None:
         argv = sys.argv
-    parser = OptionParser(
-        usage="usage: %prog [options] arg1 arg2", version=f"%prog {__version__}"
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description='Transform YAML to XML and XML to YAML',
     )
-    parser.description = 'Transform YAML to XML and XML to YAML.'
-    parser.add_option(
-        '-i',
-        '--infile',
-        metavar="FILE",
-        action='store',
-        dest='infile',
-        help='Path to input file (use with --outfile)',
-    )
-    parser.add_option(
-        '-o',
-        '--outfile',
-        metavar="FILE",
-        action='store',
-        dest='outfile',
-        help='Path to output file (use with --infile)',
-    )
-    parser.add_option(
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        dest="verbose",
         help="Display more processing info",
     )
-    parser.add_option(
+    parser.add_argument(
         '-d',
         '--dump-config',
         action='store_true',
         dest="dump",
         help='Dump default configuration file to stdout',
     )
+    parser.add_argument(
+        '-s',
+        '--save-config',
+        action='store_true',
+        dest="save",
+        help='save active config to default filename (.ymltoxml.yml) and exit',
+    )
+    parser.add_argument(
+        '-i',
+        '--infile',
+        nargs='?',
+        metavar="FILE",
+        type=str,
+        help="Path to single input file (use with --outfile)",
+    )
+    parser.add_argument(
+        '-o',
+        '--outfile',
+        nargs='?',
+        metavar="FILE",
+        type=str,
+        help="Path to single output file (required with --infile)",
+    )
+    parser.add_argument(
+        'file',
+        nargs='*',
+        metavar="FILE",
+        type=str,
+        help="Process input file (list) to target extension",
+    )
 
-    (options, args) = parser.parse_args()
-
-    if options.outfile and not options.infile:
-        parser.error("missing --infile argument")
-    if options.verbose:
-        debug = True
-    if options.infile and not args:
-        outname = options.outfile
-        process_inputs(options.infile, popts, outname, debug=debug)
-        sys.exit(0)
-    elif options.dump:
-        sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
-        sys.exit(0)
-    if not args:
+    args = parser.parse_args()
+    if len(argv) == 1:
         parser.print_help()
         sys.exit(1)
+    if args.outfile and not args.infile:
+        parser.error("missing infile argument")
+    if args.verbose:
+        debug = True
 
-    if len(args) > 0:
-        for filearg in args:
+    pcfg, pfile = load_config(debug=debug)
+    popts = Munch.toDict(pcfg)
+
+    if args.save:
+        cfg_data = pfile.read_bytes()
+        def_config = Path('.ymltoxml.yml')
+        def_config.write_bytes(cfg_data)
+        sys.exit(0)
+    if args.dump:
+        sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
+        sys.stdout.flush()
+        sys.exit(0)
+
+    if args.infile:
+        if args.outfile:
+            process_inputs(args.infile, popts, args.outfile, debug=debug)
+        else:
+            process_inputs(args.infile, popts, debug=debug)
+
+    if args.file:
+        for filearg in args.file:
             process_inputs(filearg, popts, debug=debug)
 
 

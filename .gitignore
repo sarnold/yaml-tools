@@ -5,7 +5,8 @@ __pycache__/
 
 # generated/user files
 src/ymltoxml/_version.py
-.ymltoxml.yaml
+.ymltoxml.y*
+.yasort.y*
 in.*
 out.*
 sorted-out/
