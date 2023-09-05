@@ -147,7 +147,7 @@ def main(argv=None):  # pragma: no cover
         nargs='*',
         metavar="FILE",
         type=str,
-        help="Process input file (list) to target directory",
+        help="Process input file(s) to target directory",
     )
 
     args = parser.parse_args()
