@@ -124,14 +124,6 @@ current round-trip is not exact, due to the following:
 
 For the files tested (eg, mavlink) the end result is cleaner/shinier XML.
 
-.. note:: This project uses versioningit_ to generate and maintain the
-          version file, which only gets included in the sdist/wheel
-          packages. In a fresh clone, running any of the tox_ commands
-          should generate the current version file.
-
-.. _versioningit: https://github.com/jwodder/versioningit
-
-
 Dev workflows
 =============
 
@@ -301,7 +293,7 @@ It's usually a good idea to update the hooks to the latest version::
     :target: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml
     :alt: Release Status
 
-.. |cov| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/master/test-coverage.svg
+.. |cov| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/test-coverage.svg
     :target: https://github.com/sarnold/ymltoxml/
     :alt: Test coverage
 
