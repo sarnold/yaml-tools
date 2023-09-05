@@ -18,7 +18,10 @@ markers = "subscript"
 
 [tool.coverage.run]
 branch = true
-source = ["src"]
+source = [
+    "src",
+    ".tox/py*/lib/python*/site-packages/",
+]
 omit = [
     "tests",
     ".tox",
@@ -28,8 +31,15 @@ omit = [
 source = ["src"]
 
 [tool.coverage.report]
-fail_under = 10
+fail_under = 80
 show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "raise AssertionError",
+    "if typing.TYPE_CHECKING:",
+    "if TYPE_CHECKING:",
+]
 
 [tool.black]
 line-length = 90

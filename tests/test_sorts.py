@@ -1,10 +1,7 @@
-import sys
-
 import pytest
-from munch import Munch
-from ruamel.yaml import YAML
 
 from ymltoxml.utils import StrYAML, sort_from_parent
+from ymltoxml.yasort import sort_list_data
 
 defconfig_str = """\
 # comments should be preserved
@@ -55,7 +52,7 @@ controls:  # sequences can have nodes that are mappings
             - var_authselect_profile=sssd
 """
 
-expected_sort_out = """\
+inner_sort_out = """\
 policy: Security Requirements Guide - General Purpose Operating System
 title: Security Requirements Guide - General Purpose Operating System
 id: srg_gpos
@@ -89,15 +86,46 @@ controls:  # sequences can have nodes that are mappings
   - var_sshd_disable_compression=no            # this should be last
 """
 
+outer_sort_out = """\
+policy: Security Requirements Guide - General Purpose Operating System
+title: Security Requirements Guide - General Purpose Operating System
+id: srg_gpos
+version: v2r3
+source: https://public.cyber.mil/stigs/downloads/
+controls_dir: srg_gpos
+levels:
+    - id: high
+    - id: medium
+    - id: low
+controls:  # sequences can have nodes that are mappings
+    - id: Variables
+      levels:
+          - high
+          - medium
+          - low
+      title: Variables
+      rules:
+          - login_banner_text=dod_banners    # this should be first
+          - sshd_approved_ciphers=stig
+          - sshd_approved_macs=stig
+          - sshd_idle_timeout_value=10_minutes
+          - var_account_disable_post_pw_expiration=35
+          - var_accounts_authorized_local_users_regex=rhel8
+          - var_auditd_action_mail_acct=root
+          - var_auditd_space_left_action=email
+          - var_auditd_space_left_percentage=25pc
+          - var_authselect_profile=sssd
+          - var_password_hashing_algorithm=SHA512
+          - var_password_pam_dictcheck=1
+          - var_sshd_disable_compression=no    # this should be last
+"""
 
-# my_yaml = StrYAML()
 
-
-def test_sort_output():
-    yaml = YAML()
+def test_sort_from():
+    yaml = StrYAML()
 
     data = yaml.load(yaml_str)
-    check = yaml.load(expected_sort_out)
+    check = yaml.load(inner_sort_out)
     popts = yaml.load(defconfig_str)
 
     data_sorted = sort_from_parent(data, popts)
@@ -107,4 +135,30 @@ def test_sort_output():
     popts['default_sort_key'] = 'controls'
 
     data_noparent = sort_from_parent(data, popts)
-    yaml.dump(data_noparent, sys.stdout)
+    # yaml.dump(data_noparent, sys.stdout)
+
+
+def test_sort_list():
+    yaml = StrYAML()
+
+    data = yaml.load(yaml_str)
+    check = outer_sort_out
+    popts = yaml.load(defconfig_str)
+
+    data_sorted = sort_list_data(data, popts)
+    assert data_sorted == check
+
+
+def test_sort_format():
+    yaml = StrYAML()
+
+    data = yaml.load(inner_sort_out)
+    popts = yaml.load(defconfig_str)
+    yaml.indent(
+        mapping=popts['mapping'],
+        sequence=popts['sequence'],
+        offset=popts['offset'],
+    )
+    yaml.preserve_quotes = popts['preserve_quotes']
+
+    assert yaml.dump(data) == outer_sort_out

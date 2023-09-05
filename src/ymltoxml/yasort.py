@@ -1,7 +1,6 @@
 """Console script for sorting YAML lists."""
 
 import argparse
-import re
 import sys
 from pathlib import Path
 
@@ -14,6 +13,7 @@ from .utils import (
     StrYAML,
     load_config,
     replace_angles,
+    replace_curlys,
     sort_from_parent,
 )
 
@@ -32,13 +32,6 @@ def get_input_yaml(filepath, prog_opts):
     :return data_in: file data
     :raises FileTypeError: if the input file is not yaml
     """
-
-    def replace_curlys(data):
-        """
-        Replace original outside curly brace with angle bracket.
-        """
-        data = re.sub(r'\s{{{\s', ' <{{ ', data)
-        return re.sub(r'\}}}\s', '}}> ', data)
 
     data_in = None
     yaml = YAML()
@@ -117,7 +110,7 @@ def process_inputs(filepath, prog_opts, debug=False):
         new_opath.write_text(restored_data, encoding=prog_opts['file_encoding'])
 
 
-def main(argv=None):
+def main(argv=None):  # pragma: no cover
     """
     Read/write YAML files with sorted list(s).
     """

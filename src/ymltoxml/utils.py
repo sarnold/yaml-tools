@@ -73,6 +73,14 @@ def replace_angles(data):
     return re.sub(r'\}}>\s', '}}} ', data)
 
 
+def replace_curlys(data):
+    """
+    Replace original outside curly brace with angle bracket.
+    """
+    data = re.sub(r'\s{{{\s', ' <{{ ', data)
+    return re.sub(r'\}}}\s', '}}> ', data)
+
+
 def restore_xml_comments(xmls):
     """
     Turn tagged comment elements back into xml comments.

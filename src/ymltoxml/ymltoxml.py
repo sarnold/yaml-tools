@@ -132,7 +132,7 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
         new_opath.write_text(outdata, encoding=prog_opts['file_encoding'])
 
 
-def main(argv=None):
+def main(argv=None):  # pragma: no cover
     """
     Transform YAML to XML and XML to YAML.
     """
