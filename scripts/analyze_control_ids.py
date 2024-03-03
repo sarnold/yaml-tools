@@ -12,13 +12,13 @@ from ymltoxml.utils import get_filelist, get_profile_type
 
 id_count: typing.Counter[str] = Counter()
 FILE = os.getenv('ID_FILE', default='tests/data/PRIVACY-ids-50.txt')
-DEBUG = os.getenv('DEBUG', default=False)
+DEBUG = os.getenv('DEBUG', default=None)
 
 if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
     sys.exit(1)
 
-input_ids = [line for line in Path(FILE).read_text(encoding='utf-8').splitlines()]
+input_ids = list(Path(FILE).read_text(encoding='utf-8').splitlines())
 i_set = set(sorted(input_ids))
 
 print(f"Input control IDs -> {len(i_set)}")
@@ -32,15 +32,15 @@ for pfile in nist_files:
         print(f"Profile {pfile} not found! Skipping...")
 
     ptype = get_profile_type(pfile, debug=DEBUG)
-    ptype_ids = [line for line in Path(pfile).read_text(encoding='utf-8').splitlines()]
+    ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
     p_set = set(sorted(ptype_ids))
-    print(f"{ptype} profile control IDs -> {len(p_set)}"\n)
+    print(f"{ptype} profile control IDs -> {len(p_set)}\n")
 
     print(f"Input set is in {ptype} set: {p_set > i_set}")
     common_set = p_set & i_set
-    print(f"Num input controls in {ptype} set -> {len(common_set)")
+    print(f"Num input controls in {ptype} set -> {len(common_set)}")
     not_in_set = i_set - p_set
-    print(f"Num input controls not in {ptype} set -> {len(not_in_set)")
+    print(f"Num input controls not in {ptype} set -> {len(not_in_set)}")
     if DEBUG:
         print(f"Input controls not in {ptype} set: {not_in_set}")
 

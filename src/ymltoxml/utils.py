@@ -64,13 +64,12 @@ def get_profile_type(filename, debug=False):
     exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
     """
     profile_types = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
-    profile_type = None
+    match = None
 
     if any((match := substring) in filename for substring in profile_types):
-        profile_type = match
-    if debug:
-        print(f'Found profile type: {profile_type}')
-    return profile_type
+        if debug:
+            print(f'Found profile type: {match}')
+    return match
 
 
 def load_config(file_encoding='utf-8', yasort=False, debug=False):
