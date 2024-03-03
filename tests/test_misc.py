@@ -7,17 +7,19 @@ from ymltoxml.utils import StrYAML, get_filelist, get_profile_type, load_config
 
 
 def test_get_filelist():
+    test_path = Path('docs') / 'source' / 'index.rst'
     files = get_filelist('docs/source', '*.rst')
     assert isinstance(files, list)
     assert len(files) == 6
-    assert 'docs/source/index.rst' in files
+    assert str(test_path) in files
 
 
 def test_get_filelist_debug():
+    test_path = Path('docs') / 'source' / 'index.rst'
     files = get_filelist('docs/source', '*.rst', debug=True)
     assert isinstance(files, list)
     assert len(files) == 6
-    assert 'docs/source/index.rst' in files
+    assert str(test_path) in files
 
 
 def test_get_profile_type():
