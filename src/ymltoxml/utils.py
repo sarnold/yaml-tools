@@ -58,6 +58,36 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
     return file_list
 
 
+def get_profile_sets(dirpath, filepattern='*.txt', debug=False):
+    """
+    Get the oscal ID files and parse them into ID sets, return a list of sets.
+    There should not be more than one file for each profile type.
+    """
+    h_set = set()
+    m_set = set()
+    l_set = set()
+    p_set = set()
+
+    nist_files = sorted(get_filelist(dirpath, filepattern, debug))
+    for _, pfile in enumerate(nist_files):
+        ptype = get_profile_type(pfile, debug)
+        ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
+        t_set = set(sorted(ptype_ids))
+        if ptype == 'HIGH':
+            h_set.update(t_set)
+        if ptype == 'MODERATE':
+            m_set.update(t_set)
+        if ptype == 'LOW':
+            l_set.update(t_set)
+        if ptype == 'PRIVACY':
+            p_set.update(t_set)
+        if ptype is None:
+            if debug:
+                print(f"{ptype} not found! Skipping...")
+            break
+    return [h_set, m_set, l_set, p_set]
+
+
 def get_profile_type(filename, debug=False):
     """
     Get oscal profile type from filename, where profile type is one of the

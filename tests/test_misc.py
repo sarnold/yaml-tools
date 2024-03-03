@@ -3,8 +3,13 @@ from pathlib import Path
 import pytest
 from munch import Munch
 
-from ymltoxml.utils import StrYAML, get_filelist, get_profile_type, load_config
-
+from ymltoxml.utils import (
+    StrYAML,
+    get_filelist,
+    get_profile_sets,
+    get_profile_type,
+    load_config,
+)
 
 def test_get_filelist():
     test_path = Path('docs') / 'source' / 'index.rst'
@@ -20,6 +25,15 @@ def test_get_filelist_debug():
     assert isinstance(files, list)
     assert len(files) == 6
     assert str(test_path) in files
+
+
+def test_get_profile_sets():
+    dirpath = 'tests/data/'
+    set_list = get_profile_sets(dirpath)
+    assert len(set_list) == 4
+    for item in set_list:
+        assert isinstance(item, set)
+    assert set_list[0] > set_list[1]
 
 
 def test_get_profile_type():

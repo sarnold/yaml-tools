@@ -29,12 +29,12 @@ nist_files = sorted(get_filelist('800-53-control-ids/nist', '*.txt', debug=DEBUG
 
 for pfile in nist_files:
     if not Path(pfile).exists():
-        print(f"Profile {pfile} not found! Skipping...")
+        print(f"{pfile} profile not found! Skipping...")
 
     ptype = get_profile_type(pfile, debug=DEBUG)
     ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
     p_set = set(sorted(ptype_ids))
-    print(f"{ptype} profile control IDs -> {len(p_set)}\n")
+    print(f"\n{ptype} profile control IDs -> {len(p_set)}")
 
     print(f"Input set is in {ptype} set: {p_set > i_set}")
     common_set = p_set & i_set
