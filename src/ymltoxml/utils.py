@@ -40,6 +40,39 @@ class StrYAML(YAML):
         return stream.getvalue()
 
 
+def get_filelist(dirpath, filepattern='*.txt', debug=False):
+    """
+    Get path objects matching ``filepattern`` starting at ``dirpath`` and
+    return a list of matching paths for any files found.
+
+    :param dirpath: directory name to search in
+    :param filepattern: str of the form ``*.<ext>``
+    :return: list of path strings
+    """
+    file_list = []
+    filenames = Path(dirpath).rglob(filepattern)
+    for pfile in list(filenames):
+        file_list.append(str(pfile))
+    if debug:
+        print(f'Found file list: {file_list}')
+    return file_list
+
+
+def get_profile_type(filename, debug=False):
+    """
+    Get oscal profile type from filename, where profile type is one of the
+    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
+    """
+    profile_types = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
+    profile_type = None
+
+    if any((match := substring) in filename for substring in profile_types):
+        profile_type = match
+    if debug:
+        print(f'Found profile type: {profile_type}')
+    return profile_type
+
+
 def load_config(file_encoding='utf-8', yasort=False, debug=False):
     """
     Load yaml configuration file and munchify the data. If local file is
