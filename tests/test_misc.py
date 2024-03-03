@@ -29,11 +29,14 @@ def test_get_filelist_debug():
 
 def test_get_profile_sets():
     dirpath = 'tests/data/'
-    set_list = get_profile_sets(dirpath)
-    assert len(set_list) == 4
-    for item in set_list:
+    id_sets = get_profile_sets(dirpath)
+    assert len(id_sets) == 2
+    assert isinstance(id_sets, tuple)
+    for item in id_sets:
+        assert len(item) == 4
+    for item in id_sets[0]:
         assert isinstance(item, set)
-    assert set_list[0] > set_list[1]
+    assert id_sets[0][0] > id_sets[0][1]
 
 
 def test_get_profile_type():

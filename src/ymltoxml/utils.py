@@ -21,6 +21,8 @@ else:
 
 VERSION = version('ymltoxml')
 
+PROFILE_TYPES = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
+
 
 class FileTypeError(Exception):
     """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
@@ -45,8 +47,9 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
     Get path objects matching ``filepattern`` starting at ``dirpath`` and
     return a list of matching paths for any files found.
 
-    :param dirpath: directory name to search in
+    :param dirpath: directory name to start file search
     :param filepattern: str of the form ``*.<ext>``
+    :param debug: increase output verbosity
     :return: list of path strings
     """
     file_list = []
@@ -58,10 +61,20 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
     return file_list
 
 
-def get_profile_sets(dirpath, filepattern='*.txt', debug=False):
+def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
     """
-    Get the oscal ID files and parse them into ID sets, return a list of sets.
-    There should not be more than one file for each profile type.
+    Get the 800-53 oscal ID files and parse them into ID sets, return
+    a list of sets. There should not be more than one controls file for
+    each profile type.
+
+    :Note: The oscal ID files are simply text files with a single "column"
+           of ID strings extracted from the NIST oscal-content files or a
+           CSV dump, etc. Samples are contained in the ``tests/data`` folder.
+
+    :param dirpath: directory name to start file search
+    :param filepattern: str of the form ``*.<ext>``
+    :param debug: increase output verbosity
+    :return: tuple of lists: (profile_sets, profile_types)
     """
     h_set = set()
     m_set = set()
@@ -69,6 +82,7 @@ def get_profile_sets(dirpath, filepattern='*.txt', debug=False):
     p_set = set()
 
     nist_files = sorted(get_filelist(dirpath, filepattern, debug))
+
     for _, pfile in enumerate(nist_files):
         ptype = get_profile_type(pfile, debug)
         ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
@@ -85,7 +99,8 @@ def get_profile_sets(dirpath, filepattern='*.txt', debug=False):
             if debug:
                 print(f"{ptype} not found! Skipping...")
             break
-    return [h_set, m_set, l_set, p_set]
+
+    return [h_set, m_set, l_set, p_set], PROFILE_TYPES
 
 
 def get_profile_type(filename, debug=False):
@@ -93,12 +108,12 @@ def get_profile_type(filename, debug=False):
     Get oscal profile type from filename, where profile type is one of the
     exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
     """
-    profile_types = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
     match = None
 
-    if any((match := substring) in filename for substring in profile_types):
+    if any((match := substring) in filename for substring in PROFILE_TYPES):
         if debug:
             print(f'Found profile type: {match}')
+
     return match
 
 
