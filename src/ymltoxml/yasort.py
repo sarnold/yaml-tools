@@ -154,6 +154,7 @@ def main(argv=None):  # pragma: no cover
 
     cfg, pfile = load_config(yasort=True)
     popts = Munch.toDict(cfg)
+    outdir = popts['output_dirname']
 
     if args.save:
         cfg_data = pfile.read_bytes()
@@ -165,18 +166,14 @@ def main(argv=None):  # pragma: no cover
         sys.exit(0)
     if args.verbose:
         debug = True
-
-    output_dir = Path(popts['output_dirname'])
-    if debug:
-        print(f'Creating output directory {output_dir}')
-    output_dir.mkdir(exist_ok=True)
-
-    if args.file:
-        for filearg in args.file:
-            process_inputs(filearg, popts, debug=debug)
-    else:
+    if not args.file:
         parser.print_help()
         sys.exit(1)
+    if debug:
+        print(f'Creating output directory {outdir}')
+    Path(outdir).mkdir(exist_ok=True)
+    for filearg in args.file:
+        process_inputs(filearg, popts, debug=debug)
 
 
 if __name__ == '__main__':

@@ -34,9 +34,9 @@ for id_set, ptype in zip(id_sets, id_names):
     print(f"\n{ptype} profile control IDs -> {len(id_set)}")
 
     print(f"Input set is in {ptype} set: {id_set > in_set}")
-    common_set = id_set & in_set
+    common_set = sorted(id_set & in_set)
     print(f"Num input controls in {ptype} set -> {len(common_set)}")
-    not_in_set = in_set - id_set
+    not_in_set = sorted(in_set - id_set)
     print(f"Num input controls not in {ptype} set -> {len(not_in_set)}")
     if DEBUG:
         print(f"Input controls not in {ptype} set: {not_in_set}")
@@ -45,3 +45,9 @@ print(f"\n{id_names[2]} set is in {id_names[0]} set: {id_sets[0] > id_sets[2]}")
 print(f"{id_names[2]} set is in {id_names[1]} set: {id_sets[1] > id_sets[2]}")
 print(f"{id_names[1]} set is in {id_names[0]} set: {id_sets[0] > id_sets[1]}")
 print(f"{id_names[3]} set is in {id_names[0]} set: {id_sets[0] > id_sets[3]}")
+
+if DEBUG:
+    not_in_high = sorted(in_set - id_sets[0])
+    print("\nInput controls not in HIGH set\n")
+    for ctl_id in not_in_high:
+        print(ctl_id)
