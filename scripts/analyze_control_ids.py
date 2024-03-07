@@ -20,11 +20,11 @@ if not Path(FILE).exists():
     sys.exit(1)
 
 input_ids = list(Path(FILE).read_text(encoding='utf-8').splitlines())
-in_set = set(sorted(input_ids))
+in_set = set(input_ids)
 
 print(f"Input control IDs -> {len(in_set)}")
 if DEBUG:
-    print(in_set)
+    print(sorted(in_set))
 if SELFTEST:
     id_sets, id_names = get_profile_sets('tests/data')
 else:
