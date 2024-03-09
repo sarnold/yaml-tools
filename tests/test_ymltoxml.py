@@ -26,6 +26,14 @@ def test_process_inputs(xml_file, yml_file):
     process_inputs(yml_file, popts)
 
 
+def test_process_inputs_debug(xml_file, yml_file):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+
+    process_inputs(xml_file, popts, debug=True)
+    process_inputs(yml_file, popts, debug=True)
+
+
 def test_process_no_comments(xml_file, yml_file):
     yaml = StrYAML()
     popts = yaml.load(defconfig_str)

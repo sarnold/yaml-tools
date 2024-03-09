@@ -1,16 +1,13 @@
 import pytest
 
 from ymltoxml.utils import FileTypeError, StrYAML
-from ymltoxml.yasort import get_input_yaml, process_inputs
+from ymltoxml.yagrep import process_inputs
 
 defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
 default_yml_ext: '.yaml'
-output_dirname: 'sorted-out'
-default_parent_key: 'controls'
-default_sort_key: 'rules'
-has_parent_key: true
+default_separator: '/'
 preserve_quotes: true
 process_comments: false
 mapping: 4
@@ -55,31 +52,24 @@ controls:  # sequences can have nodes that are mappings
 """
 
 
-def test_process_inputs(tmp_path):
+def test_process_inputs(capfd, tmp_path):
     yaml = StrYAML()
-    d = tmp_path / "out"
-    d.mkdir()
     inp = tmp_path / "in.yml"
     inp.write_text(yaml_str, encoding="utf-8")
 
     popts = yaml.load(defconfig_str)
-    popts['output_dirname'] = d
-    process_inputs(inp, popts)
-    assert len(list(d.iterdir())) == 1
-    # for child in d.iterdir(): print(child)
+    process_inputs(inp, 'low', popts)
+    out, err = capfd.readouterr()
 
 
-def test_process_inputs_debug(tmp_path):
+def test_process_inputs_debug(capfd, tmp_path):
     yaml = StrYAML()
-    d = tmp_path / "out"
-    d.mkdir()
     inp = tmp_path / "in.yml"
     inp.write_text(yaml_str, encoding="utf-8")
 
     popts = yaml.load(defconfig_str)
-    popts['output_dirname'] = d
-    process_inputs(inp, popts, True)
-    assert len(list(d.iterdir())) == 1
+    process_inputs(inp, 'low', popts, True)
+    out, err = capfd.readouterr()
 
 
 def test_bad_file(capfd, tmp_path):
@@ -88,9 +78,6 @@ def test_bad_file(capfd, tmp_path):
     inp2 = tmp_path / "in.ymml"
     inp2.write_text(yaml_str, encoding="utf-8")
 
-    process_inputs(inp2, popts)
+    process_inputs(inp2, 'low', popts)
     out, err = capfd.readouterr()
     assert file_type_err in out
-
-    with pytest.raises(FileTypeError):
-        get_input_yaml(inp2, popts)
