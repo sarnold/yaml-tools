@@ -117,7 +117,7 @@ def get_profile_type(filename, debug=False):
     return match
 
 
-def load_config(file_encoding='utf-8', yasort=False, debug=False):
+def load_config(file_encoding='utf-8', yasort=False, yagrep=False, debug=False):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
@@ -133,6 +133,8 @@ def load_config(file_encoding='utf-8', yasort=False, debug=False):
     prog_name = 'ymltoxml'
     if yasort:
         prog_name = 'yasort'
+    if yagrep:
+        prog_name = 'yagrep'
     defconfig = Path(f'.{prog_name}.yml')
 
     cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
