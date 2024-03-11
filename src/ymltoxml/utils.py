@@ -1,6 +1,7 @@
 """
 Shared utility code.
 """
+
 import re
 import sys
 from pathlib import Path

@@ -10,9 +10,9 @@
 
 Python command line tools to convert between XML_ files and YAML_ files,
 preserving attributes and comments (with minor corrections).  The default
-file encoding for both types is UTF-8 without a BOM. Includes another
-console entry point to sort large YAML lists (eg, lists of rules found
-in the `SCAP Security Guide`_).
+file encoding for both types is UTF-8 without a BOM. Now includes more
+console entry points to grep or sort interesting YAML files (eg, lists
+of rules found in the `SCAP Security Guide`_).
 
 .. _SCAP Security Guide: https://github.com/ComplianceAsCode/content
 
@@ -47,8 +47,8 @@ idiom to install it on your system in a virtual env after cloning::
 The alternative to python venv is the ``tox`` test driver.  If you have it
 installed already, see the example tox commands below.
 
-Usage
------
+ymltoxml
+--------
 
 The current version supports minimal command options; if no options are
 provided, the only required arguments are one or more files of a single
@@ -102,20 +102,75 @@ configuration file, do::
   $ ymltoxml --dump-config > .ymltoxml.yaml
   $ $EDITOR .ymltoxml.yaml
 
-An additional helper script is now provided for sorting large (YAML) lists.
-The new ``yasort`` script uses its own configuration file, creatively named
-``yasort.yaml``. The above applies equally to this new config file.
+yagrep
+------
+
+A new helper script is now included for searching keys or values in
+YAML files. The ``yagrep`` script also has its own built-in config
+file, which can be copied and edited as shown above. In this case the
+script is intended to feel more-or-less like ``grep`` so the default
+config should Just Work. That said, the script uses the ``dpath``
+python library, so you may need to change the default "path" separator
+if your data has keys containing forward slashes (see the `upstream
+docs`_ for details).
+
+General usage guidelines:
+
+* use the ``-f`` (filter) arg to search for a value string
+* follow the (json) output from above to find the key name
+* then use the ``-l`` (lookup) arg to extract the values for the above key
+
+Useful yagrep config file settings:
+
+:default_separator: change the path separator to something like ``;`` if data
+                    has forward slashes
+:output_format: set the output format to ``raw`` for unformmated output
 
 ::
 
-  $ yasort
+  $ yagrep -h
+  usage: yagrep [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]
+
+  Search in YAML files for keys and values.
+
+  positional arguments:
+    TEXT               Text string to look for (one-only, required) (default:
+                       None)
+    FILE               Look in file(s) for text string (at least one, required)
+                       (default: None)
+
+  options:
+    -h, --help         show this help message and exit
+    --version          show program's version number and exit
+    -v, --verbose      Display more processing info (default: False)
+    -d, --dump-config  Dump default configuration file to stdout (default:
+                       False)
+    -s, --save-config  save active config to default filename (.yagrep.yml) and
+                       exit (default: False)
+    -f, --filter       Filter out data not matching input string (no paths)
+                       (default: False)
+    -l, --lookup       Lookup by key and return list of values for any matches
+                       (default: False)
+
+
+.. _upstream docs: https://github.com/dpath-maintainers/dpath-python
+
+yasort
+------
+
+Another helper script is included for sorting large (YAML) lists.
+The ``yasort`` script also uses its own configuration file, creatively named
+``.yasort.yaml``. The above applies equally to this config file.
+
+::
+
+  $ yasort -h
   usage: yasort [-h] [--version] [-v] [-d] [-s] [FILE ...]
 
   Sort YAML lists and write new files.
 
   positional arguments:
-    FILE               Process input file(s) to target directory (default:
-                       None)
+    FILE               Process input file(s) to target directory (default: None)
 
   options:
     -h, --help         show this help message and exit
@@ -126,18 +181,42 @@ The new ``yasort`` script uses its own configuration file, creatively named
     -s, --save-config  save active config to default filename (.yasort.yml) and
                        exit (default: False)
 
+All of the optional arguments for ``yasort`` are essentially orthogonal to
+sorting, thus the only required argument for normal usage is one or more
+input files. All of the user settings are in the default configuration file
+shown below; use the ``--save-config`` option to create your own config file.
+
+Default yasort.yaml:
+
+.. code-block:: yaml
+
+  ---
+  # comments should be preserved
+  file_encoding: 'utf-8'
+  default_yml_ext: '.yaml'
+  output_dirname: 'sorted-out'
+  default_parent_key: 'controls'
+  default_sort_key: 'rules'
+  has_parent_key: true
+  preserve_quotes: true
+  process_comments: false
+  mapping: 4
+  sequence: 6
+  offset: 4
+
 
 Features and limitations
 ------------------------
 
-We only test on mavlink XML message definitions, so it probably *will not*
-work at all on arbitrarily complex XML files with namespaces, etc.  The
-current round-trip is not exact, due to the following:
+We mainly test on mavlink XML message definitions and NIST/SSG YAML files,
+so round-trip conversion *may not* work at all on arbitrarily complex XML
+files with namespaces, etc.  The current round-trip is not exact, due to
+the following:
 
 * missing encoding is added to version tag
 * leading/trailing whitespace in text elements and comments is not preserved
-* elements with self-closing tags are converted to full closing tags
-* empty elements on more than one line are not preserved
+* XML - elements with self-closing tags are converted to full closing tags
+* XML - empty elements on more than one line are not preserved
 
 For the files tested (eg, mavlink) the end result is cleaner/shinier XML.
 
@@ -172,13 +251,13 @@ only Git, Python, and Tox.
 SCAP support
 ------------
 
-The yasort tool is also intended to be part of a larger workflow, mainly
+The yasort/yagrep tools are intended to be part of a larger workflow, mainly
 working with SCAP content, ie, the scap-security-guide source files (or
 just content_). It is currently used to sort profiles with large numbers
 of rules to make it easier to visually diff and spot duplicates, etc.
 
-The configuration file defaults are based on existing yaml structure, but
-you are free to change them for another use case. To adjust how the sorting
+The yasort configuration file defaults are based on existing yaml structure,
+but feel free to change them for another use case. To adjust how the sorting
 works, make a local config file (see above) and edit as needed the following
 options:
 
@@ -189,7 +268,7 @@ options:
 :default_yml_ext: change the output file extension
 
 The rest of the options are for YAML formatting/flow style (see the ruamel_
-documetation for formatting details)
+documentation for formatting details)
 
 .. _content: https://complianceascode.readthedocs.io/en/latest/
 .. _ruamel: https://yaml.readthedocs.io/en/latest/

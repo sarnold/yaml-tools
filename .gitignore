@@ -7,10 +7,12 @@ __pycache__/
 src/ymltoxml/_version.py
 .ymltoxml.y*
 .yasort.y*
+.yagrep.y*
 in.*
 out.*
 sorted-out/
 munch/
+nested_lookup/
 
 # C extensions
 *.so

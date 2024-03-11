@@ -1,7 +1,7 @@
 import pytest
 
-from ymltoxml.utils import StrYAML
-from ymltoxml.ymltoxml import process_inputs
+from ymltoxml.utils import FileTypeError, StrYAML
+from ymltoxml.ymltoxml import get_input_type, process_inputs
 
 defconfig_str = """\
 file_encoding: 'utf-8'
@@ -16,6 +16,8 @@ short_empty_elements: false
 pretty: true
 indent: '  '
 """
+
+file_type_err = "FileTypeError: unknown input file extension"
 
 
 def test_process_inputs(xml_file, yml_file):
@@ -41,3 +43,17 @@ def test_process_no_comments(xml_file, yml_file):
 
     process_inputs(xml_file, popts)
     process_inputs(yml_file, popts)
+
+
+def test_bad_file(capfd, tmp_path):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    inp2 = tmp_path / "in.ymml"
+    inp2.write_text("name: null", encoding="utf-8")
+
+    process_inputs(inp2, popts)
+    out, err = capfd.readouterr()
+    assert file_type_err in out
+
+    with pytest.raises(FileTypeError):
+        get_input_type(inp2, popts)
