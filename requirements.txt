@@ -1,6 +1,8 @@
 importlib-metadata; python_version < '3.8'
 importlib-resources; python_version < '3.10'
+dpath
 munch
+nested-lookup
 PyYAML
 ruamel.yaml
 xmltodict

@@ -1,0 +1,11 @@
+---
+# comments should be preserved
+file_encoding: 'utf-8'
+default_yml_ext: '.yaml'
+default_separator: '/'
+output_format: 'json'
+preserve_quotes: true
+process_comments: false
+mapping: 4
+sequence: 6
+offset: 4

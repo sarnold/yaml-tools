@@ -1,16 +1,15 @@
 import pytest
 
+from munch import Munch
 from ymltoxml.utils import FileTypeError, StrYAML
-from ymltoxml.yasort import get_input_yaml, process_inputs
+from ymltoxml.yagrep import process_inputs
 
 defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
 default_yml_ext: '.yaml'
-output_dirname: 'sorted-out'
-default_parent_key: 'controls'
-default_sort_key: 'rules'
-has_parent_key: true
+default_separator: '/'
+output_format: null
 preserve_quotes: true
 process_comments: false
 mapping: 4
@@ -54,43 +53,61 @@ controls:  # sequences can have nodes that are mappings
             - var_authselect_profile=sssd
 """
 
+args_obj = Munch.fromDict(
+    {
+        "get": False,
+        "filter": False,
+        "text": "foo",
+    }
+)
 
-def test_process_inputs(tmp_path):
+testdata = [
+    ("rules", True, False, "disable_compression",),
+    ("rules", False, True, "disable_compression"),
+    ("rules", False, False, "[]",),
+]
+
+@pytest.mark.parametrize("a,b,c,expected", testdata)
+def test_process_inputs(a, b, c, expected, capfd, tmp_path):
+    args_obj.text = a
+    args_obj.filter = b
+    args_obj.lookup = c
+    debug = False
     yaml = StrYAML()
-    d = tmp_path / "out"
-    d.mkdir()
     inp = tmp_path / "in.yml"
     inp.write_text(yaml_str, encoding="utf-8")
 
     popts = yaml.load(defconfig_str)
-    popts['output_dirname'] = d
-    process_inputs(inp, popts)
-    assert len(list(d.iterdir())) == 1
-    # for child in d.iterdir(): print(child)
+    process_inputs(inp, args_obj, popts, debug)
+    out, err = capfd.readouterr()
+    assert expected in out
+    assert "policy" not in out
 
 
-def test_process_inputs_debug(tmp_path):
+def test_process_inputs_filter_debug(capfd, tmp_path):
+    args_obj.text = "low"
+    args_obj.filter = True
+    args_obj.lookup = False
+    debug = True
     yaml = StrYAML()
-    d = tmp_path / "out"
-    d.mkdir()
     inp = tmp_path / "in.yml"
     inp.write_text(yaml_str, encoding="utf-8")
 
     popts = yaml.load(defconfig_str)
-    popts['output_dirname'] = d
-    process_inputs(inp, popts, True)
-    assert len(list(d.iterdir())) == 1
+    popts['output_format'] = 'json'
+    process_inputs(inp, args_obj, popts, debug)
+    out, err = capfd.readouterr()
+    assert "disable_compression" in out
+    assert "Searching in" in out
 
 
 def test_bad_file(capfd, tmp_path):
+    args_obj.text = "low"
     yaml = StrYAML()
     popts = yaml.load(defconfig_str)
     inp2 = tmp_path / "in.ymml"
     inp2.write_text(yaml_str, encoding="utf-8")
 
-    process_inputs(inp2, popts)
+    process_inputs(inp2, args_obj, popts)
     out, err = capfd.readouterr()
     assert file_type_err in out
-
-    with pytest.raises(FileTypeError):
-        get_input_yaml(inp2, popts)
