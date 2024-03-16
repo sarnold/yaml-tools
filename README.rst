@@ -405,7 +405,7 @@ It's usually a good idea to update the hooks to the latest version::
     :target: https://github.com/sarnold/ymltoxml/releases
     :alt: GitHub tag
 
-.. |python| image:: https://img.shields.io/badge/python-3.6+-blue.svg
+.. |python| image:: https://img.shields.io/badge/python-3.8+-blue.svg
     :target: https://www.python.org/downloads/
     :alt: Python
 
