@@ -18,17 +18,15 @@ markers = "subscript"
 
 [tool.coverage.run]
 branch = true
-source = [
-    "src",
-    ".tox/py*/lib/python*/site-packages/",
-]
 omit = [
     "tests",
-    ".tox",
 ]
 
 [tool.coverage.paths]
-source = ["src"]
+source = [
+    "src",
+    ".tox/*/lib/python*/site-packages/"
+]
 
 [tool.coverage.report]
 fail_under = 80

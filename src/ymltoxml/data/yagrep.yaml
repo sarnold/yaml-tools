@@ -3,6 +3,7 @@
 file_encoding: 'utf-8'
 default_yml_ext: '.yaml'
 default_separator: '/'
+default_oscal_dir: 'ext/oscal-content'
 output_format: 'json'
 preserve_quotes: true
 process_comments: false

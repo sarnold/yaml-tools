@@ -83,7 +83,8 @@ def main(argv=None):  # pragma: no cover
         description='''Search in YAML files for keys and values.
             The default search with no options is path-based, thus it
             may return empty results without a path or wildcard. Use
-            the filter argument to find the path(s) to a substring.''',
+            the filter argument to find the path(s) to a key using a
+            substring (wildcard) search.''',
         usage='%(prog)s [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]',
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
