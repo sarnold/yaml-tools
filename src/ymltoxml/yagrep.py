@@ -71,7 +71,6 @@ def main(argv=None):  # pragma: no cover
     """
     Process args and execute search.
     """
-    debug = False
     if argv is None:
         argv = sys.argv
 
@@ -146,21 +145,17 @@ def main(argv=None):  # pragma: no cover
     if args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
-    if args.verbose:
-        debug = True
     # we need to help argparse here, since it has trouble parsing the 2
     # postional args as required when both are missing, even with help from
     # nargs behavior (we also need customized usage msg above to replace the
     # default error text with the following print() statement)
     if not args.file or not args.text:
         parser.print_usage()
-        print(
-            "yagrep: error: both of the following arguments are required: TEXT *and* FILE"
-        )
+        print("yagrep: error: the following arguments are required: TEXT *and* FILE")
         sys.exit(1)
 
     for filearg in args.file:
-        process_inputs(filearg, args, popts, debug)
+        process_inputs(filearg, args, popts, args.verbose)
 
 
 if __name__ == '__main__':

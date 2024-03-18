@@ -57,19 +57,37 @@ def main(argv=None):  # pragma: no cover
         description='Extract data from OSCAL content repo',
     )
     parser.add_argument('--version', action="version", version=f"%(prog)s {VERSION}")
-    parser.add_argument('-t', '--test', help='Run sanity checks', action='store_true')
+    parser.add_argument(
+        '-t', '--test', help='run sanity checks and exit', action='store_true'
+    )
     parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
-        help="Display more processing info",
+        help="display more processing info",
     )
     parser.add_argument(
         '-d',
         '--dump-config',
-        help="dump active configuration to stdout",
+        help="dump active configuration to stdout and exit",
         action='store_true',
         dest="dump",
+    )
+    parser.add_argument(
+        '-n',
+        '--nist-path',
+        metavar="PATH",
+        type=str,
+        help="path to NIST oscal-content directory",
+        dest="nist",
+    )
+    parser.add_argument(
+        'file',
+        nargs='?',
+        metavar="FILE",
+        type=str,
+        default=None,
+        help="path to input file",
     )
 
     args = parser.parse_args()
@@ -80,6 +98,16 @@ def main(argv=None):  # pragma: no cover
     if args.test:
         self_test(ucfg)
         sys.exit(0)
+    if not args.file:
+        parser.print_usage()
+        print("oscal: error: the following arguments are required: FILE")
+        sys.exit(1)
+
+    nist_path = args.nist if args.nist else ucfg.default_oscal_path
+    if args.verbose:
+        print(f"Using path to oscal: {nist_path}")
+        if args.file:
+            print(f"Using input file: {args.file}")
 
 
 if __name__ == "__main__":
