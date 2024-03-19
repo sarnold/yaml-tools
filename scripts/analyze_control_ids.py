@@ -5,15 +5,78 @@ Simple ID string counter.
 import os
 import sys
 import typing
-from collections import Counter
+from collections import Counter, deque
 from pathlib import Path
 
-from ymltoxml.utils import get_profile_sets
+from fuzzy_match import match as fmatch
+
+from ymltoxml.utils import get_filelist
 
 id_count: typing.Counter[str] = Counter()
+result_queue = deque()
+
 FILE = os.getenv('ID_FILE', default='tests/data/PRIVACY-ids.txt')
 DEBUG = os.getenv('DEBUG', default=None)
 SELFTEST = os.getenv('SELFTEST', default=None)
+
+PROFILE_NAMES = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
+
+
+def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
+    """
+    Get the 800-53 oscal ID files and parse them into ID sets, return
+    a list of sets. There should not be more than one controls file for
+    each profile type.
+
+    :Note: The oscal ID files are simply text files with a single "column"
+           of ID strings extracted from the NIST oscal-content files or a
+           CSV dump, etc. Samples are contained in the ``tests/data`` folder.
+
+    :param dirpath: directory name to start file search
+    :param filepattern: str of the form ``*.<ext>``
+    :param debug: increase output verbosity
+    :return: tuple of lists: (profile_sets, PROFILE_NAMES)
+    """
+    h_set = set()
+    m_set = set()
+    l_set = set()
+    p_set = set()
+
+    nist_files = sorted(get_filelist(dirpath, filepattern, debug))
+
+    for _, pfile in enumerate(nist_files):
+        ptype = get_profile_type(pfile, debug)
+        ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
+        t_set = set(sorted(ptype_ids))
+        if ptype == 'HIGH':
+            h_set.update(t_set)
+        if ptype == 'MODERATE':
+            m_set.update(t_set)
+        if ptype == 'LOW':
+            l_set.update(t_set)
+        if ptype == 'PRIVACY':
+            p_set.update(t_set)
+        if ptype is None:
+            if debug:
+                print(f"{ptype} not found! Skipping...")
+            break
+
+    return [h_set, m_set, l_set, p_set], PROFILE_NAMES
+
+
+def get_profile_type(filename, debug=False):
+    """
+    Get oscal profile type from filename, where profile type is one of the
+    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
+    """
+    match = None
+
+    if any((match := substring) in filename for substring in PROFILE_NAMES):
+        if debug:
+            print(f'Found profile type: {match}')
+
+    return match
+
 
 if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
@@ -46,8 +109,24 @@ print(f"{id_names[2]} set is in {id_names[1]} set: {id_sets[1] > id_sets[2]}")
 print(f"{id_names[1]} set is in {id_names[0]} set: {id_sets[0] > id_sets[1]}")
 print(f"{id_names[3]} set is in {id_names[0]} set: {id_sets[0] > id_sets[3]}")
 
+not_in_high = sorted(in_set - id_sets[0])
+
 if DEBUG:
-    not_in_high = sorted(in_set - id_sets[0])
     print("\nInput controls not in HIGH set\n")
     for ctl_id in not_in_high:
         print(ctl_id)
+
+print("Running fuzzy match for not-in HIGH set")
+print(f"  processing {len(not_in_high)} control IDs from not-in HIGH set")
+
+for ctl_id in not_in_high:
+    result = fmatch.extract(ctl_id, id_sets[0], score_cutoff=0.6)
+    match_list = [match for match in result if ctl_id.startswith(match[0])]
+    if len(match_list) > 0:
+        result_queue.append((ctl_id, match_list))
+
+print(f"\nFuzzy ID match shows {len(result_queue)} possible controls match HIGH set")
+
+if DEBUG:
+    for match_res in result_queue:
+        print(f"Ctl ID {match_res[0]} => {match_res[1]}")

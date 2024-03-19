@@ -22,8 +22,6 @@ else:
 
 VERSION = version('ymltoxml')
 
-PROFILE_TYPES = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
-
 
 class FileTypeError(Exception):
     """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
@@ -60,62 +58,6 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
     if debug:
         print(f'Found file list: {file_list}')
     return file_list
-
-
-def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
-    """
-    Get the 800-53 oscal ID files and parse them into ID sets, return
-    a list of sets. There should not be more than one controls file for
-    each profile type.
-
-    :Note: The oscal ID files are simply text files with a single "column"
-           of ID strings extracted from the NIST oscal-content files or a
-           CSV dump, etc. Samples are contained in the ``tests/data`` folder.
-
-    :param dirpath: directory name to start file search
-    :param filepattern: str of the form ``*.<ext>``
-    :param debug: increase output verbosity
-    :return: tuple of lists: (profile_sets, profile_types)
-    """
-    h_set = set()
-    m_set = set()
-    l_set = set()
-    p_set = set()
-
-    nist_files = sorted(get_filelist(dirpath, filepattern, debug))
-
-    for _, pfile in enumerate(nist_files):
-        ptype = get_profile_type(pfile, debug)
-        ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
-        t_set = set(sorted(ptype_ids))
-        if ptype == 'HIGH':
-            h_set.update(t_set)
-        if ptype == 'MODERATE':
-            m_set.update(t_set)
-        if ptype == 'LOW':
-            l_set.update(t_set)
-        if ptype == 'PRIVACY':
-            p_set.update(t_set)
-        if ptype is None:
-            if debug:
-                print(f"{ptype} not found! Skipping...")
-            break
-
-    return [h_set, m_set, l_set, p_set], PROFILE_TYPES
-
-
-def get_profile_type(filename, debug=False):
-    """
-    Get oscal profile type from filename, where profile type is one of the
-    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
-    """
-    match = None
-
-    if any((match := substring) in filename for substring in PROFILE_TYPES):
-        if debug:
-            print(f'Found profile type: {match}')
-
-    return match
 
 
 def load_config(file_encoding='utf-8', yasort=False, yagrep=False, debug=False):

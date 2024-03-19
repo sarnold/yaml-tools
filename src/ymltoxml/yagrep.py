@@ -21,7 +21,8 @@ def process_inputs(filepath, grep_args, prog_opts, debug=False):
     Handle file arguments and process them. Return any input data for use
     with ``dpath`` search.
 
-    :param filepath: filename as Path obj
+    :param filepath: filename as path str
+    :type filepath: str
     :param prog_opts: configuration options
     :type prog_opts: dict
     :param debug: enable extra processing info
