@@ -15,7 +15,8 @@ from ymltoxml.utils import get_filelist
 id_count: typing.Counter[str] = Counter()
 result_queue = deque()
 
-FILE = os.getenv('ID_FILE', default='tests/data/PRIVACY-ids.txt')
+FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-ids.txt')
+FUZZY = os.getenv('FUZZY', default=None)
 DEBUG = os.getenv('DEBUG', default=None)
 SELFTEST = os.getenv('SELFTEST', default=None)
 
@@ -37,6 +38,20 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
     :param debug: increase output verbosity
     :return: tuple of lists: (profile_sets, PROFILE_NAMES)
     """
+
+    def get_profile_type(filename, debug=False):
+        """
+        Get oscal profile type from filename, where profile type is one of the
+        exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
+        """
+        match = None
+
+        if any((match := substring) in filename for substring in PROFILE_NAMES):
+            if debug:
+                print(f'Found profile type: {match}')
+
+        return match
+
     h_set = set()
     m_set = set()
     l_set = set()
@@ -62,20 +77,6 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
             break
 
     return [h_set, m_set, l_set, p_set], PROFILE_NAMES
-
-
-def get_profile_type(filename, debug=False):
-    """
-    Get oscal profile type from filename, where profile type is one of the
-    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
-    """
-    match = None
-
-    if any((match := substring) in filename for substring in PROFILE_NAMES):
-        if debug:
-            print(f'Found profile type: {match}')
-
-    return match
 
 
 if not Path(FILE).exists():
@@ -116,17 +117,18 @@ if DEBUG:
     for ctl_id in not_in_high:
         print(ctl_id)
 
-print("Running fuzzy match for not-in HIGH set")
-print(f"  processing {len(not_in_high)} control IDs from not-in HIGH set")
+if FUZZY:
+    print("Running fuzzy match for not-in HIGH set")
+    print(f"  processing {len(not_in_high)} control IDs from not-in HIGH set")
 
-for ctl_id in not_in_high:
-    result = fmatch.extract(ctl_id, id_sets[0], score_cutoff=0.6)
-    match_list = [match for match in result if ctl_id.startswith(match[0])]
-    if len(match_list) > 0:
-        result_queue.append((ctl_id, match_list))
+    for ctl_id in not_in_high:
+        result = fmatch.extract(ctl_id, id_sets[0], score_cutoff=0.6)
+        match_list = [match for match in result if ctl_id.startswith(match[0])]
+        if len(match_list) > 0:
+            result_queue.append((ctl_id, match_list))
 
-print(f"\nFuzzy ID match shows {len(result_queue)} possible controls match HIGH set")
+    print(f"\nFuzzy ID match shows {len(result_queue)} possible controls match HIGH set")
 
-if DEBUG:
-    for match_res in result_queue:
-        print(f"Ctl ID {match_res[0]} => {match_res[1]}")
+    if DEBUG:
+        for match_res in result_queue:
+            print(f"Ctl ID {match_res[0]} => {match_res[1]}")
