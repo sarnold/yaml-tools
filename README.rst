@@ -12,12 +12,23 @@ Python command line tools to convert between XML_ files and YAML_ files,
 preserving attributes and comments (with minor corrections).  The default
 file encoding for both types is UTF-8 without a BOM. Now includes more
 console entry points to grep or sort interesting YAML files (eg, lists
-of rules found in the `SCAP Security Guide`_).
+of rules found in the `SCAP Security Guide`_) and more input file types
+to ingest SSG and other upstream data, eg, NIST oscal-content_.
 
 .. _SCAP Security Guide: https://github.com/ComplianceAsCode/content
+.. _oscal-content: https://github.com/usnistgov/oscal-content.git
 
 Quick Start
 ===========
+
+Available console commands and scripts:
+
+* ``ymltoxml`` - YAML / XML round-trip conversion and cleanup
+* ``yasort`` - sort large lists in YAML files
+* ``yagrep`` - grep for keys/values in YAML files
+* ``oscal`` (*WIP*) - ingest NIST 800-53 content in multiple formats
+* ``analyze_control_ids.py`` (*experimental*) - analyze control ID sets
+
 
 Install with pip
 ----------------
@@ -29,7 +40,7 @@ to install ymltoxml on any platform. Install from the main branch::
 
 or use this command to install a specific release version::
 
-  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.2.2/ymltoxml-0.2.2.tar.gz
+  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.3.0/ymltoxml-0.3.0.tar.gz
 
 The full package provides the ``ymltoxml.py`` executable as well as
 a reference configuration file with defaults for all values.
@@ -319,10 +330,22 @@ To build/lint the api docs, use the following tox commands:
 Making Changes & Contributing
 =============================
 
-We use the gitchangelog_ action to generate our changelog and GH Release
-page, as well as the gitchangelog message format to help it categorize/filter
-commits for a tidier changelog. Please use the appropriate ACTION modifiers
-in any Pull Requests.
+We use the gitchangelog_ action to generate our changelog file and GH
+Release page, as well as the gitchangelog commit message prefix "tag"
+modifiers to help it categorize/filter commits for a tidier changelog.
+Please use the appropriate ACTION modifiers in any Pull Requests. Some
+examples of commit message summary "tags" are shown in ``.gitchangelog.rc``
+file and reproduced below::
+
+  new: usr: support of bazaar implemented
+  chg: re-indentend some lines !cosmetic
+  new: dev: updated code to be compatible with last version of killer lib.
+  fix: pkg: updated year of licence coverage.
+  new: test: added a bunch of test around user usability of feature X.
+  fix: typo in spelling my name in comment. !minor
+
+See the following docs page (or generate-changelog_ on Github) for more
+details.
 
 This repo is also pre-commit_ enabled for various linting and format
 checks.  The checks run automatically on commit and will fail the
@@ -365,7 +388,7 @@ It's usually a good idea to update the hooks to the latest version::
     pre-commit autoupdate
 
 
-.. _gitchangelog: https://github.com/sarnold/gitchangelog-action
+.. _gitchangelog: https://github.com/sarnold/gitchangelog
 .. _pre-commit: http://pre-commit.com/
 
 
