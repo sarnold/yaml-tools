@@ -10,7 +10,7 @@ from pathlib import Path
 
 from fuzzy_match import match as fmatch
 
-from ymltoxml.utils import get_filelist
+from ymltoxml.utils import get_filelist, text_file_reader
 
 id_count: typing.Counter[str] = Counter()
 result_queue = deque()
@@ -19,7 +19,7 @@ FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-ids.txt')
 FUZZY = os.getenv('FUZZY', default=None)
 DEBUG = os.getenv('DEBUG', default=None)
 SELFTEST = os.getenv('SELFTEST', default=None)
-
+OPTIONS = {'file_encoding': 'utf-8'}
 PROFILE_NAMES = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
 
 
@@ -61,7 +61,7 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
 
     for _, pfile in enumerate(nist_files):
         ptype = get_profile_type(pfile, debug)
-        ptype_ids = list(Path(pfile).read_text(encoding='utf-8').splitlines())
+        ptype_ids = text_file_reader(pfile, OPTIONS)
         t_set = set(sorted(ptype_ids))
         if ptype == 'HIGH':
             h_set.update(t_set)

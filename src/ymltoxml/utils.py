@@ -168,15 +168,14 @@ def text_file_reader(filepath, prog_opts):
 
     if infile.suffix not in EXTENSIONS:
         raise FileTypeError("FileTypeError: unknown input file extension")
-    else:
-        with infile.open("r", encoding=prog_opts['file_encoding']) as file:
-            if infile.suffix == '.csv':
-                data_in = list(csv.DictReader(file))
-            elif infile.suffix == '.json':
-                data_in = json.load(file)
-            elif infile.suffix == '.yaml' or infile.suffix == '.yml':
-                data_in = yaml_loader.safe_load(file)
-            else:
-                data_in = list(file.read().splitlines())
+    with infile.open("r", encoding=prog_opts['file_encoding']) as file:
+        if infile.suffix == '.csv':
+            data_in = list(csv.DictReader(file))
+        elif infile.suffix == '.json':
+            data_in = json.load(file)
+        elif infile.suffix in {'.yaml', '.yml'}:
+            data_in = yaml_loader.safe_load(file)
+        else:
+            data_in = list(file.read().splitlines())
 
     return data_in
