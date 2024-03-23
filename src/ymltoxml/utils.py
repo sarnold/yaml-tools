@@ -155,13 +155,13 @@ def text_file_reader(filepath, prog_opts):
     Text file reader for specific data types plus raw text. Tries to handle
     YAML, JSON, CSV, and plain old text. Read and parse the file data if
     ``filepath`` is one of the expected types and return data objects. For
-     all supported types of data, return a list of objects.
+    all supported types of data, return a list of objects.
 
     :param filepath: filename/path as str
     :param prog_opts: configuration options
     :type prog_opts: dict
     :return object: file data as list
-    :raises FileTypeError: if the input file is not xml or yml
+    :raises FileTypeError: if input file extension is not in EXTENSIONS
     """
     data_in = {}
     infile = Path(filepath)
