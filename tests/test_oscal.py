@@ -1,7 +1,7 @@
 import pytest
 from munch import Munch
 
-from ymltoxml.oscal import self_test
+import ymltoxml.oscal
 from ymltoxml.utils import FileTypeError, StrYAML
 
 defconfig_str = """\
@@ -24,7 +24,7 @@ file_type_err = "FileTypeError: unknown input file extension"
 def test_self_test(capfd):
     popts = Munch.fromYAML(defconfig_str)
     assert isinstance(popts, Munch)
-    self_test(popts)
+    ymltoxml.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'Console tools' in out
@@ -37,7 +37,7 @@ def test_self_test_bad_file(capfd):
     cfg_dict['default_oscal_dir'] = 'bogus/oscal'
     popts = Munch.fromDict(cfg_dict)
     assert isinstance(popts, Munch)
-    self_test(popts)
+    ymltoxml.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'FileNotFoundError' in out
@@ -49,7 +49,7 @@ def test_self_test_bad_cfg(capfd):
 
     del cfg_dict['default_oscal_dir']
     popts = Munch.fromDict(cfg_dict)
-    self_test(popts)
+    ymltoxml.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'missing key' in out

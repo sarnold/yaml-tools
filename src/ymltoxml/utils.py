@@ -2,10 +2,13 @@
 Shared utility code.
 """
 
+import csv
+import json
 import re
 import sys
 from pathlib import Path
 
+import yaml as yaml_loader
 from munch import Munch
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
@@ -20,11 +23,14 @@ if sys.version_info < (3, 10):
 else:
     import importlib.resources as importlib_resources
 
+EXTENSIONS = ['.csv', '.json', '.txt', '.yaml', '.yml']
 VERSION = version('ymltoxml')
 
 
 class FileTypeError(Exception):
-    """Raise when the file extension is not '.xml', '.yml', or '.yaml'"""
+    """
+    Raise when the file extension is not '.xml', '.yml', or '.yaml'.
+    """
 
     __module__ = Exception.__module__
 
@@ -142,3 +148,35 @@ def sort_from_parent(input_data, prog_opts):
         input_data[skey_name].sort()
 
     return input_data
+
+
+def text_file_reader(filepath, prog_opts):
+    """
+    Text file reader for specific data types plus raw text. Tries to handle
+    YAML, JSON, CSV, and plain old text. Read and parse the file data if
+    ``filepath`` is one of the expected types and return data objects. For
+     all supported types of data, return a list of objects.
+
+    :param filepath: filename/path as str
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :return object: file data as list
+    :raises FileTypeError: if the input file is not xml or yml
+    """
+    data_in = {}
+    infile = Path(filepath)
+
+    if infile.suffix not in EXTENSIONS:
+        raise FileTypeError("FileTypeError: unknown input file extension")
+    else:
+        with infile.open("r", encoding=prog_opts['file_encoding']) as file:
+            if infile.suffix == '.csv':
+                data_in = list(csv.DictReader(file))
+            elif infile.suffix == '.json':
+                data_in = json.load(file)
+            elif infile.suffix == '.yaml' or infile.suffix == '.yml':
+                data_in = yaml_loader.safe_load(file)
+            else:
+                data_in = list(file.read().splitlines())
+
+    return data_in

@@ -10,8 +10,7 @@ from munch import Munch
 from nested_lookup import nested_lookup
 
 from .utils import VERSION as __version__
-from .utils import FileTypeError, load_config
-from .ymltoxml import get_input_type
+from .utils import FileTypeError, load_config, text_file_reader
 
 # pylint: disable=R0801
 
@@ -48,7 +47,7 @@ def process_inputs(filepath, grep_args, prog_opts, debug=False):
             print(f'Searching in {fpath}...')
 
         try:
-            _, indata = get_input_type(fpath, prog_opts)
+            indata = text_file_reader(fpath, prog_opts)
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
             return None
@@ -84,7 +83,7 @@ def main(argv=None):  # pragma: no cover
             The default search with no options is path-based, thus it
             may return empty results without a path or wildcard. Use
             the filter argument to find the path(s) to a key using a
-            substring (wildcard) search.''',
+            substring search.''',
         usage='%(prog)s [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]',
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
