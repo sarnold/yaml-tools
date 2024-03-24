@@ -10,8 +10,7 @@ from munch import Munch
 from nested_lookup import nested_lookup
 
 from .utils import VERSION as __version__
-from .utils import FileTypeError, load_config
-from .ymltoxml import get_input_type
+from .utils import FileTypeError, load_config, text_file_reader
 
 # pylint: disable=R0801
 
@@ -21,7 +20,8 @@ def process_inputs(filepath, grep_args, prog_opts, debug=False):
     Handle file arguments and process them. Return any input data for use
     with ``dpath`` search.
 
-    :param filepath: filename as Path obj
+    :param filepath: filename as path str
+    :type filepath: str
     :param prog_opts: configuration options
     :type prog_opts: dict
     :param debug: enable extra processing info
@@ -47,7 +47,7 @@ def process_inputs(filepath, grep_args, prog_opts, debug=False):
             print(f'Searching in {fpath}...')
 
         try:
-            _, indata = get_input_type(fpath, prog_opts)
+            indata = text_file_reader(fpath, prog_opts)
         except FileTypeError as exc:
             print(f'{exc} => {fpath}')
             return None
@@ -71,7 +71,6 @@ def main(argv=None):  # pragma: no cover
     """
     Process args and execute search.
     """
-    debug = False
     if argv is None:
         argv = sys.argv
 
@@ -83,7 +82,8 @@ def main(argv=None):  # pragma: no cover
         description='''Search in YAML files for keys and values.
             The default search with no options is path-based, thus it
             may return empty results without a path or wildcard. Use
-            the filter argument to find the path(s) to a substring.''',
+            the filter argument to find the path(s) to a key using a
+            substring search.''',
         usage='%(prog)s [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]',
     )
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -145,21 +145,17 @@ def main(argv=None):  # pragma: no cover
     if args.dump:
         sys.stdout.write(pfile.read_text(encoding=popts['file_encoding']))
         sys.exit(0)
-    if args.verbose:
-        debug = True
     # we need to help argparse here, since it has trouble parsing the 2
     # postional args as required when both are missing, even with help from
     # nargs behavior (we also need customized usage msg above to replace the
     # default error text with the following print() statement)
     if not args.file or not args.text:
         parser.print_usage()
-        print(
-            "yagrep: error: both of the following arguments are required: TEXT *and* FILE"
-        )
+        print("yagrep: error: the following arguments are required: TEXT *and* FILE")
         sys.exit(1)
 
     for filearg in args.file:
-        process_inputs(filearg, args, popts, debug)
+        process_inputs(filearg, args, popts, args.verbose)
 
 
 if __name__ == '__main__':

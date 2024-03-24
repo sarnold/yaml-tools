@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # generated/user files
-src/ymltoxml/_version.py
+ext/
 .ymltoxml.y*
 .yasort.y*
 .yagrep.y*
