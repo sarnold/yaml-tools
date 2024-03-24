@@ -1,3 +1,5 @@
+import json
+import sys
 from difflib import SequenceMatcher as SM
 from pathlib import Path
 
@@ -10,8 +12,13 @@ from ymltoxml.utils import (
     StrYAML,
     get_filelist,
     load_config,
+    pystache_render,
+    text_data_writer,
     text_file_reader,
 )
+
+# from pystache import Renderer, TemplateSpec
+
 
 defconfig_str = """\
 # comments should be preserved
@@ -23,7 +30,7 @@ default_profile_path: 'nist.gov/SP800-53/rev5'
 input_format: null
 output_format: 'json'
 preserve_quotes: true
-process_comments: false
+process_comments: true
 mapping: 4
 sequence: 6
 offset: 4
@@ -64,6 +71,29 @@ controls:  # sequences can have nodes that are mappings
             - login_banner_text=dod_banners  # this should be first
             - var_authselect_profile=sssd
 """
+
+
+def test_data_writer(capfd):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    data = yaml.load(yaml_str)
+    assert isinstance(data, dict)
+
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert json.loads(out)
+
+    popts['output_format'] = 'yaml'
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert yaml.load(out) == data
+
+    popts['output_format'] = 'raw'
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert isinstance(out, str)
+    assert out.startswith("{'policy': 'Security Requirements Guide")
+    print(len(out))
 
 
 def test_file_reader(capfd, tmp_path):
@@ -118,6 +148,15 @@ def test_get_filelist_debug():
     assert isinstance(files, list)
     assert len(files) == 6
     assert str(test_path) in files
+
+
+def test_render_simple():
+    """
+    Test rendering pystache template.
+    """
+    simple_tpl = """Hi {{thing}}!"""
+    actual = pystache_render(simple_tpl, {'thing': 'pizza'})
+    assert actual == 'Hi pizza!'
 
 
 def test_str_dumper():

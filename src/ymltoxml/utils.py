@@ -8,6 +8,7 @@ import re
 import sys
 from pathlib import Path
 
+import pystache
 import yaml as yaml_loader
 from munch import Munch
 from ruamel.yaml import YAML
@@ -96,6 +97,14 @@ def load_config(file_encoding='utf-8', yasort=False, yagrep=False, debug=False):
     return cfgobj, cfgfile
 
 
+def pystache_render(*args, **kwargs):
+    """
+    Render pystache template with strict mode enabled.
+    """
+    render = pystache.Renderer(missing_tags='strict')
+    return render.render(*args, **kwargs)
+
+
 def replace_angles(data):
     """
     Replace angle bracket with original curly brace.
@@ -148,6 +157,30 @@ def sort_from_parent(input_data, prog_opts):
         input_data[skey_name].sort()
 
     return input_data
+
+
+def text_data_writer(outdata, popts):
+    """
+    Text data output with optional formatting (default is raw); uses config
+    setting for output format.
+    """
+    fmt = popts['output_format'] if popts['output_format'] else 'raw'
+
+    if fmt == 'json':
+        out = json.dumps(outdata, indent=4, sort_keys=True)
+    elif fmt == 'yaml':
+        yaml = StrYAML()
+        yaml.indent(
+            mapping=popts['mapping'],
+            sequence=popts['sequence'],
+            offset=popts['offset'],
+        )
+        yaml.preserve_quotes = popts['preserve_quotes']
+        out = yaml.dump(outdata)
+    else:
+        out = repr(outdata)
+
+    sys.stdout.write(out + '\n')
 
 
 def text_file_reader(filepath, prog_opts):
