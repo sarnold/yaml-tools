@@ -49,7 +49,12 @@ def xform_id(string):
         return string.replace('(', '.').replace(')', '').lower()
     else:
         slist = string.upper().split('.')
-        return f'{slist[0]}({slist[1]})'
+        if len(slist) == 2:
+            return f'{slist[0]}({slist[1]})'
+        elif len(slist) == 3:
+            return f'{slist[0]}({slist[1]})({slist[2].lower()})'
+        else:
+            return f'{slist[0]}({slist[1]})({slist[2].lower()})({slist[3]})'
 
 
 class Attachable(object):

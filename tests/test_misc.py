@@ -187,10 +187,18 @@ def test_str_dumper():
 
 
 def test_xform_id():
-    doc_id = 'AC-2(11)'
-    sort_id = 'ac-2.11'
-    assert xform_id(doc_id) == sort_id
-    assert xform_id(sort_id) == doc_id
+    doc0_id = 'AC-2(11)'
+    sort0_id = 'ac-2.11'
+    assert xform_id(doc0_id) == sort0_id
+    assert xform_id(sort0_id) == doc0_id
+    doc1_id = 'AC-2(11)(a)'
+    sort1_id = 'ac-2.11.a'
+    assert xform_id(doc1_id) == sort1_id
+    assert xform_id(sort1_id) == doc1_id
+    doc2_id = 'AC-05(02)(a)(01)'
+    sort2_id = 'ac-05.02.a.01'
+    assert xform_id(doc2_id) == sort2_id
+    assert xform_id(sort2_id) == doc2_id
 
 
 def test_load_debug_config():
