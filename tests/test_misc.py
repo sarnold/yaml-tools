@@ -7,6 +7,7 @@ import pytest
 from munch import Munch
 
 from ymltoxml import utils
+from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
     StrYAML,
@@ -150,6 +151,26 @@ def test_get_filelist_debug():
     assert str(test_path) in files
 
 
+def test_gen_control():
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    ctx = {
+        'caps': 'AC-1',
+        'status': 'pending',
+        'notes': 'A note.',
+        'rules_list': [],
+        'description': 'Describe something.',
+        'name': 'A control name.',
+        'levels_list': [],
+    }
+    out = generate_control(ctx)
+    print(out)
+    assert 'pending' in out
+
+    back_in = yaml.load(out)
+    print(back_in[0])
+
+
 def test_render_simple():
     """
     Test rendering pystache template.
@@ -163,6 +184,13 @@ def test_str_dumper():
     my_yaml = StrYAML()
     assert isinstance(my_yaml, StrYAML)
     assert hasattr(my_yaml, 'dump')
+
+
+def test_xform_id():
+    doc_id = 'AC-2(11)'
+    sort_id = 'ac-2.11'
+    assert xform_id(doc_id) == sort_id
+    assert xform_id(sort_id) == doc_id
 
 
 def test_load_debug_config():

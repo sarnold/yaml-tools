@@ -13,7 +13,7 @@ minversion = "6.0"
 testpaths = ["tests",]
 log_cli =  false
 doctest_optionflags = ["ELLIPSIS", "NORMALIZE_WHITESPACE",]
-addopts = "--strict-markers"
+addopts = "--strict-markers --doctest-modules"
 markers = "subscript"
 
 [tool.coverage.run]
