@@ -1,5 +1,5 @@
 """
-Simple ID string counter.
+Simple ID string counter and set matcher.
 """
 
 import os
@@ -83,7 +83,7 @@ if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
     sys.exit(1)
 
-input_ids = list(Path(FILE).read_text(encoding='utf-8').splitlines())
+input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
 in_set = set(input_ids)
 
 print(f"Input control IDs -> {len(in_set)}")

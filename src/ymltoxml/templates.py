@@ -45,11 +45,13 @@ def xform_id(string):
 
     AC-12(2) <==> ac-12.2
     """
-    if '(' in string:
+    if '(' in string or string.isupper():
         return string.replace('(', '.').replace(')', '').lower()
     else:
         slist = string.upper().split('.')
-        if len(slist) == 2:
+        if len(slist) == 1:
+            return slist[0]
+        elif len(slist) == 2:
             return f'{slist[0]}({slist[1]})'
         elif len(slist) == 3:
             return f'{slist[0]}({slist[1]})({slist[2].lower()})'
