@@ -4,8 +4,10 @@ Shared utility code.
 
 import csv
 import json
+import os
 import re
 import sys
+import tempfile
 from pathlib import Path
 
 import pystache
@@ -46,6 +48,15 @@ class StrYAML(YAML):
         stream = StringIO()
         YAML.dump(self, data, stream, **kw)
         return stream.getvalue()
+
+
+def get_cachedir(dir_name='yml_cache'):
+    """
+    Get temp cachedir (create it if needed) and override the dir_name if
+    passed.
+    """
+    cache_dir = tempfile.gettempdir()
+    return os.path.join(cache_dir, dir_name)
 
 
 def get_filelist(dirpath, filepattern='*.txt', debug=False):

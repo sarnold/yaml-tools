@@ -58,6 +58,7 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
     p_set = set()
 
     nist_files = sorted(get_filelist(dirpath, filepattern, debug))
+    print(f'Files: {nist_files}')
 
     for _, pfile in enumerate(nist_files):
         ptype = get_profile_type(pfile, debug)
