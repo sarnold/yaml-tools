@@ -11,6 +11,7 @@ from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
     StrYAML,
+    get_cachedir,
     get_filelist,
     load_config,
     pystache_render,
@@ -133,6 +134,14 @@ def test_file_reader_raises(capfd, tmp_path):
 
     with pytest.raises(FileTypeError):
         text_file_reader(inp2, popts)
+
+
+def test_get_cachedir():
+    test_dir = 'test_cache'
+    dir1 = get_cachedir()
+    assert dir1.endswith('yml_cache')
+    dir2 = get_cachedir(test_dir)
+    assert dir2.endswith('test_cache')
 
 
 def test_get_filelist():

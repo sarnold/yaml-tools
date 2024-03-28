@@ -12,7 +12,12 @@ from diskcache import Deque
 from nested_lookup import nested_lookup
 
 from ymltoxml.templates import xform_id
-from ymltoxml.utils import get_cachedir, get_filelist, text_file_reader
+from ymltoxml.utils import (
+    FileTypeError,
+    get_cachedir,
+    get_filelist,
+    text_file_reader,
+)
 
 id_count: typing.Counter[str] = Counter()
 id_queue = Deque(get_cachedir(dir_name='id_queue'))
