@@ -52,6 +52,7 @@ repos:
         - ruamel.yaml
         - dpath
         - nested_lookup
+        - pystache
       args:
         - --follow-imports=normal
         - --install-types

@@ -9,7 +9,33 @@ repos:
     repo_depth: 1
     repo_remote: origin
     repo_opts: []
-    repo_branch: release-1.3
+    repo_branch: main
+    repo_hash: null
+    repo_use_rebase: false
+    repo_has_lfs_files: false
+    repo_init_submodules: false
+    repo_install: false
+    repo_enable: true
+  - repo_name: openscap
+    repo_alias: oscap
+    repo_url: git@github.com:VCTLabs/openscap.git
+    repo_depth: 0
+    repo_remote: origin
+    repo_opts: []
+    repo_branch: devel-1.3
+    repo_hash: null
+    repo_use_rebase: false
+    repo_has_lfs_files: false
+    repo_init_submodules: false
+    repo_install: false
+    repo_enable: true
+  - repo_name: scap-security-guide
+    repo_alias: content
+    repo_url: git@github.com:VCTLabs/scap-security-guide.git
+    repo_depth: 0
+    repo_remote: origin
+    repo_opts: []
+    repo_branch: openembedded-plus
     repo_hash: null
     repo_use_rebase: false
     repo_has_lfs_files: false

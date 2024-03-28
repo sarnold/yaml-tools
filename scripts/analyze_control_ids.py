@@ -1,5 +1,5 @@
 """
-Simple ID string counter.
+Simple ID string counter and set matcher.
 """
 
 import os
@@ -58,6 +58,7 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
     p_set = set()
 
     nist_files = sorted(get_filelist(dirpath, filepattern, debug))
+    print(f'Files: {nist_files}')
 
     for _, pfile in enumerate(nist_files):
         ptype = get_profile_type(pfile, debug)
@@ -83,7 +84,7 @@ if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
     sys.exit(1)
 
-input_ids = list(Path(FILE).read_text(encoding='utf-8').splitlines())
+input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
 in_set = set(input_ids)
 
 print(f"Input control IDs -> {len(in_set)}")

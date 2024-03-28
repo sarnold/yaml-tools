@@ -1,3 +1,5 @@
+import json
+import sys
 from difflib import SequenceMatcher as SM
 from pathlib import Path
 
@@ -5,13 +7,20 @@ import pytest
 from munch import Munch
 
 from ymltoxml import utils
+from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
     StrYAML,
+    get_cachedir,
     get_filelist,
     load_config,
+    pystache_render,
+    text_data_writer,
     text_file_reader,
 )
+
+# from pystache import Renderer, TemplateSpec
+
 
 defconfig_str = """\
 # comments should be preserved
@@ -23,7 +32,7 @@ default_profile_path: 'nist.gov/SP800-53/rev5'
 input_format: null
 output_format: 'json'
 preserve_quotes: true
-process_comments: false
+process_comments: true
 mapping: 4
 sequence: 6
 offset: 4
@@ -66,6 +75,29 @@ controls:  # sequences can have nodes that are mappings
 """
 
 
+def test_data_writer(capfd):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    data = yaml.load(yaml_str)
+    assert isinstance(data, dict)
+
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert json.loads(out)
+
+    popts['output_format'] = 'yaml'
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert yaml.load(out) == data
+
+    popts['output_format'] = 'raw'
+    text_data_writer(data, popts)
+    out, err = capfd.readouterr()
+    assert isinstance(out, str)
+    assert out.startswith("{'policy': 'Security Requirements Guide")
+    print(len(out))
+
+
 def test_file_reader(capfd, tmp_path):
     yaml = StrYAML()
     popts = yaml.load(defconfig_str)
@@ -104,6 +136,14 @@ def test_file_reader_raises(capfd, tmp_path):
         text_file_reader(inp2, popts)
 
 
+def test_get_cachedir():
+    test_dir = 'test_cache'
+    dir1 = get_cachedir()
+    assert dir1.endswith('yml_cache')
+    dir2 = get_cachedir(test_dir)
+    assert dir2.endswith('test_cache')
+
+
 def test_get_filelist():
     test_path = Path('docs') / 'source' / 'index.rst'
     files = get_filelist('docs/source', '*.rst')
@@ -120,10 +160,49 @@ def test_get_filelist_debug():
     assert str(test_path) in files
 
 
+def test_gen_control():
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    ctx = {
+        'caps': 'AC-1',
+        'status': 'pending',
+        'notes': 'A note.',
+        'rules_list': [],
+        'description': 'Describe something.',
+        'name': 'A control name.',
+        'levels_list': [],
+    }
+    out = generate_control(ctx)
+    print(out)
+    assert 'pending' in out
+
+    back_in = yaml.load(out)
+    print(back_in[0])
+
+
+def test_render_simple():
+    """
+    Test rendering pystache template.
+    """
+    simple_tpl = """Hi {{thing}}!"""
+    actual = pystache_render(simple_tpl, {'thing': 'pizza'})
+    assert actual == 'Hi pizza!'
+
+
 def test_str_dumper():
     my_yaml = StrYAML()
     assert isinstance(my_yaml, StrYAML)
     assert hasattr(my_yaml, 'dump')
+
+
+def test_xform_id():
+    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(11)(a)', 'AC-05(02)(a)(01)']
+    sort_ids = ['ac-1', 'ac-2.11', 'ac-2.11.a', 'ac-05.02.a.01']
+    print("")
+    for x, y in zip(doc_ids, sort_ids):
+        print(xform_id(x), y)
+        assert xform_id(x) == y
+        assert xform_id(y) == x
 
 
 def test_load_debug_config():
