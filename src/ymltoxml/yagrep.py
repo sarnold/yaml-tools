@@ -75,7 +75,7 @@ def main(argv=None):  # pragma: no cover
     if argv is None:
         argv = sys.argv
 
-    cfg, pfile = load_config(yagrep=True)
+    cfg, pfile = load_config(Path(__file__).stem)
     popts = Munch.toDict(cfg)
 
     parser = argparse.ArgumentParser(
