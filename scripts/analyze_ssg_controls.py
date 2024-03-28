@@ -18,9 +18,9 @@ id_count: typing.Counter[str] = Counter()
 id_queue = Deque(get_cachedir(dir_name='id_queue'))
 ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
 
-FILE = os.getenv('ID_FILE', default='tests/data/PRIVACY-ids.txt')
+FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-all-ids.txt')
 SSG_PATH = os.getenv('SSG_PATH', default='ext/content/controls')
-DEBUG = os.getenv('DEBUG', default=None)
+DEBUG = int(os.getenv('DEBUG', default=0))
 
 OPTIONS = {'file_encoding': 'utf-8'}
 FILE_GLOB = 'nist_*.yml'
@@ -45,11 +45,16 @@ if not Path(FILE).exists():
     sys.exit(1)
 
 input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
-up_ids = [xform_id(x) for x in input_ids]
+
+if input_ids[0].islower():
+    up_ids = [xform_id(x) for x in input_ids]
+else:
+    up_ids = input_ids
+
 in_set = set(up_ids)
 
 if DEBUG:
-    print(f'Input Ids: {in_set}')
+    print(f'Input Ids: {input_ids}')
 
 id_queue.clear()
 ctl_queue.clear()
@@ -79,11 +84,11 @@ for path in nist_file_tuples:
     for ctl_id in ctl_list:
         ctl_queue.append((ctl_id['id'], ctl_id))
 
-if DEBUG:
+if DEBUG > 1:
     print(f'ID queue Front: {id_queue.peekleft()}')
     print(f'Control queue Front: {ctl_queue.peekleft()}')
 
-print(f"\nInput control Ids -> {len(up_ids)}")
+print(f"\nInput control Ids -> {len(input_ids)}")
 for _ in range(4):
     pname, id_list = id_queue.popleft()
     print(f"\n{pname} control IDs -> {len(id_list)}")
