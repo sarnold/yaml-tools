@@ -8,6 +8,7 @@ default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
+default_csv_hdr: null
 input_format: null
 output_format: 'json'
 preserve_quotes: true

@@ -31,6 +31,7 @@ default_oscal_path: 'ext/oscal-content'
 default_profile_path: 'nist.gov/SP800-53/rev5'
 input_format: null
 output_format: 'json'
+default_csv_hdr: null
 preserve_quotes: true
 process_comments: true
 mapping: 4

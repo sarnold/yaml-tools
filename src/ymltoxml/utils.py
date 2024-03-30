@@ -164,10 +164,11 @@ def text_data_writer(outdata, popts):
     """
     out = ''
     is_seq = isinstance(outdata, collections.abc.Sequence)
+    csv_hdr = popts['default_csv_hdr']
     fmt = popts['output_format'] if popts['output_format'] else 'raw'
 
     if fmt == 'csv' and is_seq:
-        field_names = [x for x in outdata[0].keys()]
+        field_names = csv_hdr if csv_hdr else list(outdata[0].keys())
         w = csv.DictWriter(sys.stdout, field_names)
         w.writeheader()
         w.writerows(outdata)

@@ -20,6 +20,8 @@ from .utils import (
     text_file_reader,
 )
 
+# pylint: disable=R0801
+
 
 def load_input_data(filepath, prog_opts, debug=False):
     """
@@ -50,18 +52,20 @@ def load_input_data(filepath, prog_opts, debug=False):
 
     for path in file_tuples:
         print(f'Extracting IDs from {path[1]}')
-        fpath = Path(path[0])
+        # fpath = Path(path[0])
 
         try:
-            indata = text_file_reader(fpath, prog_opts)
+            indata = text_file_reader(Path(path[0]), prog_opts)
         except FileTypeError as exc:
-            print(f'{exc} => {fpath}')
+            print(f'{exc} => {Path(path[0])}')
 
-        id_list = [x for x in nested_lookup('id', indata) if x.isupper()]
-        id_queue.append((path[1], id_list))
+        # id_list = [x for x in nested_lookup('id', indata) if x.isupper()]
+        id_queue.append(
+            (path[1], [x for x in nested_lookup('id', indata) if x.isupper()])
+        )
 
-        ctl_list = nested_lookup(prog_opts['default_lookup_key'], indata)[0]
-        for ctl_id in ctl_list:
+        # ctl_list = nested_lookup(prog_opts['default_lookup_key'], indata)[0]
+        for ctl_id in nested_lookup(prog_opts['default_lookup_key'], indata)[0]:
             ctl_queue.append((ctl_id['id'], ctl_id))
 
     if debug:
@@ -176,7 +180,7 @@ def main(argv=None):  # pragma: no cover
         print(f"Using path to content: {ucfg.default_content_path}")
         print(f"Using input file: {infile}")
 
-    ids, ctls = load_input_data(infile, args, args.verbose)
+    inids, ids, ctls = load_input_data(infile, args, args.verbose)
 
 
 if __name__ == "__main__":
