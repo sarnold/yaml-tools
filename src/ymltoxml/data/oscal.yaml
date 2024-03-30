@@ -4,8 +4,10 @@ file_encoding: 'utf-8'
 default_ext: '.yaml'
 default_content_path: 'ext/oscal-content'
 default_profile_path: 'nist.gov/SP800-53/rev5'
-default_ssg_glob: 'nist_*.yml'
+default_profile_name: 'PRIVACY'
+default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
+default_lookup_key: 'controls'
 input_format: null
 output_format: 'json'
 preserve_quotes: true

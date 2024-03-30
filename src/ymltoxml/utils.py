@@ -2,12 +2,11 @@
 Shared utility code.
 """
 
+import collections
 import csv
 import json
-import os
 import re
 import sys
-import tempfile
 from pathlib import Path
 
 import pystache
@@ -48,15 +47,6 @@ class StrYAML(YAML):
         stream = StringIO()
         YAML.dump(self, data, stream, **kw)
         return stream.getvalue()
-
-
-def get_cachedir(dir_name='yml_cache'):
-    """
-    Get temp cachedir (create it if needed) and override the dir_name if
-    passed.
-    """
-    cache_dir = tempfile.gettempdir()
-    return os.path.join(cache_dir, dir_name)
 
 
 def get_filelist(dirpath, filepattern='*.txt', debug=False):
@@ -169,25 +159,35 @@ def sort_from_parent(input_data, prog_opts):
 def text_data_writer(outdata, popts):
     """
     Text data output with optional formatting (default is raw); uses config
-    setting for output format.
+    setting for output format. Supports the same text file types supported
+    by the ``text_file_reader()`` input function.
     """
+    out = ''
+    is_seq = isinstance(outdata, collections.abc.Sequence)
     fmt = popts['output_format'] if popts['output_format'] else 'raw'
 
-    if fmt == 'json':
-        out = json.dumps(outdata, indent=4, sort_keys=True)
-    elif fmt == 'yaml':
-        yaml = StrYAML()
-        yaml.indent(
-            mapping=popts['mapping'],
-            sequence=popts['sequence'],
-            offset=popts['offset'],
-        )
-        yaml.preserve_quotes = popts['preserve_quotes']
-        out = yaml.dump(outdata)
-    else:
-        out = repr(outdata)
+    if fmt == 'csv' and is_seq:
+        field_names = [x for x in outdata[0].keys()]
+        w = csv.DictWriter(sys.stdout, field_names)
+        w.writeheader()
+        w.writerows(outdata)
 
-    sys.stdout.write(out + '\n')
+    else:
+        if fmt == 'json':
+            out = json.dumps(outdata, indent=4, sort_keys=True)
+        elif fmt == 'yaml':
+            yaml = StrYAML()
+            yaml.indent(
+                mapping=popts['mapping'],
+                sequence=popts['sequence'],
+                offset=popts['offset'],
+            )
+            yaml.preserve_quotes = popts['preserve_quotes']
+            out = yaml.dump(outdata)
+        else:
+            out = repr(outdata)
+
+        sys.stdout.write(out + '\n')
 
 
 def text_file_reader(filepath, prog_opts):

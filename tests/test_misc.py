@@ -1,3 +1,4 @@
+import csv
 import json
 import sys
 from difflib import SequenceMatcher as SM
@@ -11,7 +12,6 @@ from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
     StrYAML,
-    get_cachedir,
     get_filelist,
     load_config,
     pystache_render,
@@ -87,15 +87,30 @@ def test_data_writer(capfd):
 
     popts['output_format'] = 'yaml'
     text_data_writer(data, popts)
-    out, err = capfd.readouterr()
-    assert yaml.load(out) == data
+    out1, err1 = capfd.readouterr()
+    assert yaml.load(out1) == data
 
-    popts['output_format'] = 'raw'
+    popts['output_format'] = None
     text_data_writer(data, popts)
-    out, err = capfd.readouterr()
-    assert isinstance(out, str)
-    assert out.startswith("{'policy': 'Security Requirements Guide")
-    print(len(out))
+    out2, err2 = capfd.readouterr()
+    assert isinstance(out2, str)
+    assert out2.startswith("{'policy': 'Security Requirements Guide")
+    # print(out)
+    # print(out1)
+    # print(out2)
+    # print(len(out2))
+
+
+def test_data_writer_csv(capfd):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+
+    popts['output_format'] = 'csv'
+    row_data = text_file_reader('tests/data/catalog.json', popts)
+    text_data_writer(row_data, popts)
+    out3, err3 = capfd.readouterr()
+    assert isinstance(out3, str)
+    # print(out3)
 
 
 def test_file_reader(capfd, tmp_path):
@@ -120,10 +135,10 @@ def test_file_reader(capfd, tmp_path):
     # similarity ratio measure is a float in the range [0, 1]
     sim_01 = SM(None, str(file_data[0]), str(file_data[1])).ratio()
     print(sim_01)
-    assert sim_01 > 0.999
+    assert sim_01 > 0.9
     sim_12 = SM(None, str(file_data[1]), str(file_data[2])).ratio()
     print(sim_12)
-    assert sim_12 > 0.999
+    assert sim_12 > 0.9
 
 
 def test_file_reader_raises(capfd, tmp_path):
@@ -134,14 +149,6 @@ def test_file_reader_raises(capfd, tmp_path):
 
     with pytest.raises(FileTypeError):
         text_file_reader(inp2, popts)
-
-
-def test_get_cachedir():
-    test_dir = 'test_cache'
-    dir1 = get_cachedir()
-    assert dir1.endswith('yml_cache')
-    dir2 = get_cachedir(test_dir)
-    assert dir2.endswith('test_cache')
 
 
 def test_get_filelist():

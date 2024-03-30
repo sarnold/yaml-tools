@@ -5,11 +5,71 @@ The main init, run, and self-test functions for oscal extract.
 import argparse
 import importlib
 import sys
+from collections import deque
 from pathlib import Path
 
 from munch import Munch
+from nested_lookup import nested_lookup
 
-from .utils import VERSION, load_config
+from .templates import xform_id
+from .utils import (
+    VERSION,
+    FileTypeError,
+    get_filelist,
+    load_config,
+    text_file_reader,
+)
+
+
+def load_input_data(filepath, prog_opts, debug=False):
+    """
+    Find and gather the inputs, ie, content file(s) and user control IDs,
+    into a tuple of lists (id_list, file_tuple_list). Load up the queues
+    and return a tuple of both queues and the list of normalized user IDs
+    from ``filepath``.
+    """
+    id_queue = deque()
+    ctl_queue = deque()
+    file_tuples = []
+    in_list = Path(filepath).read_text(encoding=prog_opts['file_encoding']).splitlines()
+
+    in_ids = [xform_id(x) for x in in_list] if in_list[0].islower() else in_list
+    if debug:
+        print(f'Normalized input Ids: {in_ids}')
+
+    ctl_files = get_filelist(
+        prog_opts['default_ssg_path'],
+        prog_opts['default_ssg_glob'],
+        debug,
+    )
+
+    for file in ctl_files:
+        file_tuples.append((file, Path(file).name))
+    if debug:
+        print(f'Using control file(s): {file_tuples}')
+
+    for path in file_tuples:
+        print(f'Extracting IDs from {path[1]}')
+        fpath = Path(path[0])
+
+        try:
+            indata = text_file_reader(fpath, prog_opts)
+        except FileTypeError as exc:
+            print(f'{exc} => {fpath}')
+
+        id_list = [x for x in nested_lookup('id', indata) if x.isupper()]
+        id_queue.append((path[1], id_list))
+
+        ctl_list = nested_lookup(prog_opts['default_lookup_key'], indata)[0]
+        for ctl_id in ctl_list:
+            ctl_queue.append((ctl_id['id'], ctl_id))
+
+    if debug:
+        print(f'ID queue Front: {id_queue[0]}')
+        print(f'Control queue Front: {ctl_queue[0]}')
+        print(f"\nUser control Ids -> {len(in_ids)}")
+
+    return in_ids, id_queue, ctl_queue
 
 
 def self_test(opts):
@@ -50,15 +110,18 @@ def main(argv=None):  # pragma: no cover
     if argv is None:
         argv = sys.argv
 
-    ucfg, _ = load_config(Path(__file__).stem)
+    ucfg, pfile = load_config(Path(__file__).stem)
 
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-        description='Extract data from OSCAL content repo',
+        description='Extract data from OSCAL or SSG content sources',
     )
     parser.add_argument('--version', action="version", version=f"%(prog)s {VERSION}")
     parser.add_argument(
         '-t', '--test', help='run sanity checks and exit', action='store_true'
+    )
+    parser.add_argument(
+        '-u', '--use-ssg', help='use ssg content sources', action='store_true'
     )
     parser.add_argument(
         "-v",
@@ -74,24 +137,26 @@ def main(argv=None):  # pragma: no cover
         dest="dump",
     )
     parser.add_argument(
-        '-n',
-        '--nist-path',
-        metavar="PATH",
-        type=str,
-        help="path to NIST oscal-content directory",
-        dest="nist",
+        '-s',
+        '--save-config',
+        action='store_true',
+        dest="save",
+        help='save active config to default filename (.oscal.yml) and exit',
     )
     parser.add_argument(
         'file',
         nargs='?',
         metavar="FILE",
         type=str,
-        default=None,
-        help="path to input file",
+        help="path to input file with control IDs",
     )
 
     args = parser.parse_args()
 
+    if args.save:
+        cfg_data = pfile.read_bytes()
+        Path('.oscal.yml').write_bytes(cfg_data)
+        sys.exit(0)
     if args.dump:
         sys.stdout.write(Munch.toYAML(ucfg))
         sys.exit(0)
@@ -102,12 +167,16 @@ def main(argv=None):  # pragma: no cover
         parser.print_usage()
         print("oscal: error: the following arguments are required: FILE")
         sys.exit(1)
+    infile = args.file
+    if not Path(infile).exists():
+        print(f'Input file {infile} not found!')
+        sys.exit(1)
 
-    nist_path = args.nist if args.nist else ucfg.default_content_path
     if args.verbose:
-        print(f"Using path to oscal: {nist_path}")
-        if args.file:
-            print(f"Using input file: {args.file}")
+        print(f"Using path to content: {ucfg.default_content_path}")
+        print(f"Using input file: {infile}")
+
+    ids, ctls = load_input_data(infile, args, args.verbose)
 
 
 if __name__ == "__main__":
