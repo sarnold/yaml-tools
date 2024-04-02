@@ -11,6 +11,7 @@ from ymltoxml import utils
 from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
+    SortedSet,
     StrYAML,
     get_filelist,
     load_config,
@@ -150,6 +151,20 @@ def test_file_reader_raises(capfd, tmp_path):
 
     with pytest.raises(FileTypeError):
         text_file_reader(inp2, popts)
+
+
+def test_sorted_set():
+    expected = ['d', 'e', 'f']
+    s1 = SortedSet('abcdef')
+    s2 = SortedSet('defghi')
+    overlap = s1 & s2
+    assert list(overlap) == expected
+    print(overlap)
+    empty = SortedSet('')
+    print(empty)
+    u1 = SortedSet('edf')
+    s3 = u1.sort()
+    assert list(s3) == expected
 
 
 def test_get_filelist():

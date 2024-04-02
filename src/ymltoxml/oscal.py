@@ -52,19 +52,16 @@ def load_input_data(filepath, prog_opts, debug=False):
 
     for path in file_tuples:
         print(f'Extracting IDs from {path[1]}')
-        # fpath = Path(path[0])
 
         try:
             indata = text_file_reader(Path(path[0]), prog_opts)
         except FileTypeError as exc:
             print(f'{exc} => {Path(path[0])}')
 
-        # id_list = [x for x in nested_lookup('id', indata) if x.isupper()]
         id_queue.append(
             (path[1], [x for x in nested_lookup('id', indata) if x.isupper()])
         )
 
-        # ctl_list = nested_lookup(prog_opts['default_lookup_key'], indata)[0]
         for ctl_id in nested_lookup(prog_opts['default_lookup_key'], indata)[0]:
             ctl_queue.append((ctl_id['id'], ctl_id))
 
@@ -159,7 +156,7 @@ def main(argv=None):  # pragma: no cover
 
     if args.save:
         cfg_data = pfile.read_bytes()
-        Path('.oscal.yml').write_bytes(cfg_data)
+        Path(f'.oscal{ucfg.default_ext}').write_bytes(cfg_data)
         sys.exit(0)
     if args.dump:
         sys.stdout.write(Munch.toYAML(ucfg))
