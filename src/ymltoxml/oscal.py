@@ -15,6 +15,7 @@ from .templates import xform_id
 from .utils import (
     VERSION,
     FileTypeError,
+    SortedSet,
     get_filelist,
     load_config,
     text_file_reader,
@@ -33,7 +34,7 @@ def load_input_data(filepath, prog_opts, debug=False):
     id_queue = deque()
     ctl_queue = deque()
     file_tuples = []
-    in_list = Path(filepath).read_text(encoding=prog_opts['file_encoding']).splitlines()
+    in_list = text_file_reader(filepath, prog_opts)
 
     in_ids = [xform_id(x) for x in in_list] if in_list[0].islower() else in_list
     if debug:
@@ -73,7 +74,35 @@ def load_input_data(filepath, prog_opts, debug=False):
     return in_ids, id_queue, ctl_queue
 
 
-def self_test(opts):
+def process_data(filepath, prog_opts, debug=False):
+    """
+    Process inputs, print some output.
+    """
+    input_ids, id_queue, ctls = load_input_data(filepath, prog_opts, debug=debug)
+    print(f"\nInput control Ids -> {len(input_ids)}")
+    id_set_match(input_ids, id_queue, debug=debug)
+
+
+def id_set_match(in_ids, id_q, debug=False):
+    """
+    Quick set match analysis of ID sets.
+    """
+    in_set = SortedSet(in_ids)
+
+    for _ in range(len(id_q)):
+        pname, id_list = id_q.popleft()
+        print(f"\n{pname} control IDs -> {len(id_list)}")
+        id_set = SortedSet(id_list)
+
+        print(f"Input set is in {pname} set: {id_set > in_set}")
+        common_set = id_set & in_set
+        print(f"Num input controls in {pname} set -> {len(common_set)}")
+        not_in_set = in_set - id_set
+        print(f"Num input controls not in {pname} set -> {len(not_in_set)}")
+        print(f"Input control IDs not in {pname} set: {list(not_in_set)}")
+
+
+def self_test(ucfg):
     """
     Basic sanity check using ``import_module``.
     """
@@ -91,9 +120,9 @@ def self_test(opts):
             print("FAILED: %s", repr(exc))
 
     try:
-        print(f'Checking if {opts.default_content_path} exists')
+        print(f'Checking if {ucfg.default_content_path} exists')
         try:
-            ret = Path(opts.default_content_path).resolve(strict=True)
+            ret = Path(ucfg.default_content_path).resolve(strict=True)
             print(f'  Resolved: {ret}')
         except (FileNotFoundError, RuntimeError) as exc:
             print(f"  {repr(exc)}")
@@ -111,7 +140,8 @@ def main(argv=None):  # pragma: no cover
     if argv is None:
         argv = sys.argv
 
-    ucfg, pfile = load_config(Path(__file__).stem)
+    cfg, pfile = load_config(Path(__file__).stem)
+    popts = Munch.toDict(cfg)
 
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -156,13 +186,13 @@ def main(argv=None):  # pragma: no cover
 
     if args.save:
         cfg_data = pfile.read_bytes()
-        Path(f'.oscal{ucfg.default_ext}').write_bytes(cfg_data)
+        Path(f'.oscal{cfg.default_ext}').write_bytes(cfg_data)
         sys.exit(0)
     if args.dump:
-        sys.stdout.write(Munch.toYAML(ucfg))
+        sys.stdout.write(Munch.toYAML(cfg))
         sys.exit(0)
     if args.test:
-        self_test(ucfg)
+        self_test(cfg)
         sys.exit(0)
     if not args.file:
         parser.print_usage()
@@ -174,10 +204,10 @@ def main(argv=None):  # pragma: no cover
         sys.exit(1)
 
     if args.verbose:
-        print(f"Using path to content: {ucfg.default_content_path}")
+        print(f"Using path to content: {cfg.default_content_path}")
         print(f"Using input file: {infile}")
 
-    inids, ids, ctls = load_input_data(infile, args, args.verbose)
+    process_data(infile, popts, args.verbose)
 
 
 if __name__ == "__main__":
