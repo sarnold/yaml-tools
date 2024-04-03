@@ -9,8 +9,8 @@ defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
 default_ext: '.yaml'
-default_content_path: 'ext/oscal-content'
-default_profile_path: 'nist.gov/SP800-53/rev5'
+default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
+default_profile_glob: '*.yaml'
 default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
@@ -75,11 +75,28 @@ def test_process_data(capfd, tmp_path):
     data_file.write_text(yaml_str, encoding="utf-8")
 
     popts = yaml.load(defconfig_str)
-    popts['default_ssg_path'] = tmp_path
-    popts['default_ssg_glob'] = 'test.yaml'
+    popts['default_content_path'] = tmp_path
+    popts['default_profile_glob'] = 'test*.yaml'
 
-    process_data(infile, popts)
-    process_data(infile, popts, True)
+    process_data(infile, popts, False, False)
+    process_data(infile, popts, False, True)
+    out, err = capfd.readouterr()
+    print(out)
+    assert 'Input control IDs' in out
+
+
+def test_process_data_alt(capfd, tmp_path):
+    yaml = StrYAML()
+    infile = 'tests/data/OE-expanded-profile-ids.txt'
+    data_file = tmp_path / "test2.yaml"
+    data_file.write_text(yaml_str, encoding="utf-8")
+
+    popts = yaml.load(defconfig_str)
+    popts['default_ssg_path'] = tmp_path
+    popts['default_ssg_glob'] = 'test*.yaml'
+
+    process_data(infile, popts, True, False)
+    process_data(infile, popts, True, True)
     out, err = capfd.readouterr()
     print(out)
     assert 'Input control IDs' in out

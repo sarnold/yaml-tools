@@ -24,7 +24,7 @@ from .utils import (
 # pylint: disable=R0801
 
 
-def load_input_data(filepath, prog_opts, debug=False):
+def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     """
     Find and gather the inputs, ie, content file(s) and user control IDs,
     into a tuple of lists (id_list, file_tuple_list). Load up the queues
@@ -40,9 +40,13 @@ def load_input_data(filepath, prog_opts, debug=False):
     if debug:
         print(f'Normalized input Ids: {in_ids}')
 
+    if use_ssg:
+        prog_opts['default_content_path'] = prog_opts['default_ssg_path']
+        prog_opts['default_profile_glob'] = prog_opts['default_ssg_glob']
+
     ctl_files = get_filelist(
-        prog_opts['default_ssg_path'],
-        prog_opts['default_ssg_glob'],
+        prog_opts['default_content_path'],
+        prog_opts['default_profile_glob'],
         debug,
     )
 
@@ -74,11 +78,13 @@ def load_input_data(filepath, prog_opts, debug=False):
     return in_ids, id_queue, ctl_queue
 
 
-def process_data(filepath, prog_opts, debug=False):
+def process_data(filepath, prog_opts, use_ssg=False, debug=False):
     """
     Process inputs, print some output.
     """
-    input_ids, id_queue, ctls = load_input_data(filepath, prog_opts, debug=debug)
+    input_ids, id_queue, ctls = load_input_data(
+        filepath, prog_opts, use_ssg=use_ssg, debug=debug
+    )
     print(f"\nInput control Ids -> {len(input_ids)}")
     id_set_match(input_ids, id_queue, debug=debug)
 
@@ -152,20 +158,24 @@ def main(argv=None):  # pragma: no cover
         '-t', '--test', help='run sanity checks and exit', action='store_true'
     )
     parser.add_argument(
-        '-u', '--use-ssg', help='use ssg content sources', action='store_true'
+        '-u',
+        '--use-ssg',
+        help='use ssg content sources instead of oscal defaults',
+        action='store_true',
+        dest="ssg",
     )
     parser.add_argument(
-        "-v",
-        "--verbose",
-        action="store_true",
-        help="display more processing info",
+        '-v',
+        '--verbose',
+        action='store_true',
+        help='display more processing info',
     )
     parser.add_argument(
         '-d',
         '--dump-config',
-        help="dump active configuration to stdout and exit",
+        help='dump active configuration to stdout and exit',
         action='store_true',
-        dest="dump",
+        dest='dump',
     )
     parser.add_argument(
         '-s',
@@ -204,10 +214,11 @@ def main(argv=None):  # pragma: no cover
         sys.exit(1)
 
     if args.verbose:
-        print(f"Using path to content: {cfg.default_content_path}")
-        print(f"Using input file: {infile}")
+        print(f"Path to content: {cfg.default_content_path}")
+        print(f"Content file glob: {cfg.default_profile_glob}")
+        print(f"Input file: {infile}")
 
-    process_data(infile, popts, args.verbose)
+    process_data(infile, popts, args.ssg, args.verbose)
 
 
 if __name__ == "__main__":

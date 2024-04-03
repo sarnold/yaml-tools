@@ -28,8 +28,8 @@ defconfig_str = """\
 file_encoding: 'utf-8'
 default_ext: '.yaml'
 default_separator: '/'
-default_oscal_path: 'ext/oscal-content'
-default_profile_path: 'nist.gov/SP800-53/rev5'
+default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
+default_profile_glob: '*.yaml'
 input_format: null
 output_format: 'json'
 default_csv_hdr: null
