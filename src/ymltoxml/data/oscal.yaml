@@ -3,7 +3,7 @@
 file_encoding: 'utf-8'
 default_ext: '.yaml'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
-default_profile_glob: '*.yaml'
+default_profile_glob: '*resolved-profile_catalog.yaml'
 default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_rhcos4.yml'
 default_ssg_path: 'ext/content/controls'

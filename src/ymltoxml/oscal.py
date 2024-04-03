@@ -63,9 +63,16 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
         except FileTypeError as exc:
             print(f'{exc} => {Path(path[0])}')
 
-        id_queue.append(
-            (path[1], [x for x in nested_lookup('id', indata) if x.isupper()])
-        )
+        if not use_ssg:
+            path_ids = [
+                xform_id(x)
+                for x in nested_lookup('id', indata)
+                if x.islower() and '_' not in x
+            ]
+        else:
+            path_ids = [x for x in nested_lookup('id', indata) if x.isupper()]
+
+        id_queue.append((path[1], path_ids))
 
         for ctl_id in nested_lookup(prog_opts['default_lookup_key'], indata)[0]:
             ctl_queue.append((ctl_id['id'], ctl_id))
