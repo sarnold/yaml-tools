@@ -4,20 +4,16 @@ Simple SSG control ID matcher (ingests directly from content repo).
 
 import os
 import sys
+import tempfile
 import typing
 from collections import Counter
 from pathlib import Path
 
 from diskcache import Deque
-from nested_lookup import nested_lookup
 
+from nested_lookup import nested_lookup
 from ymltoxml.templates import xform_id
-from ymltoxml.utils import (
-    FileTypeError,
-    get_cachedir,
-    get_filelist,
-    text_file_reader,
-)
+from ymltoxml.utils import FileTypeError, get_filelist, text_file_reader
 
 id_count: typing.Counter[str] = Counter()
 id_queue = Deque(get_cachedir(dir_name='id_queue'))
@@ -35,6 +31,15 @@ CONTROL_FILES = [
     'nist_rhacm.yml',
     'nist_rhcos4.yml',
 ]
+
+
+def get_cachedir(dir_name='yml_cache'):
+    """
+    Get temp cachedir (create it if needed) and override the dir_name if
+    passed.
+    """
+    cache_dir = tempfile.gettempdir()
+    return os.path.join(cache_dir, dir_name)
 
 
 def set_unique(sequence):

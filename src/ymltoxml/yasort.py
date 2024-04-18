@@ -83,8 +83,7 @@ def process_inputs(filepath, prog_opts, debug=False):
     """
 
     fpath = Path(filepath)
-    outdir = Path(prog_opts['output_dirname'])
-    opath = outdir.joinpath(fpath.stem)
+    opath = Path(prog_opts['output_dirname']).joinpath(fpath.stem)
 
     if not fpath.exists():
         print(f'Input file {fpath} not found! Skipping...')
@@ -121,7 +120,9 @@ def main(argv=None):  # pragma: no cover
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Sort YAML lists and write new files.',
     )
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     parser.add_argument(
         "-v",
         "--verbose",

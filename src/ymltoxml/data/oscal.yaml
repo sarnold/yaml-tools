@@ -9,6 +9,7 @@ default_ssg_glob: 'nist_rhcos4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
 default_csv_hdr: null
+cvs_hdr_appends: []
 input_format: null
 output_format: 'json'
 preserve_quotes: true

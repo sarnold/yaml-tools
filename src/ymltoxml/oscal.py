@@ -9,6 +9,8 @@ from collections import deque
 from pathlib import Path
 
 from munch import Munch
+from natsort import os_sorted
+
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -43,6 +45,8 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     if use_ssg:
         prog_opts['default_content_path'] = prog_opts['default_ssg_path']
         prog_opts['default_profile_glob'] = prog_opts['default_ssg_glob']
+    else:
+        print(f"Loading content from: {prog_opts['default_content_path']}")
 
     ctl_files = get_filelist(
         prog_opts['default_content_path'],
@@ -56,7 +60,8 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
         print(f'Using control file(s): {file_tuples}')
 
     for path in file_tuples:
-        print(f'Extracting IDs from {path[1]}')
+        if debug:
+            print(f'Extracting IDs from {path[1]}')
 
         try:
             indata = text_file_reader(Path(path[0]), prog_opts)
@@ -67,7 +72,7 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
             path_ids = [
                 xform_id(x)
                 for x in nested_lookup('id', indata)
-                if x.islower() and '_' not in x
+                if x.islower() and '_' not in x and '-' in x
             ]
         else:
             path_ids = [x for x in nested_lookup('id', indata) if x.isupper()]
@@ -80,39 +85,60 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     if debug:
         print(f'ID queue Front: {id_queue[0]}')
         print(f'Control queue Front: {ctl_queue[0]}')
-        print(f"\nUser control Ids -> {len(in_ids)}")
 
     return in_ids, id_queue, ctl_queue
 
 
-def process_data(filepath, prog_opts, use_ssg=False, debug=False):
+def process_data(filepath, prog_opts, uargs):
     """
     Process inputs, print some output.
     """
     input_ids, id_queue, ctls = load_input_data(
-        filepath, prog_opts, use_ssg=use_ssg, debug=debug
+        filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
     )
-    print(f"\nInput control Ids -> {len(input_ids)}")
-    id_set_match(input_ids, id_queue, debug=debug)
+    if uargs.verbose:
+        print(f"\nInput control Ids -> {len(input_ids)}")
+    id_set_match(input_ids, id_queue, uargs=uargs)
 
 
-def id_set_match(in_ids, id_q, debug=False):
+def id_set_match(in_ids, id_q, uargs):
     """
     Quick set match analysis of ID sets.
     """
     in_set = SortedSet(in_ids)
+    q_size = len(id_q)
 
-    for _ in range(len(id_q)):
+    for _ in range(q_size):
         pname, id_list = id_q.popleft()
-        print(f"\n{pname} control IDs -> {len(id_list)}")
+        if uargs.verbose:
+            print(f"\n{pname} control IDs -> {len(id_list)}")
         id_set = SortedSet(id_list)
 
-        print(f"Input set is in {pname} set: {id_set > in_set}")
+        if uargs.verbose:
+            print(f"Input set is in {pname} set: {id_set > in_set}")
         common_set = id_set & in_set
-        print(f"Num input controls in {pname} set -> {len(common_set)}")
+        if uargs.verbose:
+            print(f"Num input controls in {pname} set -> {len(common_set)}")
         not_in_set = in_set - id_set
-        print(f"Num input controls not in {pname} set -> {len(not_in_set)}")
-        print(f"Input control IDs not in {pname} set: {list(not_in_set)}")
+        if uargs.verbose:
+            print(f"Num input controls not in {pname} set -> {len(not_in_set)}")
+            print(f"Input control IDs not in {pname} set: {list(not_in_set)}")
+
+    # this requires a single filename in the search glob resulting in a control
+    # ID queue size of 1 (as well as the sort-ids argument)
+    if q_size == 1 and uargs.sort:
+        sort_in = (
+            [xform_id(x) for x in common_set] if in_ids[0].isupper() else common_set
+        )
+        sort_out = (
+            [xform_id(x) for x in not_in_set] if in_ids[0].isupper() else not_in_set
+        )
+        print(f'\nInput IDs in {pname}:')
+        for ctl in os_sorted(sort_in):
+            print(ctl)
+        print(f'\nInput IDs not in {pname}:')
+        for ctl in os_sorted(sort_out):
+            print(ctl)
 
 
 def self_test(ucfg):
@@ -172,20 +198,27 @@ def main(argv=None):  # pragma: no cover
         dest="ssg",
     )
     parser.add_argument(
+        '-s',
+        '--sort-ids',
+        help='output report sorted IDs',
+        action='store_true',
+        dest="sort",
+    )
+    parser.add_argument(
         '-v',
         '--verbose',
         action='store_true',
         help='display more processing info',
     )
     parser.add_argument(
-        '-d',
+        '-D',
         '--dump-config',
         help='dump active configuration to stdout and exit',
         action='store_true',
         dest='dump',
     )
     parser.add_argument(
-        '-s',
+        '-S',
         '--save-config',
         action='store_true',
         dest="save",
@@ -224,8 +257,10 @@ def main(argv=None):  # pragma: no cover
         print(f"Path to content: {cfg.default_content_path}")
         print(f"Content file glob: {cfg.default_profile_glob}")
         print(f"Input file: {infile}")
+    else:
+        print(f"Processing input file: {infile}")
 
-    process_data(infile, popts, args.ssg, args.verbose)
+    process_data(infile, popts, args)
 
 
 if __name__ == "__main__":

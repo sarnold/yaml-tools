@@ -15,6 +15,8 @@ default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
+default_csv_hdr: null
+cvs_hdr_appends: []
 input_format: null
 output_format: 'json'
 preserve_quotes: true
@@ -67,8 +69,50 @@ controls:
   - moderate
 """
 
+args_obj = Munch.fromDict(
+    {
+        "sort": False,
+        "ssg": True,
+        "verbose": False,
+    }
+)
 
-def test_process_data(capfd, tmp_path):
+testdata = [
+    (
+        False,
+        False,
+        False,
+        "Loading content",
+    ),
+    (
+        False,
+        False,
+        True,
+        "Input control IDs",
+    ),
+]
+
+testdata2 = [
+    (
+        False,
+        True,
+        True,
+        "test2.yaml",
+    ),
+    (
+        True,
+        True,
+        True,
+        "Normalized input",
+    ),
+]
+
+
+@pytest.mark.parametrize("a,b,c,expected", testdata)
+def test_process_data(a, b, c, expected, capfd, tmp_path):
+    args_obj.sort = a
+    args_obj.ssg = b
+    args_obj.verbose = c
     yaml = StrYAML()
     infile = 'tests/data/OE-expanded-profile-ids.txt'
     data_file = tmp_path / "test.yaml"
@@ -76,16 +120,20 @@ def test_process_data(capfd, tmp_path):
 
     popts = yaml.load(defconfig_str)
     popts['default_content_path'] = tmp_path
-    popts['default_profile_glob'] = 'test*.yaml'
+    popts['default_profile_glob'] = 'test.yaml'
 
-    process_data(infile, popts, False, False)
-    process_data(infile, popts, False, True)
+    process_data(infile, popts, args_obj)
+    process_data(infile, popts, args_obj)
     out, err = capfd.readouterr()
     print(out)
-    assert 'Input control IDs' in out
+    assert expected in out
 
 
-def test_process_data_alt(capfd, tmp_path):
+@pytest.mark.parametrize("a,b,c,expected", testdata2)
+def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
+    args_obj.sort = a
+    args_obj.ssg = b
+    args_obj.verbose = c
     yaml = StrYAML()
     infile = 'tests/data/OE-expanded-profile-ids.txt'
     data_file = tmp_path / "test2.yaml"
@@ -93,13 +141,13 @@ def test_process_data_alt(capfd, tmp_path):
 
     popts = yaml.load(defconfig_str)
     popts['default_ssg_path'] = tmp_path
-    popts['default_ssg_glob'] = 'test*.yaml'
+    popts['default_ssg_glob'] = 'test2.yaml'
 
-    process_data(infile, popts, True, False)
-    process_data(infile, popts, True, True)
+    process_data(infile, popts, args_obj)
+    process_data(infile, popts, args_obj)
     out, err = capfd.readouterr()
     print(out)
-    assert 'Input control IDs' in out
+    assert expected in out
 
 
 def test_self_test(capfd):
