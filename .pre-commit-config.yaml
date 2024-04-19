@@ -47,6 +47,7 @@ repos:
       additional_dependencies:
         - importlib_metadata
         - importlib_resources
+        - natsort
         - munch
         - munch-stubs
         - ruamel.yaml

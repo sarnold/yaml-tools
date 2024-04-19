@@ -40,7 +40,7 @@ exclude_lines = [
 ]
 
 [tool.black]
-line-length = 90
+line-length = 88
 skip-string-normalization = true
 include = '\.py$'
 exclude = '''

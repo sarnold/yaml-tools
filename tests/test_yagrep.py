@@ -1,6 +1,6 @@
 import pytest
-
 from munch import Munch
+
 from ymltoxml.utils import FileTypeError, StrYAML
 from ymltoxml.yagrep import process_inputs
 
@@ -9,7 +9,9 @@ defconfig_str = """\
 file_encoding: 'utf-8'
 default_yml_ext: '.yaml'
 default_separator: '/'
-output_format: null
+input_format: null
+output_format: 'json'
+default_csv_hdr: null
 preserve_quotes: true
 process_comments: false
 mapping: 4
@@ -62,10 +64,26 @@ args_obj = Munch.fromDict(
 )
 
 testdata = [
-    ("rules", True, False, "disable_compression",),
-    ("rules", False, True, "disable_compression"),
-    ("rules", False, False, "[]",),
+    (
+        "rules",
+        True,
+        False,
+        "disable_compression",
+    ),
+    (
+        "rules",
+        False,
+        True,
+        "disable_compression",
+    ),
+    (
+        "rules",
+        False,
+        False,
+        "[]",
+    ),
 ]
+
 
 @pytest.mark.parametrize("a,b,c,expected", testdata)
 def test_process_inputs(a, b, c, expected, capfd, tmp_path):

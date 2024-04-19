@@ -3,6 +3,7 @@ dpath
 importlib-metadata; python_version < '3.8'
 importlib-resources; python_version < '3.10'
 munch
+natsort
 nested-lookup
 pystache==0.6.5
 PyYAML

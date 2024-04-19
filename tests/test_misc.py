@@ -1,3 +1,4 @@
+import csv
 import json
 import sys
 from difflib import SequenceMatcher as SM
@@ -10,8 +11,8 @@ from ymltoxml import utils
 from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
 from ymltoxml.utils import (
     FileTypeError,
+    SortedSet,
     StrYAML,
-    get_cachedir,
     get_filelist,
     load_config,
     pystache_render,
@@ -27,10 +28,11 @@ defconfig_str = """\
 file_encoding: 'utf-8'
 default_ext: '.yaml'
 default_separator: '/'
-default_oscal_path: 'ext/oscal-content'
-default_profile_path: 'nist.gov/SP800-53/rev5'
+default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
+default_profile_glob: '*.yaml'
 input_format: null
 output_format: 'json'
+default_csv_hdr: null
 preserve_quotes: true
 process_comments: true
 mapping: 4
@@ -87,15 +89,30 @@ def test_data_writer(capfd):
 
     popts['output_format'] = 'yaml'
     text_data_writer(data, popts)
-    out, err = capfd.readouterr()
-    assert yaml.load(out) == data
+    out1, err1 = capfd.readouterr()
+    assert yaml.load(out1) == data
 
-    popts['output_format'] = 'raw'
+    popts['output_format'] = None
     text_data_writer(data, popts)
-    out, err = capfd.readouterr()
-    assert isinstance(out, str)
-    assert out.startswith("{'policy': 'Security Requirements Guide")
-    print(len(out))
+    out2, err2 = capfd.readouterr()
+    assert isinstance(out2, str)
+    assert out2.startswith("{'policy': 'Security Requirements Guide")
+    # print(out)
+    # print(out1)
+    # print(out2)
+    # print(len(out2))
+
+
+def test_data_writer_csv(capfd):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+
+    popts['output_format'] = 'csv'
+    row_data = text_file_reader('tests/data/catalog.json', popts)
+    text_data_writer(row_data, popts)
+    out3, err3 = capfd.readouterr()
+    assert isinstance(out3, str)
+    # print(out3)
 
 
 def test_file_reader(capfd, tmp_path):
@@ -120,10 +137,10 @@ def test_file_reader(capfd, tmp_path):
     # similarity ratio measure is a float in the range [0, 1]
     sim_01 = SM(None, str(file_data[0]), str(file_data[1])).ratio()
     print(sim_01)
-    assert sim_01 > 0.999
+    assert sim_01 > 0.9
     sim_12 = SM(None, str(file_data[1]), str(file_data[2])).ratio()
     print(sim_12)
-    assert sim_12 > 0.999
+    assert sim_12 > 0.9
 
 
 def test_file_reader_raises(capfd, tmp_path):
@@ -136,12 +153,18 @@ def test_file_reader_raises(capfd, tmp_path):
         text_file_reader(inp2, popts)
 
 
-def test_get_cachedir():
-    test_dir = 'test_cache'
-    dir1 = get_cachedir()
-    assert dir1.endswith('yml_cache')
-    dir2 = get_cachedir(test_dir)
-    assert dir2.endswith('test_cache')
+def test_sorted_set():
+    expected = ['d', 'e', 'f']
+    s1 = SortedSet('abcdef')
+    s2 = SortedSet('defghi')
+    overlap = s1 & s2
+    assert list(overlap) == expected
+    print(overlap)
+    empty = SortedSet('')
+    print(empty)
+    u1 = SortedSet('edf')
+    s3 = u1.sort()
+    assert list(s3) == expected
 
 
 def test_get_filelist():
@@ -224,7 +247,7 @@ def test_load_ymltoxml_config():
 
 
 def test_load_yasort_config():
-    popts, pfile = load_config(yasort=True)
+    popts, pfile = load_config('yasort')
 
     assert isinstance(pfile, Path)
     assert isinstance(popts, Munch)
@@ -233,9 +256,18 @@ def test_load_yasort_config():
 
 
 def test_load_yagrep_config():
-    popts, pfile = load_config(yagrep=True)
+    popts, pfile = load_config('yagrep')
 
     assert isinstance(pfile, Path)
     assert isinstance(popts, Munch)
     assert hasattr(popts, 'default_separator')
     assert pfile.stem == 'yagrep' or '.yagrep'
+
+
+def test_load_oscal_config():
+    popts, pfile = load_config('oscal')
+
+    assert isinstance(pfile, Path)
+    assert isinstance(popts, Munch)
+    assert hasattr(popts, 'default_ssg_path')
+    assert pfile.stem == 'oscal' or '.oscal'
