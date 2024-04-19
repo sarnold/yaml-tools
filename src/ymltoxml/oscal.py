@@ -41,15 +41,20 @@ def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
     writer = csv.writer(open(new_opath, 'w', newline='', encoding='utf-8'))
     reader = csv.reader(open(uargs.munge, 'r', newline='', encoding='utf-8'))
     headers = next(reader)
-    headers.append(prog_opts['new_csv_header'])
+    for hdr in prog_opts['new_csv_hdrs']:
+        headers.append(hdr)
     writer.writerow(headers)
 
     for ctl in reader:
         ctl_id = xform_id(ctl[0])
+        sub_ids = [s for s in in_ids if ctl_id in s]
         if ctl_id in in_ids:
             ctl.append('Y')
+        elif sub_ids != []:
+            ctl.append(sub_ids[0])
         else:
             ctl.append('N')
+        ctl.append(ctl_id)
         writer.writerow(ctl)
 
 
