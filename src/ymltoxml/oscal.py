@@ -3,6 +3,7 @@ The main init, run, and self-test functions for oscal extract.
 """
 
 import argparse
+import csv
 import importlib
 import sys
 from collections import deque
@@ -24,6 +25,32 @@ from .utils import (
 )
 
 # pylint: disable=R0801
+
+
+def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
+    """
+    Append/update column data using ID sets and write a new csv file using
+    the given filename with ``.modified`` appended to the filename stem.
+    """
+    mpath = Path(uargs.munge)
+    opath = Path('.').joinpath(mpath.stem)
+    new_opath = opath.with_suffix('.modified.csv')
+    if uargs.verbose:
+        print(f'Writing munged csv data to {new_opath}')
+
+    writer = csv.writer(open(new_opath, 'w', newline='', encoding='utf-8'))
+    reader = csv.reader(open(uargs.munge, 'r', newline='', encoding='utf-8'))
+    headers = next(reader)
+    headers.append(prog_opts['new_csv_header'])
+    writer.writerow(headers)
+
+    for ctl in reader:
+        ctl_id = xform_id(ctl[0])
+        if ctl_id in in_ids:
+            ctl.append('Y')
+        else:
+            ctl.append('N')
+        writer.writerow(ctl)
 
 
 def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
@@ -93,12 +120,16 @@ def process_data(filepath, prog_opts, uargs):
     """
     Process inputs, print some output.
     """
-    input_ids, id_queue, ctls = load_input_data(
-        filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
-    )
+    if uargs.munge:
+        input_ids = text_file_reader(filepath, prog_opts)
+        csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
+    else:
+        input_ids, id_queue, ctls = load_input_data(
+            filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
+        )
+        _, _ = id_set_match(input_ids, id_queue, uargs=uargs)
     if uargs.verbose:
         print(f"\nInput control Ids -> {len(input_ids)}")
-    id_set_match(input_ids, id_queue, uargs=uargs)
 
 
 def id_set_match(in_ids, id_q, uargs):
@@ -139,6 +170,8 @@ def id_set_match(in_ids, id_q, uargs):
         print(f'\nInput IDs not in {pname}:')
         for ctl in os_sorted(sort_out):
             print(ctl)
+
+    return common_set, not_in_set
 
 
 def self_test(ucfg):
@@ -209,6 +242,15 @@ def main(argv=None):  # pragma: no cover
         '--verbose',
         action='store_true',
         help='display more processing info',
+    )
+    parser.add_argument(
+        '-m',
+        '--munge-file',
+        metavar="FILE",
+        type=str,
+        help="Data file munge using input control ID sets",
+        dest="munge",
+        default=None,
     )
     parser.add_argument(
         '-D',

@@ -16,7 +16,7 @@ default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
 default_csv_hdr: null
-cvs_hdr_appends: []
+new_csv_header: 'OE expanded'
 input_format: null
 output_format: 'json'
 preserve_quotes: true
@@ -74,6 +74,7 @@ args_obj = Munch.fromDict(
         "sort": False,
         "ssg": True,
         "verbose": False,
+        "munge": None,
     }
 )
 
@@ -148,6 +149,25 @@ def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
     out, err = capfd.readouterr()
     print(out)
     assert expected in out
+
+
+# def test_process_data_munge(capfd, tmp_path):
+# args_obj.sort = False
+# args_obj.ssg = True
+# args_obj.verbose = True
+# args_obj.munge = 'tests/data/catalog.csv'
+# yaml = StrYAML()
+# infile = 'tests/data/OE-expanded-profile-ids.txt'
+# data_file = tmp_path / "test3.yaml"
+# data_file.write_text(yaml_str, encoding="utf-8")
+
+# popts = yaml.load(defconfig_str)
+# popts['default_ssg_path'] = tmp_path
+# popts['default_ssg_glob'] = 'test3.yaml'
+
+# process_data(infile, popts, args_obj)
+# out, err = capfd.readouterr()
+# print(out)
 
 
 def test_self_test(capfd):
