@@ -11,7 +11,6 @@ from pathlib import Path
 
 from munch import Munch
 from natsort import os_sorted
-
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -129,7 +128,8 @@ def process_data(filepath, prog_opts, uargs):
         input_ids = text_file_reader(filepath, prog_opts)
         csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
     else:
-        input_ids, id_queue, ctls = load_input_data(
+        # current set match does not use the ctl queue
+        input_ids, id_queue, _ = load_input_data(
             filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
         )
         _, _ = id_set_match(input_ids, id_queue, uargs=uargs)
@@ -186,7 +186,7 @@ def self_test(ucfg):
     print("Python version:", sys.version)
     print("-" * 80)
 
-    modlist = ['ymltoxml.__init__', 'ymltoxml.oscal', 'ymltoxml.utils']
+    modlist = ['yaml_tools.__init__', 'yaml_tools.oscal', 'yaml_tools.utils']
     for modname in modlist:
         try:
             print(f'Checking module {modname}')

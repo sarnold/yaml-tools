@@ -11,16 +11,13 @@ from pathlib import Path
 
 from diskcache import Deque
 from nested_lookup import nested_lookup
+
 from yaml_tools.templates import xform_id
 from yaml_tools.utils import (
     FileTypeError,
     get_filelist,
     text_file_reader,
 )
-
-id_count: typing.Counter[str] = Counter()
-id_queue = Deque(get_cachedir(dir_name='id_queue'))
-ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
 
 FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-all-ids.txt')
 SSG_PATH = os.getenv('SSG_PATH', default='ext/content/controls')
@@ -57,6 +54,10 @@ if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
     sys.exit(1)
 
+
+id_count: typing.Counter[str] = Counter()
+id_queue = Deque(get_cachedir(dir_name='id_queue'))
+ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
 input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
 
 if input_ids[0].islower():

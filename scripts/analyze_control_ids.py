@@ -9,6 +9,7 @@ from collections import Counter, deque
 from pathlib import Path
 
 from fuzzy_match import match as fmatch
+
 from yaml_tools.utils import get_filelist, text_file_reader
 
 id_count: typing.Counter[str] = Counter()

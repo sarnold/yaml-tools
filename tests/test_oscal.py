@@ -1,6 +1,7 @@
 import pytest
-import yaml_tools.oscal
 from munch import Munch
+
+import yaml_tools.oscal
 from yaml_tools.oscal import process_data
 from yaml_tools.utils import FileTypeError, StrYAML
 
@@ -172,7 +173,7 @@ def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
 def test_self_test(capfd):
     popts = Munch.fromYAML(defconfig_str)
     assert isinstance(popts, Munch)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'Console tools' in out
@@ -185,7 +186,7 @@ def test_self_test_bad_file(capfd):
     cfg_dict['default_content_path'] = 'bogus/oscal'
     popts = Munch.fromDict(cfg_dict)
     assert isinstance(popts, Munch)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'FileNotFoundError' in out
@@ -197,7 +198,7 @@ def test_self_test_bad_cfg(capfd):
 
     del cfg_dict['default_content_path']
     popts = Munch.fromDict(cfg_dict)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'missing key' in out

@@ -87,7 +87,9 @@ def main(argv=None):  # pragma: no cover
             substring search.''',
         usage='%(prog)s [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]',
     )
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     parser.add_argument(
         "-v",
         "--verbose",

@@ -7,9 +7,9 @@ from pathlib import Path
 import pytest
 from munch import Munch
 
-from ymltoxml import utils
-from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
-from ymltoxml.utils import (
+from yaml_tools import utils
+from yaml_tools.templates import ID_TEMPLATE, generate_control, xform_id
+from yaml_tools.utils import (
     FileTypeError,
     SortedSet,
     StrYAML,

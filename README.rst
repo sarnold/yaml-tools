@@ -359,8 +359,10 @@ file and reproduced below::
   new: test: added a bunch of test around user usability of feature X.
   fix: typo in spelling my name in comment. !minor
 
-See the following docs page (or generate-changelog_ on Github) for more
+See the following docs page (or generate-changelog.rst_ on Github) for more
 details.
+
+.. _generate-changelog.rst: https://github.com/sarnold/yaml-tools/blob/main/docs/source/dev/generate-changelog.rst
 
 This repo is also pre-commit_ enabled for various linting and format
 checks.  The checks run automatically on commit and will fail the

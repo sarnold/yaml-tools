@@ -143,7 +143,9 @@ def main(argv=None):  # pragma: no cover
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         description='Transform YAML to XML and XML to YAML',
     )
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument(
+        "--version", action="version", version=f"%(prog)s {__version__}"
+    )
     parser.add_argument(
         "-v",
         "--verbose",

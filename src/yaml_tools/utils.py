@@ -26,7 +26,7 @@ else:
     import importlib.resources as importlib_resources
 
 EXTENSIONS = ['.csv', '.json', '.txt', '.yaml', '.yml']
-VERSION = version('ymltoxml')
+VERSION = version('yaml_tools')
 
 
 class FileTypeError(Exception):
@@ -116,7 +116,9 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
 
     cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
-        cfgfile = importlib_resources.files('ymltoxml.data').joinpath(f'{prog_name}.yaml')
+        cfgfile = importlib_resources.files('yaml_tools.data').joinpath(
+            f'{prog_name}.yaml'
+        )
     if debug:
         print(f'Using config: {str(cfgfile.resolve())}')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
