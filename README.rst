@@ -23,7 +23,7 @@ oscal-content_.
 Quick Start
 ===========
 
-Available console commands and scripts:
+Available modules, console commands, and scripts:
 
 * ``ymltoxml`` - YAML / XML round-trip conversion and cleanup
 * ``yasort`` - sort large lists in YAML files
@@ -37,11 +37,14 @@ Experimental "demo" scripts:
 For the above "demo" scripts, check the top of the source file for any knobs
 adjustable via environment variables, eg:
 
-.. code-block::
+.. code-block:: python
 
-  FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-all-ids.txt')
-  SSG_PATH = os.getenv('SSG_PATH', default='ext/content/controls')
-  DEBUG = int(os.getenv('DEBUG', default=0))
+  FILE = os.getenv(
+      "ID_FILE",
+      default="tests/data/OE-expanded-profile-all-ids.txt",
+  )
+  SSG_PATH = os.getenv("SSG_PATH", default="ext/content/controls")
+  DEBUG = int(os.getenv("DEBUG", default=0))
 
 
 Install with pip
@@ -54,10 +57,10 @@ to install yaml-tools on any platform. Install from the main branch::
 
 or use this command to install a specific release version::
 
-  $ pip install https://github.com/sarnold/yaml-tools/releases/download/0.3.0/ymltoxml-0.3.0.tar.gz
+  $ pip install https://github.com/sarnold/yaml-tools/releases/download/0.4.0/yaml_tools-0.4.0.tar.gz
 
-The full package provides the ``ymltoxml.py`` module as well as
-a reference configuration file with defaults for all values.
+The ``yaml_tools`` package provides the modules shown above as well as
+module-specific reference configuration files with defaults for all values.
 
 If you'd rather work from the source repository, it supports the common
 idiom to install it on your system in a virtual env after cloning::
@@ -130,7 +133,7 @@ configuration file, do::
 yagrep
 ------
 
-A new helper script is now included for searching keys or values in
+A new module is now included for searching keys and values in
 YAML files. The ``yagrep`` script also has its own built-in config
 file, which can be copied and edited as shown above. In this case the
 script is intended to feel more-or-less like ``grep`` so the default
@@ -233,10 +236,10 @@ Default yasort.yaml:
 Features and limitations
 ------------------------
 
-We mainly test on mavlink XML message definitions and NIST/SSG YAML files,
-so round-trip conversion *may not* work at all on arbitrarily complex XML
-files with namespaces, etc.  The current round-trip is not exact, due to
-the following:
+We mainly test ymltoxml on mavlink XML message definitions and NIST/SSG
+YAML files, so round-trip conversion *may not* work at all on
+arbitrarily complex XML files with namespaces, etc.  The current
+round-trip is not exact, due to the following:
 
 * missing encoding is added to version tag
 * leading/trailing whitespace in text elements and comments is not preserved
@@ -316,8 +319,8 @@ all the dependencies and run the specified commands, eg:
 
 ::
 
-  $ git clone https://github.com/sarnold/ymltoxml
-  $ cd ymltoxml/
+  $ git clone https://github.com/sarnold/yaml-tools.git
+  $ cd yaml-tools/
   $ tox -e py
 
 The above will run the tests using your (default) system Python;
@@ -396,8 +399,8 @@ something like::
 
 then install it into the repo you just cloned::
 
-  $ git clone https://github.com/sarnold/ymltoxml
-  $ cd ymltoxml/
+  $ git clone https://github.com/sarnold/yaml_tools
+  $ cd yaml_tools/
   $ pre-commit install
 
 It's usually a good idea to update the hooks to the latest version::
@@ -409,40 +412,40 @@ It's usually a good idea to update the hooks to the latest version::
 .. _pre-commit: http://pre-commit.com/
 
 
-.. |ci| image:: https://github.com/sarnold/ymltoxml/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/ci.yml
+.. |ci| image:: https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml/badge.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml
     :alt: CI Status
 
-.. |wheels| image:: https://github.com/sarnold/ymltoxml/actions/workflows/wheels.yml/badge.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/wheels.yml
+.. |wheels| image:: https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml/badge.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml
     :alt: Wheel Status
 
-.. |coverage| image:: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml/badge.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/coverage.yml
+.. |coverage| image:: https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml/badge.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml
     :alt: Coverage workflow
 
-.. |badge| image:: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml/badge.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
+.. |badge| image:: https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml/badge.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml
     :alt: Pylint Status
 
-.. |release| image:: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml/badge.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/release.yml
+.. |release| image:: https://github.com/sarnold/yaml-tools/actions/workflows/release.yml/badge.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/release.yml
     :alt: Release Status
 
-.. |cov| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/test-coverage.svg
-    :target: https://github.com/sarnold/ymltoxml/
+.. |cov| image:: https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/test-coverage.svg
+    :target: https://github.com/sarnold/yaml-tools/
     :alt: Test coverage
 
-.. |pylint| image:: https://raw.githubusercontent.com/sarnold/ymltoxml/badges/main/pylint-score.svg
-    :target: https://github.com/sarnold/ymltoxml/actions/workflows/pylint.yml
+.. |pylint| image:: https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/pylint-score.svg
+    :target: https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml
     :alt: Pylint score
 
-.. |license| image:: https://img.shields.io/github/license/sarnold/ymltoxml
-    :target: https://github.com/sarnold/ymltoxml/blob/master/LICENSE
+.. |license| image:: https://img.shields.io/github/license/sarnold/yaml-tools
+    :target: https://github.com/sarnold/yaml-tools/blob/master/LICENSE
     :alt: License
 
-.. |tag| image:: https://img.shields.io/github/v/tag/sarnold/ymltoxml?color=green&include_prereleases&label=latest%20release
-    :target: https://github.com/sarnold/ymltoxml/releases
+.. |tag| image:: https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=green&include_prereleases&label=latest%20release
+    :target: https://github.com/sarnold/yaml-tools/releases
     :alt: GitHub tag
 
 .. |python| image:: https://img.shields.io/badge/python-3.8+-blue.svg
