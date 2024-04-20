@@ -1,7 +1,6 @@
 import pytest
-
-from ymltoxml.utils import StrYAML, sort_from_parent
-from ymltoxml.yasort import sort_list_data
+from yaml_tools.utils import StrYAML, sort_from_parent
+from yaml_tools.yasort import sort_list_data
 
 defconfig_str = """\
 # comments should be preserved

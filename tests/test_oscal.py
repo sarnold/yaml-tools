@@ -1,9 +1,8 @@
 import pytest
+import yaml_tools.oscal
 from munch import Munch
-
-import ymltoxml.oscal
-from ymltoxml.oscal import process_data
-from ymltoxml.utils import FileTypeError, StrYAML
+from yaml_tools.oscal import process_data
+from yaml_tools.utils import FileTypeError, StrYAML
 
 defconfig_str = """\
 # comments should be preserved

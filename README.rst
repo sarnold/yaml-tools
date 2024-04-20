@@ -1,6 +1,6 @@
-================================
- ymltoxml (and more YAML tools)
-================================
+=======================================
+ yaml-tools (and more for CSV and XML)
+=======================================
 
 |ci| |wheels| |release| |badge| |coverage|
 
@@ -8,12 +8,14 @@
 
 |tag| |license| |python|
 
-Python command line tools to convert files between XML_ and YAML_,
-preserving attributes and comments (with minor corrections).  The default
-file encoding for both types is UTF-8 without a BOM. Now includes more
+Python command line tools for working with YAML and similar structured
+text data, eg, round-trip conversion between XML_ and YAML_, preserving
+attributes and comments (with minor corrections).  The default file
+encoding for all types is UTF-8 without a BOM. Now includes more
 console entry points to grep or sort interesting YAML files (eg, lists
-of rules found in the `SCAP Security Guide`_) and support for more input
-file types to ingest SSG and other upstream data, eg, NIST oscal-content_.
+of rules found in the `SCAP Security Guide`_) and support for more
+input file types to ingest SSG and other upstream data, eg, NIST
+oscal-content_.
 
 .. _SCAP Security Guide: https://github.com/ComplianceAsCode/content
 .. _oscal-content: https://github.com/usnistgov/oscal-content.git
@@ -27,22 +29,34 @@ Available console commands and scripts:
 * ``yasort`` - sort large lists in YAML files
 * ``yagrep`` - grep for keys/values in YAML files
 * ``oscal`` (*WIP*) - ingest NIST 800-53 content in multiple formats
-* ``analyze_control_ids.py`` (*experimental*) - analyze control ID sets
+
+Experimental "demo" scripts:
+* ``analyze_control_ids.py`` - analyze control ID sets with fuzzy match
+* ``analyze_ssg_controls.py`` - analyze NIST controls from SSG content
+
+For the above "demo" scripts, check the top of the source file for any knobs
+adjustable via environment variables, eg:
+
+.. code-block::
+
+  FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-all-ids.txt')
+  SSG_PATH = os.getenv('SSG_PATH', default='ext/content/controls')
+  DEBUG = int(os.getenv('DEBUG', default=0))
 
 
 Install with pip
 ----------------
 
 This package is *not* yet published on PyPI, thus use one of the following
-to install ymltoxml on any platform. Install from the main branch::
+to install yaml-tools on any platform. Install from the main branch::
 
-  $ https://github.com/sarnold/ymltoxml/archive/refs/heads/main.tar.gz
+  $ https://github.com/sarnold/yaml-tools/archive/refs/heads/main.tar.gz
 
 or use this command to install a specific release version::
 
-  $ pip install https://github.com/sarnold/ymltoxml/releases/download/0.3.0/ymltoxml-0.3.0.tar.gz
+  $ pip install https://github.com/sarnold/yaml-tools/releases/download/0.3.0/ymltoxml-0.3.0.tar.gz
 
-The full package provides the ``ymltoxml.py`` executable as well as
+The full package provides the ``ymltoxml.py`` module as well as
 a reference configuration file with defaults for all values.
 
 If you'd rather work from the source repository, it supports the common

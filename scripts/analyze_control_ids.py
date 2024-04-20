@@ -9,8 +9,7 @@ from collections import Counter, deque
 from pathlib import Path
 
 from fuzzy_match import match as fmatch
-
-from ymltoxml.utils import get_filelist, text_file_reader
+from yaml_tools.utils import get_filelist, text_file_reader
 
 id_count: typing.Counter[str] = Counter()
 result_queue = deque()
@@ -128,7 +127,9 @@ if FUZZY:
         if len(match_list) > 0:
             result_queue.append((ctl_id, match_list))
 
-    print(f"\nFuzzy ID match shows {len(result_queue)} possible controls match HIGH set")
+    print(
+        f"\nFuzzy ID match shows {len(result_queue)} possible controls match HIGH set"
+    )
 
     if DEBUG:
         for match_res in result_queue:

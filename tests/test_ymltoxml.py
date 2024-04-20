@@ -1,7 +1,6 @@
 import pytest
-
-from ymltoxml.utils import FileTypeError, StrYAML
-from ymltoxml.ymltoxml import get_input_type, process_inputs
+from yaml_tools.utils import FileTypeError, StrYAML
+from yaml_tools.ymltoxml import get_input_type, process_inputs
 
 defconfig_str = """\
 file_encoding: 'utf-8'

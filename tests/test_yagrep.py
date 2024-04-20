@@ -1,8 +1,7 @@
 import pytest
 from munch import Munch
-
-from ymltoxml.utils import FileTypeError, StrYAML
-from ymltoxml.yagrep import process_inputs
+from yaml_tools.utils import FileTypeError, StrYAML
+from yaml_tools.yagrep import process_inputs
 
 defconfig_str = """\
 # comments should be preserved
