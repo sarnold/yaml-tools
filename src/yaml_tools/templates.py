@@ -4,6 +4,19 @@ Template bits for generating SSG-style controls in YAML.
 
 from .utils import pystache_render
 
+PROFILES = ['LOW', 'MODERATE', 'HIGH', 'PRIVACY']
+
+IMPACT_LVLS = ['low', 'moderate', 'high']
+
+CTL_FIELD_MAP = {
+    'id': 'Control Identifier',
+    'name': 'Control (or Control Enhancement) Name',
+    'notes': 'Discussion',
+    'description': 'Control Text',
+    'status': 'pending',
+    'levels': None,
+}
+
 PREAMBLE = '''
 policy: NIST
 title: Configuration Recommendations for Yocto- and OpenEmbedded-based Linux Variants
@@ -14,20 +27,20 @@ levels:
 - id: low
 - id: moderate
 - id: high
-controls:
 '''
 
 ID_TEMPLATE = '''
-- id: {{caps}}
-  status: {{status}}
-  notes: |-
-    {{notes}}
-  rules: {{rules_list}}
-  description: |-
-    {{description}}
-  title: >-
-    {{caps}} - {{name}}
-  levels: {{levels_list}}
+controls:
+  - id: {{caps}}
+    status: {{status}}
+    notes: |-
+      {{notes}}
+    rules: []
+    description: |-
+      {{description}}
+    title: >-
+      {{caps}} - {{name}}
+    levels: []
 '''
 
 

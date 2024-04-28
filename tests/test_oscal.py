@@ -16,9 +16,10 @@ default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
 default_csv_hdr: null
-new_csv_header: 'OE expanded'
+new_csv_hdrs: ['OE expanded']
 input_format: null
 output_format: 'json'
+output_path: null
 preserve_quotes: true
 process_comments: false
 mapping: 4

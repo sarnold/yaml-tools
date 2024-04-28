@@ -10,7 +10,11 @@ from pathlib import Path
 
 from fuzzy_match import match as fmatch
 
-from yaml_tools.utils import get_filelist, text_file_reader
+from yaml_tools.utils import (
+    get_filelist,
+    get_profile_type,
+    text_file_reader,
+)
 
 id_count: typing.Counter[str] = Counter()
 result_queue = deque()
@@ -38,19 +42,6 @@ def get_profile_sets(dirpath='tests/data', filepattern='*.txt', debug=False):
     :param debug: increase output verbosity
     :return: tuple of lists: (profile_sets, PROFILE_NAMES)
     """
-
-    def get_profile_type(filename, debug=False):
-        """
-        Get oscal profile type from filename, where profile type is one of the
-        exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
-        """
-        match = None
-
-        if any((match := substring) in filename for substring in PROFILE_NAMES):
-            if debug:
-                print(f'Found profile type: {match}')
-
-        return match
 
     h_set = set()
     m_set = set()

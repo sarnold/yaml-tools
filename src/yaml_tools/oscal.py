@@ -137,6 +137,13 @@ def process_data(filepath, prog_opts, uargs):
         print(f"\nInput control Ids -> {len(input_ids)}")
 
 
+def ssg_ctrl_from_nist(in_ids, prog_opts, uargs):
+    """
+    Create a new control in SSG format using the given ID. Give it some
+    levels if it exists in the relevant NIST profiles
+    """
+
+
 def id_set_match(in_ids, id_q, uargs):
     """
     Quick set match analysis of ID sets.

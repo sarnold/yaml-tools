@@ -12,6 +12,7 @@ default_csv_hdr: null
 new_csv_hdrs: []
 input_format: null
 output_format: 'json'
+output_path: null
 preserve_quotes: true
 process_comments: false
 mapping: 4
