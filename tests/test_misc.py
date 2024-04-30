@@ -167,6 +167,7 @@ def test_get_profile_ids():
     assert isinstance(out, list)
     assert len(out) == 4
     assert out[0][0] == 'HIGH'
+    assert isinstance(out[0][1], list)
 
 
 def test_get_profile_type_good():

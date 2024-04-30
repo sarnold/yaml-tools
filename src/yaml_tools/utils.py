@@ -109,7 +109,7 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
 def get_profile_ids(prog_opts, debug=False):
     """
     Replacement for ``get_filelist()`` when using the NIST profile ID text
-    files (which are now packaged in the YAML config files).
+    files (which are now packaged with the YAML config files).
     """
     id_str_data = []
     id_data = importlib_resources.files('yaml_tools').joinpath('data')

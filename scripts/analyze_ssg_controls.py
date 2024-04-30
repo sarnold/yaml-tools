@@ -25,6 +25,7 @@ DEBUG = int(os.getenv('DEBUG', default=0))
 
 OPTIONS = {'file_encoding': 'utf-8'}
 FILE_GLOB = 'nist_*.yml'
+CONTROL_SETS = []
 CONTROL_FILES = [
     'nist_ocp4.yml',
     'nist_rhidm.yml',
@@ -107,6 +108,7 @@ for _ in range(4):
     pname, id_list = id_queue.popleft()
     print(f"\n{pname} control IDs -> {len(id_list)}")
     id_set = set(id_list)
+    CONTROL_SETS.append((pname, id_set))
 
     print(f"Input set is in {pname} set: {id_set > in_set}")
     common_set = sorted(id_set & in_set)
@@ -115,3 +117,14 @@ for _ in range(4):
     print(f"Num input controls not in {pname} set -> {len(not_in_set)}")
     if DEBUG:
         print(f"Input controls not in {pname} set: {not_in_set}")
+
+if DEBUG:
+    print(
+        f"\n{CONTROL_SETS[0][0]} == {CONTROL_SETS[1][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[1][1]}"
+    )
+    print(
+        f"{CONTROL_SETS[0][0]} == {CONTROL_SETS[2][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[2][1]}"
+    )
+    print(
+        f"{CONTROL_SETS[0][0]} == {CONTROL_SETS[3][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[3][1]}"
+    )
