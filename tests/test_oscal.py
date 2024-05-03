@@ -15,6 +15,7 @@ default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
+default_control_attr: 'status'
 default_csv_hdr: null
 new_csv_hdrs: ['OE expanded']
 input_format: null
