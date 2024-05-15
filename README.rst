@@ -399,8 +399,8 @@ something like::
 
 then install it into the repo you just cloned::
 
-  $ git clone https://github.com/sarnold/yaml_tools
-  $ cd yaml_tools/
+  $ git clone https://github.com/sarnold/yaml-tools
+  $ cd yaml-tools/
   $ pre-commit install
 
 It's usually a good idea to update the hooks to the latest version::
