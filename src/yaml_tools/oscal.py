@@ -11,7 +11,6 @@ from pathlib import Path
 
 from munch import Munch
 from natsort import os_sorted
-
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -129,12 +128,29 @@ def process_data(filepath, prog_opts, uargs):
         input_ids = text_file_reader(filepath, prog_opts)
         csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
     else:
-        input_ids, id_queue, ctls = load_input_data(
+        input_ids, id_queue, ctl_queue = load_input_data(
             filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
         )
-        _, _ = id_set_match(input_ids, id_queue, uargs=uargs)
-    if uargs.verbose:
-        print(f"\nInput control Ids -> {len(input_ids)}")
+        in_list, not_in_list = id_set_match(input_ids, id_queue, uargs=uargs)
+        print(f'\nControl queue has {len(ctl_queue)} items')
+        rpt_attr = (
+            prog_opts['default_control_attr']
+            if prog_opts['default_control_attr']
+            else uargs.attribute
+        )
+        if uargs.verbose:
+            print(f'Checking input IDs: {in_list}')
+        print(f'\nID,{rpt_attr}')
+        for ctl in ctl_queue:
+            if ctl[0] in in_list:
+                print(f'{ctl[0]},{ctl[1][rpt_attr]}')
+
+
+def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
+    """
+    Create a new control in SSG format using the given ID. Give it some
+    levels if it exists in the relevant NIST profiles
+    """
 
 
 def id_set_match(in_ids, id_q, uargs):
@@ -176,7 +192,7 @@ def id_set_match(in_ids, id_q, uargs):
         for ctl in os_sorted(sort_out):
             print(ctl)
 
-    return common_set, not_in_set
+    return list(common_set), list(not_in_set)
 
 
 def self_test(ucfg):
@@ -186,7 +202,7 @@ def self_test(ucfg):
     print("Python version:", sys.version)
     print("-" * 80)
 
-    modlist = ['ymltoxml.__init__', 'ymltoxml.oscal', 'ymltoxml.utils']
+    modlist = ['yaml_tools.__init__', 'yaml_tools.oscal', 'yaml_tools.utils']
     for modname in modlist:
         try:
             print(f'Checking module {modname}')
@@ -238,7 +254,7 @@ def main(argv=None):  # pragma: no cover
     parser.add_argument(
         '-s',
         '--sort-ids',
-        help='output report sorted IDs',
+        help='use sorted IDs in output report',
         action='store_true',
         dest="sort",
     )
@@ -256,6 +272,15 @@ def main(argv=None):  # pragma: no cover
         help="Data file munge using input control ID sets",
         dest="munge",
         default=None,
+    )
+    parser.add_argument(
+        '-R',
+        '--report-attribute',
+        metavar="ATTR",
+        type=str,
+        help="Control report output using attribute ATTR",
+        dest="attribute",
+        default="status",
     )
     parser.add_argument(
         '-D',

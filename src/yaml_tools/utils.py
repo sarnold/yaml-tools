@@ -12,6 +12,7 @@ from pathlib import Path
 import pystache
 import yaml as yaml_loader
 from munch import Munch
+from natsort import os_sorted
 from ruamel.yaml import YAML
 from ruamel.yaml.compat import StringIO
 
@@ -26,7 +27,14 @@ else:
     import importlib.resources as importlib_resources
 
 EXTENSIONS = ['.csv', '.json', '.txt', '.yaml', '.yml']
-VERSION = version('ymltoxml')
+PROFILE_ID_FILES = [
+    'HIGH-ids.txt',
+    'MODERATE-ids.txt',
+    'LOW-ids.txt',
+    'PRIVACY-ids.txt',
+]
+PROFILE_NAMES = ['HIGH', 'MODERATE', 'LOW', 'PRIVACY']
+VERSION = version('yaml_tools')
 
 
 class FileTypeError(Exception):
@@ -98,6 +106,38 @@ def get_filelist(dirpath, filepattern='*.txt', debug=False):
     return file_list
 
 
+def get_profile_ids(prog_opts, debug=False):
+    """
+    Replacement for ``get_filelist()`` when using the NIST profile ID text
+    files (which are now packaged with the YAML config files).
+    """
+    id_str_data = []
+    id_data = importlib_resources.files('yaml_tools').joinpath('data')
+    for file in PROFILE_ID_FILES:
+        ptype = get_profile_type(file, debug=debug)
+        pdata = os_sorted(
+            id_data.joinpath(file)
+            .read_text(encoding=prog_opts['file_encoding'])
+            .splitlines()
+        )
+        id_str_data.append((ptype, pdata))
+    return id_str_data
+
+
+def get_profile_type(filename, debug=False):
+    """
+    Get oscal profile type from filename, where profile type is one of the
+    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
+    """
+    pmatch = None
+    for x in PROFILE_NAMES:
+        if x in filename:
+            pmatch = x
+            if debug:
+                print(f'Found profile type: {pmatch}')
+    return pmatch
+
+
 def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
     """
     Load yaml configuration file and munchify the data. If local file is
@@ -116,7 +156,9 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
 
     cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
-        cfgfile = importlib_resources.files('ymltoxml.data').joinpath(f'{prog_name}.yaml')
+        cfgfile = importlib_resources.files('yaml_tools.data').joinpath(
+            f'{prog_name}.yaml'
+        )
     if debug:
         print(f'Using config: {str(cfgfile.resolve())}')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
@@ -186,18 +228,17 @@ def sort_from_parent(input_data, prog_opts):
     return input_data
 
 
-def text_data_writer(outdata, popts):
+def text_data_writer(outdata, prog_opts):
     """
     Text data output with optional formatting (default is raw); uses config
     setting for output format. Supports the same text file types supported
     by the ``text_file_reader()`` input function.
     """
     out = ''
-    is_seq = isinstance(outdata, collections.abc.Sequence)
-    csv_hdr = popts['default_csv_hdr']
-    fmt = popts['output_format'] if popts['output_format'] else 'raw'
+    csv_hdr = prog_opts['default_csv_hdr']
+    fmt = prog_opts['output_format'] if prog_opts['output_format'] else 'raw'
 
-    if fmt == 'csv' and is_seq:
+    if fmt == 'csv' and isinstance(outdata, collections.abc.Sequence):
         field_names = csv_hdr if csv_hdr else list(outdata[0].keys())
         w = csv.DictWriter(sys.stdout, field_names)
         w.writeheader()
@@ -209,11 +250,11 @@ def text_data_writer(outdata, popts):
         elif fmt == 'yaml':
             yaml = StrYAML()
             yaml.indent(
-                mapping=popts['mapping'],
-                sequence=popts['sequence'],
-                offset=popts['offset'],
+                mapping=prog_opts['mapping'],
+                sequence=prog_opts['sequence'],
+                offset=prog_opts['offset'],
             )
-            yaml.preserve_quotes = popts['preserve_quotes']
+            yaml.preserve_quotes = prog_opts['preserve_quotes']
             out = yaml.dump(outdata)
         else:
             out = repr(outdata)

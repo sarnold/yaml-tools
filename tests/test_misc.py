@@ -7,13 +7,16 @@ from pathlib import Path
 import pytest
 from munch import Munch
 
-from ymltoxml import utils
-from ymltoxml.templates import ID_TEMPLATE, generate_control, xform_id
-from ymltoxml.utils import (
+from yaml_tools import utils
+from yaml_tools.templates import ID_TEMPLATE, generate_control, xform_id
+from yaml_tools.utils import (
+    PROFILE_NAMES,
     FileTypeError,
     SortedSet,
     StrYAML,
     get_filelist,
+    get_profile_ids,
+    get_profile_type,
     load_config,
     pystache_render,
     text_data_writer,
@@ -30,9 +33,11 @@ default_ext: '.yaml'
 default_separator: '/'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
 default_profile_glob: '*.yaml'
+default_csv_hdr: null
+new_csv_hdrs: []
 input_format: null
 output_format: 'json'
-default_csv_hdr: null
+output_path: null
 preserve_quotes: true
 process_comments: true
 mapping: 4
@@ -153,6 +158,32 @@ def test_file_reader_raises(capfd, tmp_path):
         text_file_reader(inp2, popts)
 
 
+def test_get_profile_ids():
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+
+    out = get_profile_ids(popts)
+    print(out[0][0])
+    assert isinstance(out, list)
+    assert len(out) == 4
+    assert out[0][0] == 'HIGH'
+    assert isinstance(out[0][1], list)
+
+
+def test_get_profile_type_good():
+    good = 'HIGH-ids.txt'
+    ret = get_profile_type(good, True)
+    print(ret)
+    assert 'HIGH' in ret
+
+
+def test_get_profile_type_bad():
+    bad = 'BAD-ids.txt'
+    ret = get_profile_type(bad)
+    print(ret)
+    assert ret is None
+
+
 def test_sorted_set():
     expected = ['d', 'e', 'f']
     s1 = SortedSet('abcdef')
@@ -200,7 +231,7 @@ def test_gen_control():
     assert 'pending' in out
 
     back_in = yaml.load(out)
-    print(back_in[0])
+    print(back_in)
 
 
 def test_render_simple():

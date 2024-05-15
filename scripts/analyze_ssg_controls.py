@@ -10,14 +10,14 @@ from collections import Counter
 from pathlib import Path
 
 from diskcache import Deque
-
 from nested_lookup import nested_lookup
-from ymltoxml.templates import xform_id
-from ymltoxml.utils import FileTypeError, get_filelist, text_file_reader
 
-id_count: typing.Counter[str] = Counter()
-id_queue = Deque(get_cachedir(dir_name='id_queue'))
-ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
+from yaml_tools.templates import xform_id
+from yaml_tools.utils import (
+    FileTypeError,
+    get_filelist,
+    text_file_reader,
+)
 
 FILE = os.getenv('ID_FILE', default='tests/data/OE-expanded-profile-all-ids.txt')
 SSG_PATH = os.getenv('SSG_PATH', default='ext/content/controls')
@@ -25,6 +25,7 @@ DEBUG = int(os.getenv('DEBUG', default=0))
 
 OPTIONS = {'file_encoding': 'utf-8'}
 FILE_GLOB = 'nist_*.yml'
+CONTROL_SETS = []
 CONTROL_FILES = [
     'nist_ocp4.yml',
     'nist_rhidm.yml',
@@ -54,6 +55,10 @@ if not Path(FILE).exists():
     print(f'Input file {FILE} not found!')
     sys.exit(1)
 
+
+id_count: typing.Counter[str] = Counter()
+id_queue = Deque(get_cachedir(dir_name='id_queue'))
+ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
 input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
 
 if input_ids[0].islower():
@@ -103,6 +108,7 @@ for _ in range(4):
     pname, id_list = id_queue.popleft()
     print(f"\n{pname} control IDs -> {len(id_list)}")
     id_set = set(id_list)
+    CONTROL_SETS.append((pname, id_set))
 
     print(f"Input set is in {pname} set: {id_set > in_set}")
     common_set = sorted(id_set & in_set)
@@ -111,3 +117,14 @@ for _ in range(4):
     print(f"Num input controls not in {pname} set -> {len(not_in_set)}")
     if DEBUG:
         print(f"Input controls not in {pname} set: {not_in_set}")
+
+if DEBUG:
+    print(
+        f"\n{CONTROL_SETS[0][0]} == {CONTROL_SETS[1][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[1][1]}"
+    )
+    print(
+        f"{CONTROL_SETS[0][0]} == {CONTROL_SETS[2][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[2][1]}"
+    )
+    print(
+        f"{CONTROL_SETS[0][0]} == {CONTROL_SETS[3][0]} {CONTROL_SETS[0][1] == CONTROL_SETS[3][1]}"
+    )

@@ -1,9 +1,9 @@
 import pytest
 from munch import Munch
 
-import ymltoxml.oscal
-from ymltoxml.oscal import process_data
-from ymltoxml.utils import FileTypeError, StrYAML
+import yaml_tools.oscal
+from yaml_tools.oscal import process_data
+from yaml_tools.utils import FileTypeError, StrYAML
 
 defconfig_str = """\
 # comments should be preserved
@@ -15,10 +15,12 @@ default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
+default_control_attr: 'status'
 default_csv_hdr: null
-new_csv_header: 'OE expanded'
+new_csv_hdrs: ['OE expanded']
 input_format: null
 output_format: 'json'
+output_path: null
 preserve_quotes: true
 process_comments: false
 mapping: 4
@@ -173,7 +175,7 @@ def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
 def test_self_test(capfd):
     popts = Munch.fromYAML(defconfig_str)
     assert isinstance(popts, Munch)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'Console tools' in out
@@ -186,7 +188,7 @@ def test_self_test_bad_file(capfd):
     cfg_dict['default_content_path'] = 'bogus/oscal'
     popts = Munch.fromDict(cfg_dict)
     assert isinstance(popts, Munch)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'FileNotFoundError' in out
@@ -198,7 +200,7 @@ def test_self_test_bad_cfg(capfd):
 
     del cfg_dict['default_content_path']
     popts = Munch.fromDict(cfg_dict)
-    ymltoxml.oscal.self_test(popts)
+    yaml_tools.oscal.self_test(popts)
     out, err = capfd.readouterr()
     print(out)
     assert 'missing key' in out
