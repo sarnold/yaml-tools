@@ -259,6 +259,7 @@ def test_xform_id():
         assert xform_id(y) == x
 
 
+@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_xform_id_strip():
     stripped = xform_id('AC-08-00', True)
     assert stripped == 'ac-08'

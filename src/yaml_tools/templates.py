@@ -2,6 +2,8 @@
 Template bits for generating SSG-style controls in YAML.
 """
 
+import inspect
+
 from .utils import pystache_render
 
 PROFILES = ['LOW', 'MODERATE', 'HIGH', 'PRIVACY']
@@ -59,7 +61,9 @@ def xform_id(string, strip_trailing_zeros=False):
     AC-12(2) <==> ac-12.2
     """
     if '(' in string or string[0].isupper():
-        if strip_trailing_zeros:
+        # we need to check for older-than-py39  here
+        has_rmsfx_attr = [x for x in inspect.getmembers('str') if 'removesuffix' in x]
+        if strip_trailing_zeros and has_rmsfx_attr:
             string = string.removesuffix('-00')
         return string.replace('(', '.').replace(')', '').lower()
 
