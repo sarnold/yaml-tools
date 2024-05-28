@@ -52,13 +52,15 @@ def generate_control(context):
     return id_yaml
 
 
-def xform_id(string):
+def xform_id(string, strip_trailing_zeros=True):
     """
     Transform control ID string:
 
     AC-12(2) <==> ac-12.2
     """
-    if '(' in string or string.isupper():
+    if '(' in string or string[0].isupper():
+        if strip_trailing_zeros:
+            string = string.removesuffix('-00')
         return string.replace('(', '.').replace(')', '').lower()
 
     slist = string.upper().split('.')
