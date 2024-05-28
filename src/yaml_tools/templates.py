@@ -52,7 +52,7 @@ def generate_control(context):
     return id_yaml
 
 
-def xform_id(string, strip_trailing_zeros=True):
+def xform_id(string, strip_trailing_zeros=False):
     """
     Transform control ID string:
 

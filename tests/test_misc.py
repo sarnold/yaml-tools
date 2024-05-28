@@ -259,6 +259,11 @@ def test_xform_id():
         assert xform_id(y) == x
 
 
+def test_xform_id_strip():
+    stripped = xform_id('AC-08-00', True)
+    assert stripped == 'ac-08'
+
+
 def test_load_debug_config():
     popts, pfile = load_config(debug=True)
 

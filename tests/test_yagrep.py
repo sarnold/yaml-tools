@@ -1,5 +1,6 @@
 import pytest
 from munch import Munch
+
 from yaml_tools.utils import FileTypeError, StrYAML
 from yaml_tools.yagrep import process_inputs
 
