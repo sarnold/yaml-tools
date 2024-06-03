@@ -76,7 +76,8 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     if use_ssg:
         prog_opts['default_content_path'] = prog_opts['default_ssg_path']
         prog_opts['default_profile_glob'] = prog_opts['default_ssg_glob']
-    else:
+
+    if debug:
         print(f"Loading content from: {prog_opts['default_content_path']}")
 
     ctl_files = get_filelist(
@@ -132,18 +133,20 @@ def process_data(filepath, prog_opts, uargs):
             filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
         )
         in_list, not_in_list = id_set_match(input_ids, id_queue, uargs=uargs)
-        print(f'\nControl queue has {len(ctl_queue)} items')
+
+        if not uargs.quiet:
+            print(f'\nControl queue has {len(ctl_queue)} items')
+
         rpt_attr = (
-            prog_opts['default_control_attr']
-            if prog_opts['default_control_attr']
-            else uargs.attribute
+            uargs.attribute if uargs.attribute else prog_opts['default_control_attr']
         )
-        if uargs.verbose:
-            print(f'Checking input IDs: {in_list}')
-        print(f'\nID,{rpt_attr}')
-        for ctl in ctl_queue:
-            if ctl[0] in in_list:
-                print(f'{ctl[0]},{ctl[1][rpt_attr]}')
+        if rpt_attr:
+            if uargs.verbose:
+                print(f'Checking input IDs: {in_list}')
+            print(f'\nID,{rpt_attr}')
+            for ctl in ctl_queue:
+                if ctl[0] in in_list:
+                    print(f'{ctl[0]},{ctl[1][rpt_attr]}')
 
 
 def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
@@ -265,6 +268,12 @@ def main(argv=None):  # pragma: no cover
         help='display more processing info',
     )
     parser.add_argument(
+        '-q',
+        '--quiet',
+        action='store_true',
+        help='display less processing info',
+    )
+    parser.add_argument(
         '-m',
         '--munge-file',
         metavar="FILE",
@@ -274,7 +283,7 @@ def main(argv=None):  # pragma: no cover
         default=None,
     )
     parser.add_argument(
-        '-R',
+        '-r',
         '--report-attribute',
         metavar="ATTR",
         type=str,
@@ -328,8 +337,7 @@ def main(argv=None):  # pragma: no cover
     if args.verbose:
         print(f"Path to content: {cfg.default_content_path}")
         print(f"Content file glob: {cfg.default_profile_glob}")
-        print(f"Input file: {infile}")
-    else:
+    if not args.quiet:
         print(f"Processing input file: {infile}")
 
     process_data(infile, popts, args)
