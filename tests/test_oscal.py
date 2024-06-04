@@ -77,6 +77,8 @@ args_obj = Munch.fromDict(
         "ssg": True,
         "verbose": False,
         "munge": None,
+        "quiet": False,
+        "attribute": 'rules',
     }
 )
 
@@ -85,7 +87,7 @@ testdata = [
         False,
         False,
         False,
-        "Loading content",
+        "Control queue has 2 items",
     ),
     (
         False,
