@@ -143,10 +143,10 @@ def process_data(filepath, prog_opts, uargs):
         if rpt_attr:
             if uargs.verbose:
                 print(f'Checking input IDs: {in_list}')
-            print(f'\nID,{rpt_attr}')
+            print(f'\nID;{rpt_attr}')
             for ctl in ctl_queue:
                 if ctl[0] in in_list:
-                    print(f'{ctl[0]},{ctl[1][rpt_attr]}')
+                    print(f'{ctl[0]};{ctl[1][rpt_attr]}')
 
 
 def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
