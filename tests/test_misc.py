@@ -250,7 +250,7 @@ def test_str_dumper():
 
 
 def test_xform_id_tolower():
-    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(a)', 'AC-2(9)(a)', 'AC-03-01']
+    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(a)', 'AC-02(09)(a)', 'AC-03-01']
     sort_ids = ['ac-01', 'ac-02.11', 'ac-02.a', 'ac-02.09.a', 'ac-03.01']
     print("")
     for x, y in zip(doc_ids, sort_ids):
@@ -259,7 +259,7 @@ def test_xform_id_tolower():
 
 
 def test_xform_id_toupper():
-    doc_ids = ['ac-1', 'ac-2.11', 'ac-2.a', 'ac-02.09.a', 'ac-03.01']
+    doc_ids = ['ac-01', 'ac-02.11', 'ac-02.a', 'ac-02.09.a', 'ac-03.01']
     sort_ids = ['AC-01', 'AC-02(11)', 'AC-02(a)', 'AC-02(09)(a)', 'AC-03(01)']
     print("")
     for x, y in zip(doc_ids, sort_ids):
@@ -267,7 +267,6 @@ def test_xform_id_toupper():
         assert xform_id(x) == y
 
 
-@pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")
 def test_xform_id_strip():
     stripped = xform_id('AC-08-00', True)
     assert stripped == 'ac-08'

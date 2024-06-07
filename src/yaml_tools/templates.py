@@ -56,40 +56,23 @@ def generate_control(context):
 
 def xform_id(string, strip_trailing_zeros=False):
     """
-    Transform control ID string:
+    Transform control ID strings, add leading zeros in forward direction:
 
     AC-12(2) <==> ac-12.02
     """
-    idp = re.compile(r'[)(-.]')  # regex character class for id separators
-    str_list = [x for x in idp.split(string) if x != '']
-    if strip_trailing_zeros:
-        str_list = [x for x in idp.split(string) if x not in ('00', '')]
-
-    if str_list[0].isupper():
-        id_pfx = str_list[0].lower()
-        id_num = int(str_list[1])
-        if len(str_list) == 2:
-            return f'{id_pfx}-{id_num:02d}'
-        if len(str_list) > 2:
-            id_num2 = int(str_list[2]) if str_list[2].isdigit() else str_list[2]
-        if len(str_list) == 3:
-            if str_list[2].isalpha():
-                return f'{id_pfx}-{id_num:02d}.{id_num2}'
-            return f'{id_pfx}-{id_num:02d}.{id_num2:02d}'
-        if str_list[2].isalpha():
-            return f'{id_pfx}-{id_num:02d}.{id_num2}.{str_list[3]}'
-        return f'{id_pfx}-{id_num:02d}.{id_num2:02d}.{str_list[3]}'
-
-    id_pfx = str_list[0].upper()
-    id_num = int(str_list[1])
-    if len(str_list) == 2:
-        return f'{id_pfx}-{id_num:02d}'
-    if len(str_list) > 2:
-        id_num2 = int(str_list[2]) if str_list[2].isdigit() else str_list[2]
-    if len(str_list) == 3:
-        if str_list[2].isalpha():
-            return f'{id_pfx}-{id_num:02d}({id_num2})'
-        return f'{id_pfx}-{id_num:02d}({id_num2:02d})'
-    if str_list[2].isalpha():
-        return f'{id_pfx}-{id_num:02d}({id_num2})({str_list[3]})'
-    return f'{id_pfx}-{id_num:02d}({id_num2:02d})({str_list[3]})'
+    if string[0].isupper():
+        idp = re.compile(r'[)(-]')  # regex character class id separators
+        slist = [x for x in idp.split(string) if x != '']
+        if strip_trailing_zeros:
+            slist = [x for x in idp.split(string) if x not in ('00', '')]
+        slist_with_dots = [slist[0].lower() + f"-{int(slist[1]):02d}"]
+        slist_with_dots += [
+            f".{s}" if s.isalpha() else f".{int(s):02d}" for s in slist[2:]
+        ]
+        new_id = ''.join(slist_with_dots)
+    else:
+        slist = string.upper().split('.')
+        slist_with_parens = [slist[0]]
+        slist_with_parens += [f"({s.lower()})" for s in slist[1:]]
+        new_id = ''.join(slist_with_parens)
+    return new_id
