@@ -2,7 +2,7 @@
 Template bits for generating SSG-style controls in YAML.
 """
 
-import inspect
+import re
 
 from .utils import pystache_render
 
@@ -58,20 +58,38 @@ def xform_id(string, strip_trailing_zeros=False):
     """
     Transform control ID string:
 
-    AC-12(2) <==> ac-12.2
+    AC-12(2) <==> ac-12.02
     """
-    if '(' in string or string[0].isupper():
-        # we need to check for older-than-py39  here
-        has_rmsfx_attr = [x for x in inspect.getmembers('str') if 'removesuffix' in x]
-        if strip_trailing_zeros and has_rmsfx_attr:
-            string = string.removesuffix('-00')
-        return string.replace('(', '.').replace(')', '').lower()
+    idp = re.compile(r'[)(-.]')  # regex character class for id separators
+    str_list = [x for x in idp.split(string) if x != '']
+    if strip_trailing_zeros:
+        str_list = [x for x in idp.split(string) if x not in ('00', '')]
 
-    slist = string.upper().split('.')
-    if len(slist) == 1:
-        return slist[0]
-    if len(slist) == 2:
-        return f'{slist[0]}({slist[1]})'
-    if len(slist) == 3:
-        return f'{slist[0]}({slist[1]})({slist[2].lower()})'
-    return f'{slist[0]}({slist[1]})({slist[2].lower()})({slist[3]})'
+    if str_list[0].isupper():
+        id_pfx = str_list[0].lower()
+        id_num = int(str_list[1])
+        if len(str_list) == 2:
+            return f'{id_pfx}-{id_num:02d}'
+        if len(str_list) > 2:
+            id_num2 = int(str_list[2]) if str_list[2].isdigit() else str_list[2]
+        if len(str_list) == 3:
+            if str_list[2].isalpha():
+                return f'{id_pfx}-{id_num:02d}.{id_num2}'
+            return f'{id_pfx}-{id_num:02d}.{id_num2:02d}'
+        if str_list[2].isalpha():
+            return f'{id_pfx}-{id_num:02d}.{id_num2}.{str_list[3]}'
+        return f'{id_pfx}-{id_num:02d}.{id_num2:02d}.{str_list[3]}'
+
+    id_pfx = str_list[0].upper()
+    id_num = int(str_list[1])
+    if len(str_list) == 2:
+        return f'{id_pfx}-{id_num:02d}'
+    if len(str_list) > 2:
+        id_num2 = int(str_list[2]) if str_list[2].isdigit() else str_list[2]
+    if len(str_list) == 3:
+        if str_list[2].isalpha():
+            return f'{id_pfx}-{id_num:02d}({id_num2})'
+        return f'{id_pfx}-{id_num:02d}({id_num2:02d})'
+    if str_list[2].isalpha():
+        return f'{id_pfx}-{id_num:02d}({id_num2})({str_list[3]})'
+    return f'{id_pfx}-{id_num:02d}({id_num2:02d})({str_list[3]})'

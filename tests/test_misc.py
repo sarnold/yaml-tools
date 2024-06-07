@@ -249,14 +249,22 @@ def test_str_dumper():
     assert hasattr(my_yaml, 'dump')
 
 
-def test_xform_id():
-    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(11)(a)', 'AC-05(02)(a)(01)']
-    sort_ids = ['ac-1', 'ac-2.11', 'ac-2.11.a', 'ac-05.02.a.01']
+def test_xform_id_tolower():
+    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(a)', 'AC-2(9)(a)', 'AC-03-01']
+    sort_ids = ['ac-01', 'ac-02.11', 'ac-02.a', 'ac-02.09.a', 'ac-03.01']
     print("")
     for x, y in zip(doc_ids, sort_ids):
         print(xform_id(x), y)
         assert xform_id(x) == y
-        assert xform_id(y) == x
+
+
+def test_xform_id_toupper():
+    doc_ids = ['ac-1', 'ac-2.11', 'ac-2.a', 'ac-02.09.a', 'ac-03.01']
+    sort_ids = ['AC-01', 'AC-02(11)', 'AC-02(a)', 'AC-02(09)(a)', 'AC-03(01)']
+    print("")
+    for x, y in zip(doc_ids, sort_ids):
+        print(xform_id(x), y)
+        assert xform_id(x) == y
 
 
 @pytest.mark.skipif(sys.version_info < (3, 9), reason="requires python3.9 or higher")

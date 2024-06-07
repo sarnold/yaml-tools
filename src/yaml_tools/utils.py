@@ -228,6 +228,20 @@ def sort_from_parent(input_data, prog_opts):
     return input_data
 
 
+def str_yaml_dumper(data, prog_opts):
+    """
+    Small StrYAML() dump wrapper.
+    """
+    yaml = StrYAML()
+    yaml.indent(
+        mapping=prog_opts['mapping'],
+        sequence=prog_opts['sequence'],
+        offset=prog_opts['offset'],
+    )
+    yaml.preserve_quotes = prog_opts['preserve_quotes']
+    return yaml.dump(data)
+
+
 def text_data_writer(outdata, prog_opts):
     """
     Text data output with optional formatting (default is raw); uses config
@@ -248,14 +262,7 @@ def text_data_writer(outdata, prog_opts):
         if fmt == 'json':
             out = json.dumps(outdata, indent=4, sort_keys=True)
         elif fmt == 'yaml':
-            yaml = StrYAML()
-            yaml.indent(
-                mapping=prog_opts['mapping'],
-                sequence=prog_opts['sequence'],
-                offset=prog_opts['offset'],
-            )
-            yaml.preserve_quotes = prog_opts['preserve_quotes']
-            out = yaml.dump(outdata)
+            out = str_yaml_dumper(outdata, prog_opts)
         else:
             out = repr(outdata)
 
