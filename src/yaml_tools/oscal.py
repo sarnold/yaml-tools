@@ -45,16 +45,28 @@ def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
     writer.writerow(headers)
 
     for ctl in reader:
-        ctl_id = xform_id(ctl[0])
-        sub_ids = [s for s in in_ids if ctl_id in s]
-        if ctl_id in in_ids:
-            ctl.append('Y')
-        elif sub_ids != []:
-            ctl.append(sub_ids[0])
-        else:
-            ctl.append('N')
-        ctl.append(ctl_id)
+        ctl = csv_row_match(in_ids, ctl)
         writer.writerow(ctl)
+
+
+def csv_row_match(in_ids, ctl):
+    """
+    Extracted ctl munging from ``csv_append_id_data`` loop for testing.
+
+    :param: ctl
+    :type ctl: csv row data
+    :return ctl: munged ctl
+    """
+    ctl_id = xform_id(ctl[0])
+    sub_ids = [s for s in in_ids if ctl_id in s]
+    if ctl_id in in_ids:
+        ctl.append('Y')
+    elif sub_ids != []:
+        ctl.append(sub_ids[0])
+    else:
+        ctl.append('N')
+    ctl.append(ctl_id)
+    return ctl
 
 
 def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):

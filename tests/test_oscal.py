@@ -1,23 +1,26 @@
+import csv
+
 import pytest
 from munch import Munch
 
 import yaml_tools.oscal
-from yaml_tools.oscal import process_data
-from yaml_tools.utils import FileTypeError, StrYAML
+from yaml_tools.oscal import csv_row_match, process_data
+from yaml_tools.templates import xform_id
+from yaml_tools.utils import FileTypeError, StrYAML, text_file_reader
 
 defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
 default_ext: '.yaml'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
-default_profile_glob: '*.yaml'
+default_profile_glob: '*resolved-profile_catalog.yaml'
 default_profile_name: 'PRIVACY'
 default_ssg_glob: 'nist_ocp4.yml'
 default_ssg_path: 'ext/content/controls'
 default_lookup_key: 'controls'
 default_control_attr: 'status'
 default_csv_hdr: null
-new_csv_hdrs: ['OE expanded']
+new_csv_hdrs: ['OE expanded', 'Green ID']
 input_format: null
 output_format: 'json'
 output_path: null
@@ -111,6 +114,32 @@ testdata2 = [
         "Normalized input",
     ),
 ]
+
+
+def test_csv_row_match():
+    file = 'tests/data/controls.csv'
+    infile = 'tests/data/OE-expanded-profile-all-ids.txt'
+
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+
+    in_list = text_file_reader(infile, popts)
+    in_ids = [xform_id(x) for x in in_list] if in_list[0].isupper() else in_list
+
+    print(in_ids[14])
+
+    reader = csv.reader(open(file, 'r', newline='', encoding='utf-8'))
+    headers = next(reader)
+    assert len(headers) == 7
+    print(headers)
+
+    for ctl in reader:
+        # print(len(ctl))
+        ctl = csv_row_match(in_ids, ctl)
+        print(ctl)
+        assert len(ctl) == len(headers) + 2
+        assert xform_id(ctl[0]) == ctl[-1]
+        # print(len(ctl))
 
 
 @pytest.mark.parametrize("a,b,c,expected", testdata)
