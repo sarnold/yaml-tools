@@ -133,32 +133,33 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     return in_ids, id_queue, ctl_queue
 
 
+def munge_file(filepath, prog_opts, uargs):
+    """
+    Munge a CSV file by appending columns.
+    """
+    input_ids = text_file_reader(filepath, prog_opts)
+    csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
+
+
 def process_data(filepath, prog_opts, uargs):
     """
     Process inputs, print some output.
     """
-    if uargs.munge:
-        input_ids = text_file_reader(filepath, prog_opts)
-        csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
-    else:
-        input_ids, id_queue, ctl_queue = load_input_data(
-            filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
-        )
-        in_list, not_in_list = id_set_match(input_ids, id_queue, uargs=uargs)
+    input_ids, id_queue, ctl_queue = load_input_data(
+        filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
+    )
+    in_list, not_in_list = id_set_match(input_ids, id_queue, uargs=uargs)
 
-        if not uargs.quiet:
-            print(f'\nControl queue has {len(ctl_queue)} items')
+    if not uargs.quiet:
+        print(f'\nControl queue has {len(ctl_queue)} items')
 
-        rpt_attr = (
-            uargs.attribute if uargs.attribute else prog_opts['default_control_attr']
-        )
-        if rpt_attr:
-            if uargs.verbose:
-                print(f'Checking input IDs: {in_list}')
-            print(f'\nID;{rpt_attr}')
-            for ctl in ctl_queue:
-                if ctl[0] in in_list:
-                    print(f'{ctl[0]};{ctl[1][rpt_attr]}')
+    rpt_attr = uargs.attribute if uargs.attribute else prog_opts['default_control_attr']
+    if uargs.verbose:
+        print(f'Checking input IDs: {in_list}')
+    print(f'\nID;{rpt_attr}')
+    for ctl in ctl_queue:
+        if ctl[0] in in_list:
+            print(f'{ctl[0]};{ctl[1][rpt_attr]}')
 
 
 def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
@@ -345,6 +346,8 @@ def main(argv=None):  # pragma: no cover
     if not Path(infile).exists():
         print(f'Input file {infile} not found!')
         sys.exit(1)
+    if args.munge:
+        munge_file(infile, popts, args)
 
     if args.verbose:
         print(f"Path to content: {cfg.default_content_path}")

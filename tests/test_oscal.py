@@ -80,7 +80,7 @@ args_obj = Munch.fromDict(
         "ssg": True,
         "verbose": False,
         "munge": None,
-        "quiet": False,
+        "quiet": True,
         "attribute": 'rules',
     }
 )
@@ -90,7 +90,7 @@ testdata = [
         False,
         False,
         False,
-        "Control queue has 2 items",
+        "ID;rules",
     ),
     (
         False,
@@ -168,6 +168,7 @@ def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
     args_obj.sort = a
     args_obj.ssg = b
     args_obj.verbose = c
+    args_obj.attribute = 'rules'
     yaml = StrYAML()
     infile = 'tests/data/OE-expanded-profile-ids.txt'
     data_file = tmp_path / "test2.yaml"
