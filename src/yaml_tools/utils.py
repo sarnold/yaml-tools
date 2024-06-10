@@ -250,11 +250,12 @@ def text_data_writer(outdata, prog_opts):
     """
     out = ''
     csv_hdr = prog_opts['default_csv_hdr']
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
     fmt = prog_opts['output_format'] if prog_opts['output_format'] else 'raw'
 
     if fmt == 'csv' and isinstance(outdata, collections.abc.Sequence):
         field_names = csv_hdr if csv_hdr else list(outdata[0].keys())
-        w = csv.DictWriter(sys.stdout, field_names)
+        w = csv.DictWriter(sys.stdout, field_names, delimiter=delim)
         w.writeheader()
         w.writerows(outdata)
 
@@ -284,12 +285,13 @@ def text_file_reader(filepath, prog_opts):
     """
     data_in = {}
     infile = Path(filepath)
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
 
     if infile.suffix not in EXTENSIONS:
         raise FileTypeError("FileTypeError: unknown input file extension")
     with infile.open("r", encoding=prog_opts['file_encoding']) as file:
         if infile.suffix == '.csv':
-            data_in = list(csv.DictReader(file))
+            data_in = list(csv.DictReader(file, delimiter=delim))
         elif infile.suffix == '.json':
             data_in = json.load(file)
         elif infile.suffix in {'.yaml', '.yml'}:

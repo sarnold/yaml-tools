@@ -34,11 +34,18 @@ def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
     mpath = Path(uargs.munge)
     opath = Path('.').joinpath(mpath.stem)
     new_opath = opath.with_suffix('.modified.csv')
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
     if uargs.verbose:
         print(f'Writing munged csv data to {new_opath}')
 
-    writer = csv.writer(open(new_opath, 'w', newline='', encoding='utf-8'))
-    reader = csv.reader(open(uargs.munge, 'r', newline='', encoding='utf-8'))
+    writer = csv.writer(
+        open(new_opath, 'w', newline='', encoding='utf-8'),
+        delimiter=delim,
+    )
+    reader = csv.reader(
+        open(uargs.munge, 'r', newline='', encoding='utf-8'),
+        delimiter=delim,
+    )
     headers = next(reader)
     for hdr in prog_opts['new_csv_hdrs']:
         headers.append(hdr)

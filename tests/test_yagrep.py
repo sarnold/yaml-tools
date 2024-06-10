@@ -11,6 +11,7 @@ default_yml_ext: '.yaml'
 default_separator: '/'
 input_format: null
 output_format: 'json'
+csv_delimiter: null
 default_csv_hdr: null
 preserve_quotes: true
 process_comments: false

@@ -35,6 +35,7 @@ default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
 default_profile_glob: '*.yaml'
 default_csv_hdr: null
 new_csv_hdrs: []
+csv_delimiter: null
 input_format: null
 output_format: 'json'
 output_path: null

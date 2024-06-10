@@ -21,6 +21,7 @@ default_lookup_key: 'controls'
 default_control_attr: 'status'
 default_csv_hdr: null
 new_csv_hdrs: ['OE expanded', 'Green ID']
+csv_delimiter: null
 input_format: null
 output_format: 'json'
 output_path: null
