@@ -244,9 +244,20 @@ def str_yaml_dumper(data, prog_opts):
 
 def text_data_writer(outdata, prog_opts):
     """
-    Text data output with optional formatting (default is raw); uses config
-    setting for output format. Supports the same text file types supported
-    by the ``text_file_reader()`` input function.
+    Text data writer with optional formatting (default is raw); uses config
+    setting for output format. Supports the same text data formats supported
+    by the ``text_file_reader()`` input function:
+
+    * csv
+    * json
+    * yaml
+    * raw
+
+    Sends formatted data to stdout; redirect to a file as needed.
+
+    :param outdata: data written to stdout
+    :param prog_opts: configuration options
+    :type prog_opts: dict
     """
     out = ''
     csv_hdr = prog_opts['default_csv_hdr']
@@ -272,15 +283,17 @@ def text_data_writer(outdata, prog_opts):
 
 def text_file_reader(filepath, prog_opts):
     """
-    Text file reader for specific data types plus raw text. Tries to handle
-    YAML, JSON, CSV, and plain old text. Read and parse the file data if
-    ``filepath`` is one of the expected types and return data objects. For
-    all supported types of data, return a list of objects.
+    Text file reader for specific data types including raw text. Tries to
+    handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data
+    if ``filepath`` is one of the expected types and return data objects. For
+    all supported types of data, return a dictionary (or a list if input is
+    a sequence).
 
-    :param filepath: filename/path as str
+    :param filepath: filename/path to read
+    :type filepath: str
     :param prog_opts: configuration options
     :type prog_opts: dict
-    :return object: file data as list
+    :return object: file data as dict or list
     :raises FileTypeError: if input file extension is not in EXTENSIONS
     """
     data_in = {}
