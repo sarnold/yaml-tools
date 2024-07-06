@@ -34,7 +34,9 @@ default_separator: '/'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
 default_profile_glob: '*.yaml'
 default_csv_hdr: null
+new_csv_file: null
 new_csv_hdrs: []
+csv_delimiter: null
 input_format: null
 output_format: 'json'
 output_path: null
@@ -199,18 +201,18 @@ def test_sorted_set():
 
 
 def test_get_filelist():
-    test_path = Path('docs') / 'source' / 'index.rst'
-    files = get_filelist('docs/source', '*.rst')
+    test_path = Path('tests') / 'data' / 'catalog.json'
+    files = get_filelist('tests/data', '*')
     assert isinstance(files, list)
-    assert len(files) == 6
+    assert len(files) == 7
     assert str(test_path) in files
 
 
 def test_get_filelist_debug():
-    test_path = Path('docs') / 'source' / 'index.rst'
-    files = get_filelist('docs/source', '*.rst', debug=True)
+    test_path = Path('tests') / 'data' / 'catalog.json'
+    files = get_filelist('tests/data', '*', debug=True)
     assert isinstance(files, list)
-    assert len(files) == 6
+    assert len(files) == 7
     assert str(test_path) in files
 
 
@@ -249,14 +251,27 @@ def test_str_dumper():
     assert hasattr(my_yaml, 'dump')
 
 
-def test_xform_id():
-    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(11)(a)', 'AC-05(02)(a)(01)']
-    sort_ids = ['ac-1', 'ac-2.11', 'ac-2.11.a', 'ac-05.02.a.01']
+def test_xform_id_tolower():
+    doc_ids = ['AC-1', 'AC-2(11)', 'AC-2(a)', 'AC-02(09)(a)', 'AC-03-01']
+    sort_ids = ['ac-01', 'ac-02.11', 'ac-02.a', 'ac-02.09.a', 'ac-03.01']
     print("")
     for x, y in zip(doc_ids, sort_ids):
         print(xform_id(x), y)
         assert xform_id(x) == y
-        assert xform_id(y) == x
+
+
+def test_xform_id_toupper():
+    doc_ids = ['ac-01', 'ac-02.11', 'ac-02.a', 'ac-02.09.a', 'ac-03.01']
+    sort_ids = ['AC-01', 'AC-02(11)', 'AC-02(a)', 'AC-02(09)(a)', 'AC-03(01)']
+    print("")
+    for x, y in zip(doc_ids, sort_ids):
+        print(xform_id(x), y)
+        assert xform_id(x) == y
+
+
+def test_xform_id_strip():
+    stripped = xform_id('AC-08-00', True)
+    assert stripped == 'ac-08'
 
 
 def test_load_debug_config():
