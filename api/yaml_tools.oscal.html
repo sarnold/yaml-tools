@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.oscal module &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml_tools.oscal module &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="../_static/documentation_options.js?v=de41a057"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -109,6 +109,20 @@ the given filename with <code class="docutils literal notranslate"><span class="
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.csv_row_match">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">csv_row_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/oscal.html#csv_row_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.csv_row_match" title="Link to this definition"></a></dt>
+<dd><p>Extracted ctl munging from <code class="docutils literal notranslate"><span class="pre">csv_append_id_data</span></code> loop for testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ctl</p>
+</dd>
+<dt class="field-even">Return ctl<span class="colon">:</span></dt>
+<dd class="field-even"><p>munged ctl</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.oscal.id_set_match">
 <span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">id_set_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/oscal.html#id_set_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.id_set_match" title="Link to this definition"></a></dt>
 <dd><p>Quick set match analysis of ID sets.</p>
@@ -127,6 +141,12 @@ from <code class="docutils literal notranslate"><span class="pre">filepath</span
 <dt class="sig sig-object py" id="yaml_tools.oscal.main">
 <span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/oscal.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.main" title="Link to this definition"></a></dt>
 <dd><p>Collect and process command options/arguments and then process data.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.munge_file">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">munge_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/oscal.html#munge_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.munge_file" title="Link to this definition"></a></dt>
+<dd><p>Munge a CSV file by appending columns.</p>
 </dd></dl>
 
 <dl class="py function">

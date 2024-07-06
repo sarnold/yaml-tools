@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils module &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml_tools.utils module &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="../_static/documentation_options.js?v=de41a057"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -235,29 +235,51 @@ not found in current directory, the default will be loaded.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.utils.str_yaml_dumper">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">str_yaml_dumper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#str_yaml_dumper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.str_yaml_dumper" title="Link to this definition"></a></dt>
+<dd><p>Small StrYAML() dump wrapper.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.utils.text_data_writer">
 <span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">text_data_writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#text_data_writer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.text_data_writer" title="Link to this definition"></a></dt>
-<dd><p>Text data output with optional formatting (default is raw); uses config
-setting for output format. Supports the same text file types supported
-by the <code class="docutils literal notranslate"><span class="pre">text_file_reader()</span></code> input function.</p>
+<dd><p>Text data writer with optional formatting (default is raw); uses config
+setting for output format. Supports the same text data formats supported
+by the <code class="docutils literal notranslate"><span class="pre">text_file_reader()</span></code> input function:</p>
+<ul class="simple">
+<li><p>csv</p></li>
+<li><p>json</p></li>
+<li><p>yaml</p></li>
+<li><p>raw</p></li>
+</ul>
+<p>Sends formatted data to stdout; redirect to a file as needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>outdata</strong> – data written to stdout</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.utils.text_file_reader">
 <span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">text_file_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#text_file_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.text_file_reader" title="Link to this definition"></a></dt>
-<dd><p>Text file reader for specific data types plus raw text. Tries to handle
-YAML, JSON, CSV, and plain old text. Read and parse the file data if
-<code class="docutils literal notranslate"><span class="pre">filepath</span></code> is one of the expected types and return data objects. For
-all supported types of data, return a list of objects.</p>
+<dd><p>Text file reader for specific data types including raw text. Tries to
+handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data
+if <code class="docutils literal notranslate"><span class="pre">filepath</span></code> is one of the expected types and return data objects. For
+all supported types of data, return a dictionary (or a list if input is
+a sequence).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> – filename/path as str</p></li>
+<li><p><strong>filepath</strong> (<em>str</em>) – filename/path to read</p></li>
 <li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return object<span class="colon">:</span></dt>
-<dd class="field-even"><p>file data as list</p>
+<dd class="field-even"><p>file data as dict or list</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>FileTypeError</strong> – if input file extension is not in EXTENSIONS</p>

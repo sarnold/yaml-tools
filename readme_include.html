@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="_static/documentation_options.js?v=de41a057"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -37,7 +37,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -110,7 +110,7 @@ encoding for all types is UTF-8 without a BOM. Now includes more
 console entry points to grep or sort interesting YAML files (eg, lists
 of rules found in the <a class="reference external" href="https://github.com/ComplianceAsCode/content">SCAP Security Guide</a>) and support for more
 input file types to ingest SSG and other upstream data, eg, NIST
-<a class="reference external" href="https://github.com/usnistgov/oscal-content.git">oscal-content</a>.</p>
+<a class="reference external" href="https://github.com/usnistgov/oscal-content">oscal-content</a>.</p>
 <section id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
 <p>Available modules, console commands, and scripts:</p>
@@ -120,9 +120,11 @@ input file types to ingest SSG and other upstream data, eg, NIST
 <li><p><code class="docutils literal notranslate"><span class="pre">yagrep</span></code> - grep for keys/values in YAML files</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">oscal</span></code> (<em>WIP</em>) - ingest NIST 800-53 content in multiple formats</p></li>
 </ul>
-<p>Experimental “demo” scripts:
-* <code class="docutils literal notranslate"><span class="pre">analyze_control_ids.py</span></code> - analyze control ID sets with fuzzy match
-* <code class="docutils literal notranslate"><span class="pre">analyze_ssg_controls.py</span></code> - analyze NIST controls from SSG content</p>
+<p>Experimental “demo” scripts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">analyze_control_ids.py</span></code> - analyze control ID sets with optional fuzzy match</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">analyze_ssg_controls.py</span></code> - analyze NIST controls from SSG content</p></li>
+</ul>
 <p>For the above “demo” scripts, check the top of the source file for any knobs
 adjustable via environment variables, eg:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
@@ -137,7 +139,7 @@ adjustable via environment variables, eg:</p>
 <h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Link to this heading"></a></h3>
 <p>This package is <em>not</em> yet published on PyPI, thus use one of the following
 to install yaml-tools on any platform. Install from the main branch:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ https://github.com/sarnold/yaml-tools/archive/refs/heads/main.tar.gz
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install https://github.com/sarnold/yaml-tools/archive/refs/heads/main.tar.gz
 </pre></div>
 </div>
 <p>or use this command to install a specific release version:</p>
@@ -314,8 +316,26 @@ shown below; use the <code class="docutils literal notranslate"><span class="pre
 </section>
 <section id="features-and-limitations">
 <h3>Features and limitations<a class="headerlink" href="#features-and-limitations" title="Link to this heading"></a></h3>
+<p><strong>NIST control ID munging</strong></p>
+<p>The demo scripts and <code class="docutils literal notranslate"><span class="pre">oscal</span></code> module illustrate various forms of control ID
+normalization in order to match control IDs from multiple input sources.
+Currently, there are 2 primary ID formats, and which one to use is mainly
+a user choice:</p>
+<ul class="simple">
+<li><p>AC-01(01)(a) - uppercase with parentheses</p></li>
+<li><p>ac-01.01.a - lowercase with dots</p></li>
+</ul>
+<p>Nested controls follow the <a class="reference external" href="https://github.com/usnistgov/oscal-content">upstream</a> pattern of alternating lettered and
+numbered sub-bullets for each level, and the latest rev5 controls add
+leading zeros.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">xform_id</span></code> function is <em>idempotent</em> with the following caveats:</p>
+<ul class="simple">
+<li><p>extraneous whitespace is always dropped</p></li>
+<li><p>leading zeros are added to single digit values where needed</p></li>
+</ul>
+<p><strong>XML &lt;==&gt; YAML</strong> conversion</p>
 <p>We mainly test ymltoxml on mavlink XML message definitions and NIST/SSG
-YAML files, so round-trip conversion <em>may not</em> work at all on
+content files, so round-trip conversion <em>may not</em> work at all on
 arbitrarily complex XML files with namespaces, etc.  The current
 round-trip is not exact, due to the following:</p>
 <ul class="simple">
@@ -397,6 +417,10 @@ $ tox -e py
 <p>The above will run the tests using your (default) system Python;
 to specify the Python version and host OS type, run something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e py39-linux
+</pre></div>
+</div>
+<p>To generate a coverage file, run something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e py,coverage
 </pre></div>
 </div>
 <p>Additional <code class="docutils literal notranslate"><span class="pre">tox</span></code> commands:</p>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.oscal &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml_tools.oscal &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="../../_static/documentation_options.js?v=de41a057"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -34,7 +34,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -92,6 +92,7 @@
 
 <span class="kn">from</span> <span class="nn">munch</span> <span class="kn">import</span> <span class="n">Munch</span>
 <span class="kn">from</span> <span class="nn">natsort</span> <span class="kn">import</span> <span class="n">os_sorted</span>
+
 <span class="kn">from</span> <span class="nn">nested_lookup</span> <span class="kn">import</span> <span class="n">nested_lookup</span>
 
 <span class="kn">from</span> <span class="nn">.templates</span> <span class="kn">import</span> <span class="n">xform_id</span>
@@ -115,29 +116,55 @@
 <span class="sd">    the given filename with ``.modified`` appended to the filename stem.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">uargs</span><span class="o">.</span><span class="n">munge</span><span class="p">)</span>
-    <span class="n">opath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">mpath</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
+    <span class="n">opath</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;new_csv_file&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;new_csv_file&#39;</span><span class="p">]</span>
+        <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">mpath</span><span class="o">.</span><span class="n">stem</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">new_opath</span> <span class="o">=</span> <span class="n">opath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s1">&#39;.modified.csv&#39;</span><span class="p">)</span>
+    <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;;&#39;</span>
     <span class="k">if</span> <span class="n">uargs</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing munged csv data to </span><span class="si">{</span><span class="n">new_opath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
-    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">new_opath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">uargs</span><span class="o">.</span><span class="n">munge</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span>
+        <span class="nb">open</span><span class="p">(</span><span class="n">new_opath</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span>
+        <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span>
+        <span class="nb">open</span><span class="p">(</span><span class="n">uargs</span><span class="o">.</span><span class="n">munge</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">),</span>
+        <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">headers</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">hdr</span> <span class="ow">in</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;new_csv_hdrs&#39;</span><span class="p">]:</span>
         <span class="n">headers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hdr</span><span class="p">)</span>
     <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ctl</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
-        <span class="n">ctl_id</span> <span class="o">=</span> <span class="n">xform_id</span><span class="p">(</span><span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">sub_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">in_ids</span> <span class="k">if</span> <span class="n">ctl_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">ctl_id</span> <span class="ow">in</span> <span class="n">in_ids</span><span class="p">:</span>
-            <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">sub_ids</span> <span class="o">!=</span> <span class="p">[]:</span>
-            <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
-        <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ctl_id</span><span class="p">)</span>
+        <span class="n">ctl</span> <span class="o">=</span> <span class="n">csv_row_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">ctl</span><span class="p">)</span>
         <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">ctl</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="csv_row_match">
+<a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.csv_row_match">[docs]</a>
+<span class="k">def</span> <span class="nf">csv_row_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">ctl</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracted ctl munging from ``csv_append_id_data`` loop for testing.</span>
+
+<span class="sd">    :param: ctl</span>
+<span class="sd">    :type ctl: csv row data</span>
+<span class="sd">    :return ctl: munged ctl</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ctl_id</span> <span class="o">=</span> <span class="n">xform_id</span><span class="p">(</span><span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sub_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">in_ids</span> <span class="k">if</span> <span class="n">ctl_id</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">ctl_id</span> <span class="ow">in</span> <span class="n">in_ids</span><span class="p">:</span>
+        <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">sub_ids</span> <span class="o">!=</span> <span class="p">[]:</span>
+        <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sub_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">)</span>
+    <span class="n">ctl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ctl_id</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ctl</span></div>
 
 
 
@@ -162,7 +189,8 @@
     <span class="k">if</span> <span class="n">use_ssg</span><span class="p">:</span>
         <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_content_path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_ssg_path&#39;</span><span class="p">]</span>
         <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_profile_glob&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_ssg_glob&#39;</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loading content from: </span><span class="si">{</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_content_path&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">ctl_files</span> <span class="o">=</span> <span class="n">get_filelist</span><span class="p">(</span>
@@ -207,32 +235,38 @@
 
 
 
+<div class="viewcode-block" id="munge_file">
+<a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.munge_file">[docs]</a>
+<span class="k">def</span> <span class="nf">munge_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Munge a CSV file by appending columns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">text_file_reader</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
+    <span class="n">csv_append_id_data</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">prog_opts</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="o">=</span><span class="n">uargs</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="process_data">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.process_data">[docs]</a>
 <span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process inputs, print some output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">uargs</span><span class="o">.</span><span class="n">munge</span><span class="p">:</span>
-        <span class="n">input_ids</span> <span class="o">=</span> <span class="n">text_file_reader</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
-        <span class="n">csv_append_id_data</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">prog_opts</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="o">=</span><span class="n">uargs</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">input_ids</span><span class="p">,</span> <span class="n">id_queue</span><span class="p">,</span> <span class="n">ctl_queue</span> <span class="o">=</span> <span class="n">load_input_data</span><span class="p">(</span>
-            <span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">use_ssg</span><span class="o">=</span><span class="n">uargs</span><span class="o">.</span><span class="n">ssg</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">uargs</span><span class="o">.</span><span class="n">verbose</span>
-        <span class="p">)</span>
-        <span class="n">in_list</span><span class="p">,</span> <span class="n">not_in_list</span> <span class="o">=</span> <span class="n">id_set_match</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">id_queue</span><span class="p">,</span> <span class="n">uargs</span><span class="o">=</span><span class="n">uargs</span><span class="p">)</span>
+    <span class="n">input_ids</span><span class="p">,</span> <span class="n">id_queue</span><span class="p">,</span> <span class="n">ctl_queue</span> <span class="o">=</span> <span class="n">load_input_data</span><span class="p">(</span>
+        <span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">use_ssg</span><span class="o">=</span><span class="n">uargs</span><span class="o">.</span><span class="n">ssg</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">uargs</span><span class="o">.</span><span class="n">verbose</span>
+    <span class="p">)</span>
+    <span class="n">in_list</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">id_set_match</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">id_queue</span><span class="p">,</span> <span class="n">uargs</span><span class="o">=</span><span class="n">uargs</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">uargs</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Control queue has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">ctl_queue</span><span class="p">)</span><span class="si">}</span><span class="s1"> items&#39;</span><span class="p">)</span>
-        <span class="n">rpt_attr</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_control_attr&#39;</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_control_attr&#39;</span><span class="p">]</span>
-            <span class="k">else</span> <span class="n">uargs</span><span class="o">.</span><span class="n">attribute</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">uargs</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checking input IDs: </span><span class="si">{</span><span class="n">in_list</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ID,</span><span class="si">{</span><span class="n">rpt_attr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">ctl</span> <span class="ow">in</span> <span class="n">ctl_queue</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">in_list</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">ctl</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">rpt_attr</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+    <span class="n">rpt_attr</span> <span class="o">=</span> <span class="n">uargs</span><span class="o">.</span><span class="n">attribute</span> <span class="k">if</span> <span class="n">uargs</span><span class="o">.</span><span class="n">attribute</span> <span class="k">else</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_control_attr&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">uargs</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checking input IDs: </span><span class="si">{</span><span class="n">in_list</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ID;</span><span class="si">{</span><span class="n">rpt_attr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ctl</span> <span class="ow">in</span> <span class="n">ctl_queue</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">in_list</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ctl</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">;</span><span class="si">{</span><span class="n">ctl</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">rpt_attr</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
 
 
 
@@ -366,6 +400,12 @@
         <span class="n">help</span><span class="o">=</span><span class="s1">&#39;display more processing info&#39;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-q&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--quiet&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;display less processing info&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s1">&#39;-m&#39;</span><span class="p">,</span>
         <span class="s1">&#39;--munge-file&#39;</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
@@ -375,7 +415,7 @@
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s1">&#39;-R&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;-r&#39;</span><span class="p">,</span>
         <span class="s1">&#39;--report-attribute&#39;</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;ATTR&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
@@ -425,12 +465,13 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Input file </span><span class="si">{</span><span class="n">infile</span><span class="si">}</span><span class="s1"> not found!&#39;</span><span class="p">)</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">munge</span><span class="p">:</span>
+        <span class="n">munge_file</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">popts</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Path to content: </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">default_content_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Content file glob: </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">default_profile_glob</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Input file: </span><span class="si">{</span><span class="n">infile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing input file: </span><span class="si">{</span><span class="n">infile</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">process_data</span><span class="p">(</span><span class="n">infile</span><span class="p">,</span> <span class="n">popts</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.ymltoxml &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml_tools.ymltoxml &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="../../_static/documentation_options.js?v=de41a057"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -34,7 +34,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -101,9 +101,9 @@
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">__version__</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">FileTypeError</span><span class="p">,</span>
-    <span class="n">StrYAML</span><span class="p">,</span>
     <span class="n">load_config</span><span class="p">,</span>
     <span class="n">restore_xml_comments</span><span class="p">,</span>
+    <span class="n">str_yaml_dumper</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -159,20 +159,12 @@
             <span class="n">pretty</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;pretty&#39;</span><span class="p">],</span>
             <span class="n">indent</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;indent&#39;</span><span class="p">],</span>
         <span class="p">)</span>
-
+        <span class="n">res</span> <span class="o">=</span> <span class="n">xml</span>
         <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;process_comments&#39;</span><span class="p">]:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">restore_xml_comments</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">yaml</span> <span class="o">=</span> <span class="n">StrYAML</span><span class="p">()</span>
-        <span class="n">yaml</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span>
-            <span class="n">mapping</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;mapping&#39;</span><span class="p">],</span>
-            <span class="n">sequence</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">],</span>
-            <span class="n">offset</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">],</span>
-        <span class="p">)</span>
-
-        <span class="n">yaml</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;preserve_quotes&#39;</span><span class="p">]</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">str_yaml_dumper</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">res</span></div>
 

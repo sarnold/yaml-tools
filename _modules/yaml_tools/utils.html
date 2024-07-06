@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils &mdash; yaml_tools 0.3.1.dev40+g01f0009 documentation</title>
+  <title>yaml_tools.utils &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
 
@@ -14,7 +14,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=aaa9ec67"></script>
+        <script src="../../_static/documentation_options.js?v=de41a057"></script>
         <script src="../../_static/doctools.js?v=9a2dae69"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -34,7 +34,7 @@
             yaml_tools
           </a>
               <div class="version">
-                0.3
+                0.4
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -348,21 +348,50 @@
 
 
 
+<div class="viewcode-block" id="str_yaml_dumper">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.str_yaml_dumper">[docs]</a>
+<span class="k">def</span> <span class="nf">str_yaml_dumper</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Small StrYAML() dump wrapper.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="n">StrYAML</span><span class="p">()</span>
+    <span class="n">yaml</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span>
+        <span class="n">mapping</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;mapping&#39;</span><span class="p">],</span>
+        <span class="n">sequence</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">],</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">yaml</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;preserve_quotes&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+
 <div class="viewcode-block" id="text_data_writer">
 <a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_data_writer">[docs]</a>
 <span class="k">def</span> <span class="nf">text_data_writer</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Text data output with optional formatting (default is raw); uses config</span>
-<span class="sd">    setting for output format. Supports the same text file types supported</span>
-<span class="sd">    by the ``text_file_reader()`` input function.</span>
+<span class="sd">    Text data writer with optional formatting (default is raw); uses config</span>
+<span class="sd">    setting for output format. Supports the same text data formats supported</span>
+<span class="sd">    by the ``text_file_reader()`` input function:</span>
+
+<span class="sd">    * csv</span>
+<span class="sd">    * json</span>
+<span class="sd">    * yaml</span>
+<span class="sd">    * raw</span>
+
+<span class="sd">    Sends formatted data to stdout; redirect to a file as needed.</span>
+
+<span class="sd">    :param outdata: data written to stdout</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :type prog_opts: dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="n">csv_hdr</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_csv_hdr&#39;</span><span class="p">]</span>
+    <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;,&#39;</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;output_format&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;output_format&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;raw&#39;</span>
 
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;csv&#39;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
         <span class="n">field_names</span> <span class="o">=</span> <span class="n">csv_hdr</span> <span class="k">if</span> <span class="n">csv_hdr</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">outdata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">field_names</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">)</span>
         <span class="n">w</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
         <span class="n">w</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">outdata</span><span class="p">)</span>
 
@@ -370,14 +399,7 @@
         <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;json&#39;</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;yaml&#39;</span><span class="p">:</span>
-            <span class="n">yaml</span> <span class="o">=</span> <span class="n">StrYAML</span><span class="p">()</span>
-            <span class="n">yaml</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span>
-                <span class="n">mapping</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;mapping&#39;</span><span class="p">],</span>
-                <span class="n">sequence</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">],</span>
-                <span class="n">offset</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">],</span>
-            <span class="p">)</span>
-            <span class="n">yaml</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;preserve_quotes&#39;</span><span class="p">]</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">outdata</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">str_yaml_dumper</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">outdata</span><span class="p">)</span>
 
@@ -389,25 +411,28 @@
 <a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_file_reader">[docs]</a>
 <span class="k">def</span> <span class="nf">text_file_reader</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Text file reader for specific data types plus raw text. Tries to handle</span>
-<span class="sd">    YAML, JSON, CSV, and plain old text. Read and parse the file data if</span>
-<span class="sd">    ``filepath`` is one of the expected types and return data objects. For</span>
-<span class="sd">    all supported types of data, return a list of objects.</span>
+<span class="sd">    Text file reader for specific data types including raw text. Tries to</span>
+<span class="sd">    handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data</span>
+<span class="sd">    if ``filepath`` is one of the expected types and return data objects. For</span>
+<span class="sd">    all supported types of data, return a dictionary (or a list if input is</span>
+<span class="sd">    a sequence).</span>
 
-<span class="sd">    :param filepath: filename/path as str</span>
+<span class="sd">    :param filepath: filename/path to read</span>
+<span class="sd">    :type filepath: str</span>
 <span class="sd">    :param prog_opts: configuration options</span>
 <span class="sd">    :type prog_opts: dict</span>
-<span class="sd">    :return object: file data as list</span>
+<span class="sd">    :return object: file data as dict or list</span>
 <span class="sd">    :raises FileTypeError: if input file extension is not in EXTENSIONS</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data_in</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">infile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;,&#39;</span>
 
     <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXTENSIONS</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">FileTypeError</span><span class="p">(</span><span class="s2">&quot;FileTypeError: unknown input file extension&quot;</span><span class="p">)</span>
     <span class="k">with</span> <span class="n">infile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.csv&#39;</span><span class="p">:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.json&#39;</span><span class="p">:</span>
             <span class="n">data_in</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">}:</span>
