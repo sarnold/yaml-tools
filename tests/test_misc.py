@@ -34,6 +34,7 @@ default_separator: '/'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
 default_profile_glob: '*.yaml'
 default_csv_hdr: null
+new_csv_file: null
 new_csv_hdrs: []
 csv_delimiter: null
 input_format: null
@@ -200,18 +201,18 @@ def test_sorted_set():
 
 
 def test_get_filelist():
-    test_path = Path('docs') / 'source' / 'index.rst'
-    files = get_filelist('docs/source', '*.rst')
+    test_path = Path('tests') / 'data' / 'catalog.json'
+    files = get_filelist('tests/data', '*')
     assert isinstance(files, list)
-    assert len(files) == 6
+    assert len(files) == 7
     assert str(test_path) in files
 
 
 def test_get_filelist_debug():
-    test_path = Path('docs') / 'source' / 'index.rst'
-    files = get_filelist('docs/source', '*.rst', debug=True)
+    test_path = Path('tests') / 'data' / 'catalog.json'
+    files = get_filelist('tests/data', '*', debug=True)
     assert isinstance(files, list)
-    assert len(files) == 6
+    assert len(files) == 7
     assert str(test_path) in files
 
 

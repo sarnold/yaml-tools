@@ -11,6 +11,7 @@ from pathlib import Path
 
 from munch import Munch
 from natsort import os_sorted
+
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -32,9 +33,13 @@ def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
     the given filename with ``.modified`` appended to the filename stem.
     """
     mpath = Path(uargs.munge)
-    opath = Path('.').joinpath(mpath.stem)
+    opath = (
+        Path(prog_opts['new_csv_file'])
+        if prog_opts['new_csv_file']
+        else Path('.').joinpath(mpath.stem)
+    )
     new_opath = opath.with_suffix('.modified.csv')
-    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
     if uargs.verbose:
         print(f'Writing munged csv data to {new_opath}')
 
@@ -155,7 +160,7 @@ def process_data(filepath, prog_opts, uargs):
     input_ids, id_queue, ctl_queue = load_input_data(
         filepath, prog_opts, use_ssg=uargs.ssg, debug=uargs.verbose
     )
-    in_list, not_in_list = id_set_match(input_ids, id_queue, uargs=uargs)
+    in_list, _ = id_set_match(input_ids, id_queue, uargs=uargs)
 
     if not uargs.quiet:
         print(f'\nControl queue has {len(ctl_queue)} items')

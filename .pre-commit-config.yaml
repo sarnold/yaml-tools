@@ -50,6 +50,7 @@ repos:
         - natsort
         - munch
         - munch-stubs
+        - PyYAML
         - ruamel.yaml
         - dpath
         - nested_lookup

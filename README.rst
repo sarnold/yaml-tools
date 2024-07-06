@@ -18,7 +18,7 @@ input file types to ingest SSG and other upstream data, eg, NIST
 oscal-content_.
 
 .. _SCAP Security Guide: https://github.com/ComplianceAsCode/content
-.. _oscal-content: https://github.com/usnistgov/oscal-content.git
+.. _oscal-content: https://github.com/usnistgov/oscal-content
 
 Quick Start
 ===========
@@ -237,8 +237,31 @@ Default yasort.yaml:
 Features and limitations
 ------------------------
 
+**NIST control ID munging**
+
+The demo scripts and ``oscal`` module illustrate various forms of control ID
+normalization in order to match control IDs from multiple input sources.
+Currently, there are 2 primary ID formats, and which one to use is mainly
+a user choice:
+
+* AC-01(01)(a) - uppercase with parentheses
+* ac-01.01.a - lowercase with dots
+
+Nested controls follow the upstream_ pattern of alternating lettered and
+numbered sub-bullets for each level, and the latest rev5 controls add
+leading zeros.
+
+The ``xform_id`` function is *idempotent* with the following caveats:
+
+* extraneous whitespace is always dropped
+* leading zeros are added to single digit values where needed
+
+.. _upstream: https://github.com/usnistgov/oscal-content
+
+**XML <==> YAML** conversion
+
 We mainly test ymltoxml on mavlink XML message definitions and NIST/SSG
-YAML files, so round-trip conversion *may not* work at all on
+content files, so round-trip conversion *may not* work at all on
 arbitrarily complex XML files with namespaces, etc.  The current
 round-trip is not exact, due to the following:
 
@@ -328,6 +351,10 @@ The above will run the tests using your (default) system Python;
 to specify the Python version and host OS type, run something like::
 
   $ tox -e py39-linux
+
+To generate a coverage file, run something like the following::
+
+  $ tox -e py,coverage
 
 Additional ``tox`` commands:
 
