@@ -261,7 +261,7 @@ def text_data_writer(outdata, prog_opts):
     """
     out = ''
     csv_hdr = prog_opts['default_csv_hdr']
-    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
     fmt = prog_opts['output_format'] if prog_opts['output_format'] else 'raw'
 
     if fmt == 'csv' and isinstance(outdata, collections.abc.Sequence):
@@ -298,7 +298,7 @@ def text_file_reader(filepath, prog_opts):
     """
     data_in = {}
     infile = Path(filepath)
-    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
 
     if infile.suffix not in EXTENSIONS:
         raise FileTypeError("FileTypeError: unknown input file extension")

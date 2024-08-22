@@ -36,7 +36,7 @@ default_profile_glob: '*.yaml'
 default_csv_hdr: null
 new_csv_file: null
 new_csv_hdrs: []
-csv_delimiter: null
+csv_delimiter: ','
 input_format: null
 output_format: 'json'
 output_path: null
