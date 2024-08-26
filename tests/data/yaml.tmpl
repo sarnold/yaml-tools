@@ -1,0 +1,14 @@
+tcid: {{ tcid }}
+title: {{ title }}
+purpose: {{ purpose }}
+description: |
+  Multiline unicode text string
+reqs:
+  - id: {{ reqid }}
+    method: {{ vermethod }}
+steps: {% for step in steps %}
+  - step: {{ loop.index }}
+    action: |
+      Multiline unicode text string
+    expected_result: |
+      Multiline unicode text string {% endfor %}

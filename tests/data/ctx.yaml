@@ -1,0 +1,8 @@
+tcid: LT-4.1.1
+title: Power Up
+purpose: Collect initial version and product ID data.
+reqid: R016
+vermethod: T
+steps:
+- step:
+- step:

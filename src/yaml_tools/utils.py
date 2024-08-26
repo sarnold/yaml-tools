@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 
+import jinja2
 import pystache
 import yaml as yaml_loader
 from munch import Munch
@@ -26,7 +27,7 @@ if sys.version_info < (3, 10):
 else:
     import importlib.resources as importlib_resources
 
-EXTENSIONS = ['.csv', '.json', '.txt', '.yaml', '.yml']
+EXTENSIONS = ['.csv', '.json', '.rst', '.tmpl', '.txt', '.yaml', '.yml']
 PROFILE_ID_FILES = [
     'HIGH-ids.txt',
     'MODERATE-ids.txt',
@@ -164,6 +165,26 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
 
     return cfgobj, cfgfile
+
+
+def process_template(tmpl_file, data_file, prog_opts):
+    """
+    Process rst or yaml template file and context data, then return new
+    file data. Context data is typically provided in a YAML file. Output
+    data should be written to a new file of the same type as ``tmpl_file``.
+
+    :param tmpl_file: jinja template file (yaml or rst)
+    :param data_file: context data for template (also yaml)
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :return data_out: rendered template data
+    """
+    template = text_file_reader(tmpl_file, prog_opts)
+    context = text_file_reader(data_file, prog_opts)
+    tmpl_obj = jinja2.Template(template)
+    data_out = tmpl_obj.render(context)
+    # data_out = pystache_render(template, context)
+    return data_out
 
 
 def pystache_render(*args, **kwargs):
@@ -309,7 +330,9 @@ def text_file_reader(filepath, prog_opts):
             data_in = json.load(file)
         elif infile.suffix in {'.yaml', '.yml'}:
             data_in = yaml_loader.safe_load(file)
-        else:
+        elif 'ids' in infile.name and infile.suffix == '.txt':
             data_in = list(file.read().splitlines())
+        else:
+            data_in = file.read()
 
     return data_in
