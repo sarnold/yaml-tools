@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pystache
 import yaml as yaml_loader
+from jinja2 import Environment as Env
 from munch import Munch
 from natsort import os_sorted
 from ruamel.yaml import YAML
@@ -26,7 +27,7 @@ if sys.version_info < (3, 10):
 else:
     import importlib.resources as importlib_resources
 
-EXTENSIONS = ['.csv', '.json', '.txt', '.yaml', '.yml']
+EXTENSIONS = ['.csv', '.json', '.rst', '.tmpl', '.txt', '.yaml', '.yml']
 PROFILE_ID_FILES = [
     'HIGH-ids.txt',
     'MODERATE-ids.txt',
@@ -166,6 +167,32 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
     return cfgobj, cfgfile
 
 
+def process_template(tmpl_file, data_file, prog_opts):
+    """
+    Process jinja2 template file and context data and return rendered
+    data. Context data is typically provided in a YAML file. Output
+    data should be written to a new file matching the content type and
+    using the same name as ``data_file`` with appropriate extension.
+    Uses ``text_file_reader`` for supported file types or just plain
+    text with any other extension names.
+
+    :param tmpl_file: jinja template file (yaml or rst)
+    :param data_file: context data for template (also yaml)
+    :param prog_opts: configuration options
+    :type prog_opts: dict
+    :return data_out: rendered template data
+    """
+    envd = {"lstrip_blocks": True, "trim_blocks": True}
+    if prog_opts["jinja2_line_statements"]:
+        envd["line_statement_prefix"] = '#'
+        envd["line_comment_prefix"] = '##'
+
+    template = text_file_reader(tmpl_file, prog_opts)
+    context = text_file_reader(data_file, prog_opts)
+    data_out = Env(autoescape=True, **envd).from_string(template).render(context)
+    return data_out
+
+
 def pystache_render(*args, **kwargs):
     """
     Render pystache template with strict mode enabled.
@@ -261,7 +288,7 @@ def text_data_writer(outdata, prog_opts):
     """
     out = ''
     csv_hdr = prog_opts['default_csv_hdr']
-    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
     fmt = prog_opts['output_format'] if prog_opts['output_format'] else 'raw'
 
     if fmt == 'csv' and isinstance(outdata, collections.abc.Sequence):
@@ -298,7 +325,7 @@ def text_file_reader(filepath, prog_opts):
     """
     data_in = {}
     infile = Path(filepath)
-    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ','
+    delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
 
     if infile.suffix not in EXTENSIONS:
         raise FileTypeError("FileTypeError: unknown input file extension")
@@ -309,7 +336,9 @@ def text_file_reader(filepath, prog_opts):
             data_in = json.load(file)
         elif infile.suffix in {'.yaml', '.yml'}:
             data_in = yaml_loader.safe_load(file)
-        else:
+        elif 'ids' in infile.name and infile.suffix == '.txt':
             data_in = list(file.read().splitlines())
+        else:
+            data_in = file.read()
 
     return data_in

@@ -48,6 +48,12 @@ adjustable via environment variables, eg:
   DEBUG = int(os.getenv("DEBUG", default=0))
 
 
+.. note:: Text files with a single "column" of IDs have a special read mode
+          but the files must be named with the string "ids" in the filename
+          and the extension ".txt" for this mode to be used (as in the example
+          above).
+
+
 Install with pip
 ----------------
 
