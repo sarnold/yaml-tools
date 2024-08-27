@@ -6,9 +6,11 @@ description: |
 reqs:
   - id: {{ reqid }}
     method: {{ vermethod }}
-steps: {% for step in steps %}
+steps:
+{% for step in steps %}
   - step: {{ loop.index }}
     action: |
       Multiline unicode text string
     expected_result: |
-      Multiline unicode text string {% endfor %}
+      Multiline unicode text string
+{% endfor %}

@@ -9,9 +9,9 @@ import re
 import sys
 from pathlib import Path
 
-import jinja2
 import pystache
 import yaml as yaml_loader
+from jinja2 import Environment
 from munch import Munch
 from natsort import os_sorted
 from ruamel.yaml import YAML
@@ -169,9 +169,10 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
 
 def process_template(tmpl_file, data_file, prog_opts):
     """
-    Process rst or yaml template file and context data, then return new
-    file data. Context data is typically provided in a YAML file. Output
-    data should be written to a new file of the same type as ``tmpl_file``.
+    Process jinja2 template file and context data and return rendered
+    data. Context data is typically provided in a YAML file. Output
+    data should be written to a new file matching the content type and
+    using the same name as ``data_file`` with appropriate extension.
 
     :param tmpl_file: jinja template file (yaml or rst)
     :param data_file: context data for template (also yaml)
@@ -181,9 +182,11 @@ def process_template(tmpl_file, data_file, prog_opts):
     """
     template = text_file_reader(tmpl_file, prog_opts)
     context = text_file_reader(data_file, prog_opts)
-    tmpl_obj = jinja2.Template(template)
-    data_out = tmpl_obj.render(context)
-    # data_out = pystache_render(template, context)
+    data_out = Environment(
+        autoescape=True,
+        lstrip_blocks=True,
+        trim_blocks=True,
+    ).from_string(template).render(context)  # fmt: skip
     return data_out
 
 
