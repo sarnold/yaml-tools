@@ -1,6 +1,9 @@
-tcid: LT-4.1.1
+tcid: SYS-4.1.1
 title: Power Up
 purpose: Collect initial version and product ID data.
+description: |
+  Demonstrate power up sequence, collect baseline voltage and version data
+  for follow-on test cases.
 reqid: R016
 vermethod: T
 steps:

@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pystache
 import yaml as yaml_loader
-from jinja2 import Environment
+from jinja2 import Environment as Env
 from munch import Munch
 from natsort import os_sorted
 from ruamel.yaml import YAML
@@ -173,6 +173,8 @@ def process_template(tmpl_file, data_file, prog_opts):
     data. Context data is typically provided in a YAML file. Output
     data should be written to a new file matching the content type and
     using the same name as ``data_file`` with appropriate extension.
+    Uses ``text_file_reader`` for supported file types or just plain
+    text with any other extension names.
 
     :param tmpl_file: jinja template file (yaml or rst)
     :param data_file: context data for template (also yaml)
@@ -180,13 +182,14 @@ def process_template(tmpl_file, data_file, prog_opts):
     :type prog_opts: dict
     :return data_out: rendered template data
     """
+    envd = {"lstrip_blocks": True, "trim_blocks": True}
+    if prog_opts["jinja2_line_statements"]:
+        envd["line_statement_prefix"] = '#'
+        envd["line_comment_prefix"] = '##'
+
     template = text_file_reader(tmpl_file, prog_opts)
     context = text_file_reader(data_file, prog_opts)
-    data_out = Environment(
-        autoescape=True,
-        lstrip_blocks=True,
-        trim_blocks=True,
-    ).from_string(template).render(context)  # fmt: skip
+    data_out = Env(autoescape=True, **envd).from_string(template).render(context)
     return data_out
 
 

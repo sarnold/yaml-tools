@@ -30,6 +30,7 @@ from yaml_tools.utils import (
 defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
+jinja2_line_statements: true
 default_ext: '.yaml'
 default_separator: '/'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
@@ -329,6 +330,6 @@ def test_process_template(tmp_path):
     ]
     out = process_template(test_files[1], test_files[0], popts)
     assert "R016" in out
-    assert "step: 1" in out
-    assert "expected_result:" in out
+    assert "step: 2" in out
+    assert "voltage" in out
     print(out)
