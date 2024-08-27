@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
+  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.4.1.dev19+ga4aab6d documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=de41a057"></script>
+        <script src="_static/documentation_options.js?v=a60032f0"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -134,6 +134,13 @@ adjustable via environment variables, eg:</p>
 <span class="n">SSG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SSG_PATH&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;ext/content/controls&quot;</span><span class="p">)</span>
 <span class="n">DEBUG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Text files with a single “column” of IDs have a special read mode
+but the files must be named with the string “ids” in the filename
+and the extension “.txt” for this mode to be used (as in the example
+above).</p>
 </div>
 <section id="install-with-pip">
 <h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Link to this heading"></a></h3>

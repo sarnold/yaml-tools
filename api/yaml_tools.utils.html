@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils module &mdash; yaml_tools 0.4.1.dev14+gb3c7976 documentation</title>
+  <title>yaml_tools.utils module &mdash; yaml_tools 0.4.1.dev19+ga4aab6d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
 
@@ -15,7 +15,7 @@
   
         <script src="../_static/jquery.js?v=5d32c60e"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=de41a057"></script>
+        <script src="../_static/documentation_options.js?v=a60032f0"></script>
         <script src="../_static/doctools.js?v=9a2dae69"></script>
         <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -178,6 +178,29 @@ not found in current directory, the default will be loaded.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.utils.process_template">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">process_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmpl_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#process_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.process_template" title="Link to this definition"></a></dt>
+<dd><p>Process jinja2 template file and context data and return rendered
+data. Context data is typically provided in a YAML file. Output
+data should be written to a new file matching the content type and
+using the same name as <code class="docutils literal notranslate"><span class="pre">data_file</span></code> with appropriate extension.
+Uses <code class="docutils literal notranslate"><span class="pre">text_file_reader</span></code> for supported file types or just plain
+text with any other extension names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tmpl_file</strong> – jinja template file (yaml or rst)</p></li>
+<li><p><strong>data_file</strong> – context data for template (also yaml)</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return data_out<span class="colon">:</span></dt>
+<dd class="field-even"><p>rendered template data</p>
 </dd>
 </dl>
 </dd></dl>
