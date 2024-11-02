@@ -308,23 +308,23 @@ def text_data_writer(outdata, prog_opts):
         sys.stdout.write(out + '\n')
 
 
-def text_file_reader(filepath, prog_opts):
+def text_file_reader(file, prog_opts):
     """
-    Text file reader for specific data types including raw text. Tries to
-    handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data
-    if ``filepath`` is one of the expected types and return data objects. For
-    all supported types of data, return a dictionary (or a list if input is
-    a sequence).
+    Text file reader for specific data types including raw text. Tries
+    to handle YAML, JSON, CSV, text files with IDs, and plain ASCII
+    text. Read and parse the file data if ``file`` is one of the
+    expected types and return data objects. For all supported types of
+    data, return a dictionary (or a list if input is a sequence).
 
-    :param filepath: filename/path to read
-    :type filepath: str
+    :param file: filename/path to read
+    :type file: str
     :param prog_opts: configuration options
     :type prog_opts: dict
     :return object: file data as dict or list
     :raises FileTypeError: if input file extension is not in EXTENSIONS
     """
     data_in = {}
-    infile = Path(filepath)
+    infile = Path(file)
     delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
 
     if infile.suffix not in EXTENSIONS:
