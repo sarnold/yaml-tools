@@ -4,7 +4,11 @@ import pytest
 from munch import Munch
 
 import yaml_tools.oscal
-from yaml_tools.oscal import csv_row_match, process_data
+from yaml_tools.oscal import (
+    csv_row_match,
+    process_data,
+    ssg_ctrl_from_nist,
+)
 from yaml_tools.templates import xform_id
 from yaml_tools.utils import FileTypeError, StrYAML, text_file_reader
 
@@ -204,6 +208,12 @@ def test_process_data_alt(a, b, c, expected, capfd, tmp_path):
 # process_data(infile, popts, args_obj)
 # out, err = capfd.readouterr()
 # print(out)
+
+
+def test_ssg_ctrl_from_nist_raises():
+
+    with pytest.raises(NotImplementedError):
+        ssg_ctrl_from_nist('test', None, None)
 
 
 def test_self_test(capfd):

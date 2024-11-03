@@ -6,7 +6,7 @@
 
 |pre| |cov| |pylint|
 
-|tag| |license| |python|
+|tag| |license| |python| |contributors|
 
 Python command line tools for working with YAML and similar structured
 text data, eg, round-trip conversion between XML_ and YAML_, preserving
@@ -74,10 +74,10 @@ idiom to install it on your system in a virtual env after cloning::
 
   $ python3 -m venv env
   $ source env/bin/activate
-  $ pip install .
-  $ ymltoxml --version
-  $ ymltoxml --dump-config
-  $ deactivate
+  (env) $ pip install .
+  (env) $ ymltoxml --version
+  (env) $ ymltoxml --dump-config
+  (env) $ deactivate
 
 The alternative to python venv is the ``tox`` test driver.  If you have it
 installed already, see the example tox commands below.
@@ -335,7 +335,7 @@ documentation for formatting details)
 In-repo workflow with Tox
 -------------------------
 
-As long as you have git and at least Python 3.6, then the "easy" dev
+As long as you have git and at least Python 3.8, then the "easy" dev
 workflow is to clone this repository and install Tox via your system
 package manager, eg::
 
@@ -378,6 +378,30 @@ To build/lint the api docs, use the following tox commands:
 * ``tox -e docs`` build the documentation using sphinx and the api-doc plugin
 * ``tox -e docs-lint`` build the docs and run the sphinx link checking
 
+Local Tox upgrade
+-----------------
+
+Some required Linux environments can be old enough to require "special"
+handling (eg, Ubuntu bionic or focal) as shown below. If the Tox_ package
+version available via system package manager is less than 4.x, it may be
+possible to install the latest Tox version into XDG $HOME directories, eg,
+``$HOME/.local/bin``. Note that Ubuntu allows this but Debian frowns on it
+so this option may not available.
+
+If the above procedure is supported, try something like the following::
+
+  $ sudo apt-get update
+  $ sudo apt-get install python3-venv python3-pip
+  $ sudo apt-get purge python3-virtualenv
+  $ python3 -m pip install -U pip
+  $ source ~/.profile
+  $ which pip3
+  /home/user/.local/bin/pip3
+  $ pip3 install tox
+  $ tox --version
+
+Ensure the above version is 4.x and the path displayed starts with
+``$HOME/.local``.
 
 Making Changes & Contributing
 =============================
@@ -446,6 +470,15 @@ It's usually a good idea to update the hooks to the latest version::
 .. _pre-commit: http://pre-commit.com/
 
 
+License
+=======
+
+This project is licensed under the LGPL license - see the `LICENSE file`_ for
+details.
+
+.. _LICENSE file: https://github.com/sarnold/urt/blob/master/LICENSE
+
+
 .. |ci| image:: https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml
     :alt: CI Status
@@ -489,3 +522,7 @@ It's usually a good idea to update the hooks to the latest version::
 .. |pre| image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white
    :target: https://github.com/pre-commit/pre-commit
    :alt: pre-commit
+
+.. |contributors| image:: https://img.shields.io/github/contributors/sarnold/yaml-tools
+   :target: https://github.com/sarnold/yaml-tools/
+   :alt: Contributors

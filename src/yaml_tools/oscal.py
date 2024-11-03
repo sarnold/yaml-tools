@@ -176,8 +176,9 @@ def process_data(filepath, prog_opts, uargs):
 def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
     """
     Create a new control in SSG format using the given ID. Give it some
-    levels if it exists in the relevant NIST profiles
+    levels if it exists in the relevant NIST profiles.
     """
+    raise NotImplementedError()
 
 
 def id_set_match(in_ids, id_q, uargs):
