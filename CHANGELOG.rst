@@ -2,7 +2,21 @@ Changelog
 =========
 
 
-0.4.1 (2024-08-26)
+0.4.2 (2024-11-03)
+------------------
+
+Changes
+~~~~~~~
+- Signature refactor and test,lint cleanup. [Stephen Arnold]
+
+Fixes
+~~~~~
+- Cleanup more docstrings and parameter names. [Stephen Arnold]
+
+  * also bump pre-commit deps
+
+
+0.4.1 (2024-08-27)
 ------------------
 
 New
@@ -15,6 +29,9 @@ New
 
 Changes
 ~~~~~~~
+- Update .gitchangelog.rc and regenerate changelog. [Stephen Arnold]
+
+  * now we can match on more commit messages including dev: tag
 - Cleanup jinja template environment, enable block trim. [Stephen
   Arnold]
 - Add initial test data and template func, update text reader. [Stephen
