@@ -8,6 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Any, Dict
 
 import pystache
 import yaml as yaml_loader
@@ -309,7 +310,7 @@ def text_data_writer(outdata, prog_opts):
         sys.stdout.write(out + '\n')
 
 
-def text_file_reader(file, prog_opts):
+def text_file_reader(file: Path, prog_opts: Dict):
     """
     Text file reader for specific data types including raw text. Tries
     to handle YAML, JSON, CSV, text files with IDs, and plain ASCII
@@ -324,7 +325,7 @@ def text_file_reader(file, prog_opts):
     :return object: file data as dict or list
     :raises FileTypeError: if input file extension is not in EXTENSIONS
     """
-    data_in = {}
+    data_in: Any
     infile = Path(file)
     delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
 

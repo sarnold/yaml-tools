@@ -8,9 +8,11 @@ import importlib
 import sys
 from collections import deque
 from pathlib import Path
+from typing import Deque, Dict, List, Tuple
 
 from munch import Munch
 from natsort import os_sorted
+
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -26,7 +28,9 @@ from .utils import (
 # pylint: disable=R0801
 
 
-def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
+def csv_append_id_data(
+    in_ids: List, prog_opts: Dict, uargs: Munch
+) -> None:  # pragma: no cover
     """
     Append/update column data using ID sets and write a new csv file using
     the given filename with ``.modified`` appended to the filename stem.
@@ -60,7 +64,7 @@ def csv_append_id_data(in_ids, prog_opts, uargs):  # pragma: no cover
         writer.writerow(ctl)
 
 
-def csv_row_match(in_ids, ctl):
+def csv_row_match(in_ids: List, ctl: List) -> List:
     """
     Extracted ctl munging from ``csv_append_id_data`` loop for testing.
 
@@ -80,16 +84,18 @@ def csv_row_match(in_ids, ctl):
     return ctl
 
 
-def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
+def load_input_data(
+    filepath: Path, prog_opts: Dict, use_ssg: bool = False, debug: bool = False
+) -> Tuple[List, Deque, Deque]:
     """
     Find and gather the inputs, ie, content file(s) and user control IDs,
     into a tuple of lists (id_list, file_tuple_list). Load up the queues
     and return a tuple of both queues and the list of normalized user IDs
     from ``filepath``.
     """
-    id_queue = deque()
-    ctl_queue = deque()
-    file_tuples = []
+    id_queue: Deque = deque()
+    ctl_queue: Deque = deque()
+    file_tuples: List = []
     in_list = text_file_reader(filepath, prog_opts)
 
     in_ids = [xform_id(x) for x in in_list] if in_list[0].islower() else in_list
@@ -144,7 +150,7 @@ def load_input_data(filepath, prog_opts, use_ssg=False, debug=False):
     return in_ids, id_queue, ctl_queue
 
 
-def munge_file(filepath, prog_opts, uargs):
+def munge_file(filepath: Path, prog_opts: Dict, uargs: Munch):
     """
     Munge a CSV file by appending columns.
     """
@@ -152,7 +158,7 @@ def munge_file(filepath, prog_opts, uargs):
     csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
 
 
-def process_data(filepath, prog_opts, uargs):
+def process_data(filepath: Path, prog_opts: Dict, uargs: Munch):
     """
     Process inputs, print some output.
     """
@@ -173,7 +179,7 @@ def process_data(filepath, prog_opts, uargs):
             print(f'{ctl[0]};{ctl[1][rpt_attr]}')
 
 
-def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
+def ssg_ctrl_from_nist(in_id: str, prog_opts: Dict, uargs: Munch):
     """
     Create a new control in SSG format using the given ID. Give it some
     levels if it exists in the relevant NIST profiles.
@@ -181,7 +187,7 @@ def ssg_ctrl_from_nist(in_id, prog_opts, uargs):
     raise NotImplementedError()
 
 
-def id_set_match(in_ids, id_q, uargs):
+def id_set_match(in_ids: List, id_q: Deque, uargs: Munch) -> Tuple[List, List]:
     """
     Quick set match analysis of ID sets.
     """
@@ -223,7 +229,7 @@ def id_set_match(in_ids, id_q, uargs):
     return list(common_set), list(not_in_set)
 
 
-def self_test(ucfg):
+def self_test(ucfg: Munch):
     """
     Basic sanity check using ``import_module``.
     """
