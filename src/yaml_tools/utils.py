@@ -139,12 +139,15 @@ def get_profile_type(filename, debug=False):
     return pmatch
 
 
-def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
+def load_config(
+    prog_name='ymltoxml', pkg='yaml_tools.data', file_encoding='utf-8', debug=False
+):
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
 
     :param prog_name: filename of calling script (no extension)
+    :param pkg: name of calling package.path for importlib
     :param file_encoding: file encoding of config file
     :param debug: enable extra processing info
     :type prog_name: str
@@ -157,9 +160,7 @@ def load_config(prog_name='ymltoxml', file_encoding='utf-8', debug=False):
 
     cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
-        cfgfile = importlib_resources.files('yaml_tools.data').joinpath(
-            f'{prog_name}.yaml'
-        )
+        cfgfile = importlib_resources.files(pkg).joinpath(f'{prog_name}.yaml')
     if debug:
         print(f'Using config: {str(cfgfile.resolve())}')
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
@@ -329,16 +330,16 @@ def text_file_reader(file, prog_opts):
 
     if infile.suffix not in EXTENSIONS:
         raise FileTypeError("FileTypeError: unknown input file extension")
-    with infile.open("r", encoding=prog_opts['file_encoding']) as file:
+    with infile.open("r", encoding=prog_opts['file_encoding']) as dfile:
         if infile.suffix == '.csv':
-            data_in = list(csv.DictReader(file, delimiter=delim))
+            data_in = list(csv.DictReader(dfile, delimiter=delim))
         elif infile.suffix == '.json':
-            data_in = json.load(file)
+            data_in = json.load(dfile)
         elif infile.suffix in {'.yaml', '.yml'}:
-            data_in = yaml_loader.safe_load(file)
+            data_in = yaml_loader.safe_load(dfile)
         elif 'ids' in infile.name and infile.suffix == '.txt':
-            data_in = list(file.read().splitlines())
+            data_in = list(dfile.read().splitlines())
         else:
-            data_in = file.read()
+            data_in = dfile.read()
 
     return data_in
