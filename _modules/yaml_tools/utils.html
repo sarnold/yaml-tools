@@ -1,22 +1,20 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils &mdash; yaml_tools 0.4.1.dev20+gf0fa49a documentation</title>
+  <title>yaml_tools.utils &mdash; yaml_tools 0.4.2.dev4+g2c33406 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=96281a30"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=275be0c0"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -33,9 +31,6 @@
           <a href="../../index.html" class="icon icon-home">
             yaml_tools
           </a>
-              <div class="version">
-                0.4
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -243,12 +238,15 @@
 
 <div class="viewcode-block" id="load_config">
 <a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.load_config">[docs]</a>
-<span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">prog_name</span><span class="o">=</span><span class="s1">&#39;ymltoxml&#39;</span><span class="p">,</span> <span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span>
+    <span class="n">prog_name</span><span class="o">=</span><span class="s1">&#39;ymltoxml&#39;</span><span class="p">,</span> <span class="n">pkg</span><span class="o">=</span><span class="s1">&#39;yaml_tools.data&#39;</span><span class="p">,</span> <span class="n">file_encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load yaml configuration file and munchify the data. If local file is</span>
 <span class="sd">    not found in current directory, the default will be loaded.</span>
 
 <span class="sd">    :param prog_name: filename of calling script (no extension)</span>
+<span class="sd">    :param pkg: name of calling package.path for importlib</span>
 <span class="sd">    :param file_encoding: file encoding of config file</span>
 <span class="sd">    :param debug: enable extra processing info</span>
 <span class="sd">    :type prog_name: str</span>
@@ -261,9 +259,7 @@
 
     <span class="n">cfgfile</span> <span class="o">=</span> <span class="n">defconfig</span> <span class="k">if</span> <span class="n">defconfig</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">cfgfile</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;yaml_tools.data&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yaml&#39;</span>
-        <span class="p">)</span>
+        <span class="n">cfgfile</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Using config: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">cfgobj</span> <span class="o">=</span> <span class="n">Munch</span><span class="o">.</span><span class="n">fromYAML</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">file_encoding</span><span class="p">))</span>
@@ -439,38 +435,38 @@
 
 <div class="viewcode-block" id="text_file_reader">
 <a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_file_reader">[docs]</a>
-<span class="k">def</span> <span class="nf">text_file_reader</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">text_file_reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Text file reader for specific data types including raw text. Tries to</span>
-<span class="sd">    handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data</span>
-<span class="sd">    if ``filepath`` is one of the expected types and return data objects. For</span>
-<span class="sd">    all supported types of data, return a dictionary (or a list if input is</span>
-<span class="sd">    a sequence).</span>
+<span class="sd">    Text file reader for specific data types including raw text. Tries</span>
+<span class="sd">    to handle YAML, JSON, CSV, text files with IDs, and plain ASCII</span>
+<span class="sd">    text. Read and parse the file data if ``file`` is one of the</span>
+<span class="sd">    expected types and return data objects. For all supported types of</span>
+<span class="sd">    data, return a dictionary (or a list if input is a sequence).</span>
 
-<span class="sd">    :param filepath: filename/path to read</span>
-<span class="sd">    :type filepath: str</span>
+<span class="sd">    :param file: filename/path to read</span>
+<span class="sd">    :type file: str</span>
 <span class="sd">    :param prog_opts: configuration options</span>
 <span class="sd">    :type prog_opts: dict</span>
 <span class="sd">    :return object: file data as dict or list</span>
 <span class="sd">    :raises FileTypeError: if input file extension is not in EXTENSIONS</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">data_in</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">infile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">infile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
     <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;;&#39;</span>
 
     <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXTENSIONS</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">FileTypeError</span><span class="p">(</span><span class="s2">&quot;FileTypeError: unknown input file extension&quot;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">infile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">infile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.csv&#39;</span><span class="p">:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">))</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">dfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">))</span>
         <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.json&#39;</span><span class="p">:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dfile</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">}:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="n">yaml_loader</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">yaml_loader</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">dfile</span><span class="p">)</span>
         <span class="k">elif</span> <span class="s1">&#39;ids&#39;</span> <span class="ow">in</span> <span class="n">infile</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">data_in</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">dfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">data_in</span></div>
 

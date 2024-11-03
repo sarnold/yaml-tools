@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils module &mdash; yaml_tools 0.4.1.dev20+gf0fa49a documentation</title>
+  <title>yaml_tools.utils module &mdash; yaml_tools 0.4.2.dev4+g2c33406 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=96281a30"></script>
-        <script src="../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=275be0c0"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -36,9 +34,6 @@
           <a href="../index.html" class="icon icon-home">
             yaml_tools
           </a>
-              <div class="version">
-                0.4
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -162,13 +157,14 @@ exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.utils.load_config">
-<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ymltoxml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.load_config" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">load_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prog_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ymltoxml'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pkg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'yaml_tools.data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#load_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.load_config" title="Link to this definition"></a></dt>
 <dd><p>Load yaml configuration file and munchify the data. If local file is
 not found in current directory, the default will be loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prog_name</strong> (<em>str</em>) – filename of calling script (no extension)</p></li>
+<li><p><strong>pkg</strong> – name of calling package.path for importlib</p></li>
 <li><p><strong>file_encoding</strong> (<em>str</em>) – file encoding of config file</p></li>
 <li><p><strong>debug</strong> (<em>bool</em>) – enable extra processing info</p></li>
 </ul>
@@ -288,16 +284,16 @@ by the <code class="docutils literal notranslate"><span class="pre">text_file_re
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.utils.text_file_reader">
-<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">text_file_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#text_file_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.text_file_reader" title="Link to this definition"></a></dt>
-<dd><p>Text file reader for specific data types including raw text. Tries to
-handle YAML, JSON, CSV, and plain ASCII text. Read and parse the file data
-if <code class="docutils literal notranslate"><span class="pre">filepath</span></code> is one of the expected types and return data objects. For
-all supported types of data, return a dictionary (or a list if input is
-a sequence).</p>
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.utils.</span></span><span class="sig-name descname"><span class="pre">text_file_reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/utils.html#text_file_reader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.utils.text_file_reader" title="Link to this definition"></a></dt>
+<dd><p>Text file reader for specific data types including raw text. Tries
+to handle YAML, JSON, CSV, text files with IDs, and plain ASCII
+text. Read and parse the file data if <code class="docutils literal notranslate"><span class="pre">file</span></code> is one of the
+expected types and return data objects. For all supported types of
+data, return a dictionary (or a list if input is a sequence).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – filename/path to read</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – filename/path to read</p></li>
 <li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
 </ul>
 </dd>

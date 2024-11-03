@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.4.1.dev20+gf0fa49a documentation</title>
+  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.4.2.dev4+g2c33406 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=96281a30"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=275be0c0"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -36,9 +34,6 @@
           <a href="index.html" class="icon icon-home">
             yaml_tools
           </a>
-              <div class="version">
-                0.4
-              </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
@@ -62,9 +57,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#mavlink-use-case">Mavlink use case</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scap-use-case">SCAP use case</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#in-repo-workflow-with-tox">In-repo workflow with Tox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-tox-upgrade">Local Tox upgrade</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#making-changes-contributing">Making Changes &amp; Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a></li>
@@ -102,7 +99,7 @@
 <h1>yaml-tools (and more for CSV and XML)<a class="headerlink" href="#yaml-tools-and-more-for-csv-and-xml" title="Link to this heading"></a></h1>
 <p><a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml"><img alt="CI Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml"><img alt="Wheel Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/release.yml"><img alt="Release Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/release.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml"><img alt="Pylint Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml"><img alt="Coverage workflow" src="https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml/badge.svg" /></a></p>
 <p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/"><img alt="Test coverage" src="https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/test-coverage.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml"><img alt="Pylint score" src="https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/pylint-score.svg" /></a></p>
-<p><a class="reference external" href="https://github.com/sarnold/yaml-tools/releases"><img alt="GitHub tag" src="https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=green&amp;include_prereleases&amp;label=latest%20release" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/sarnold/yaml-tools" /></a> <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.8+-blue.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/sarnold/yaml-tools/releases"><img alt="GitHub tag" src="https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=green&amp;include_prereleases&amp;label=latest%20release" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/github/license/sarnold/yaml-tools" /></a> <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.8+-blue.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/"><img alt="Contributors" src="https://img.shields.io/github/contributors/sarnold/yaml-tools" /></a></p>
 <p>Python command line tools for working with YAML and similar structured
 text data, eg, round-trip conversion between <a class="reference external" href="https://en.wikipedia.org/wiki/Extensible_Markup_Language">XML</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a>, preserving
 attributes and comments (with minor corrections).  The default file
@@ -159,10 +156,10 @@ module-specific reference configuration files with defaults for all values.</p>
 idiom to install it on your system in a virtual env after cloning:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m venv env
 $ source env/bin/activate
-$ pip install .
-$ ymltoxml --version
-$ ymltoxml --dump-config
-$ deactivate
+(env) $ pip install .
+(env) $ ymltoxml --version
+(env) $ ymltoxml --dump-config
+(env) $ deactivate
 </pre></div>
 </div>
 <p>The alternative to python venv is the <code class="docutils literal notranslate"><span class="pre">tox</span></code> test driver.  If you have it
@@ -406,7 +403,7 @@ documentation for formatting details)</p>
 </section>
 <section id="in-repo-workflow-with-tox">
 <h3>In-repo workflow with Tox<a class="headerlink" href="#in-repo-workflow-with-tox" title="Link to this heading"></a></h3>
-<p>As long as you have git and at least Python 3.6, then the “easy” dev
+<p>As long as you have git and at least Python 3.8, then the “easy” dev
 workflow is to clone this repository and install Tox via your system
 package manager, eg:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
@@ -446,6 +443,29 @@ to specify the Python version and host OS type, run something like:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">docs</span></code> build the documentation using sphinx and the api-doc plugin</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">docs-lint</span></code> build the docs and run the sphinx link checking</p></li>
 </ul>
+</section>
+<section id="local-tox-upgrade">
+<h3>Local Tox upgrade<a class="headerlink" href="#local-tox-upgrade" title="Link to this heading"></a></h3>
+<p>Some required Linux environments can be old enough to require “special”
+handling (eg, Ubuntu bionic or focal) as shown below. If the <a class="reference external" href="https://github.com/tox-dev/tox">Tox</a> package
+version available via system package manager is less than 4.x, it may be
+possible to install the latest Tox version into XDG $HOME directories, eg,
+<code class="docutils literal notranslate"><span class="pre">$HOME/.local/bin</span></code>. Note that Ubuntu allows this but Debian frowns on it
+so this option may not available.</p>
+<p>If the above procedure is supported, try something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get install python3-venv python3-pip
+$ sudo apt-get purge python3-virtualenv
+$ python3 -m pip install -U pip
+$ source ~/.profile
+$ which pip3
+/home/user/.local/bin/pip3
+$ pip3 install tox
+$ tox --version
+</pre></div>
+</div>
+<p>Ensure the above version is 4.x and the path displayed starts with
+<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>.</p>
 </section>
 </section>
 <section id="making-changes-contributing">
@@ -492,6 +512,11 @@ $ pre-commit install
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">autoupdate</span>
 </pre></div>
 </div>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>This project is licensed under the LGPL license - see the <a class="reference external" href="https://github.com/sarnold/urt/blob/master/LICENSE">LICENSE file</a> for
+details.</p>
 </section>
 </section>
 
