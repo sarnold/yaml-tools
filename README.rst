@@ -476,7 +476,7 @@ License
 This project is licensed under the LGPL license - see the `LICENSE file`_ for
 details.
 
-.. _LICENSE file: https://github.com/sarnold/urt/blob/master/LICENSE
+.. _LICENSE file: https://github.com/sarnold/yaml-tools/blob/main/LICENSE
 
 
 .. |ci| image:: https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml/badge.svg
