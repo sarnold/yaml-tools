@@ -3,14 +3,15 @@ Template bits for generating SSG-style controls in YAML.
 """
 
 import re
+from typing import Any, Dict, List
 
 from .utils import pystache_render
 
-PROFILES = ['LOW', 'MODERATE', 'HIGH', 'PRIVACY']
+PROFILES: List = ['LOW', 'MODERATE', 'HIGH', 'PRIVACY']
 
-IMPACT_LVLS = ['low', 'moderate', 'high']
+IMPACT_LVLS: List = ['low', 'moderate', 'high']
 
-CTL_FIELD_MAP = {
+CTL_FIELD_MAP: Dict = {
     'id': 'Control Identifier',
     'name': 'Control (or Control Enhancement) Name',
     'notes': 'Discussion',
@@ -19,7 +20,7 @@ CTL_FIELD_MAP = {
     'levels': None,
 }
 
-PREAMBLE = '''
+PREAMBLE: str = '''
 policy: NIST
 title: Configuration Recommendations for Yocto- and OpenEmbedded-based Linux Variants
 id: nist_openembedded
@@ -31,7 +32,7 @@ levels:
 - id: high
 '''
 
-ID_TEMPLATE = '''
+ID_TEMPLATE: str = '''
 controls:
   - id: {{caps}}
     status: {{status}}
@@ -46,7 +47,7 @@ controls:
 '''
 
 
-def generate_control(context):
+def generate_control(context: Dict) -> Any:
     """
     Render an ID template string given a context dict.
     """
@@ -54,7 +55,7 @@ def generate_control(context):
     return id_yaml
 
 
-def xform_id(string, strip_trailing_zeros=False):
+def xform_id(string: str, strip_trailing_zeros: bool = False) -> str:
     """
     Transform control ID strings, add leading zeros in forward direction:
 
