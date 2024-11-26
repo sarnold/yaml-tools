@@ -376,7 +376,8 @@ Additional ``tox`` commands:
 To build/lint the api docs, use the following tox commands:
 
 * ``tox -e docs`` build the documentation using sphinx and the api-doc plugin
-* ``tox -e docs-lint`` build the docs and run the sphinx link checking
+* ``tox -e ldocs`` build the docs and run the sphinx link checking
+* ``tox -e cdocs`` clean all the generated doc files
 
 Local Tox upgrade
 -----------------

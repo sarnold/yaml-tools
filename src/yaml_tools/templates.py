@@ -57,9 +57,11 @@ def generate_control(context: Dict) -> Any:
 
 def xform_id(string: str, strip_trailing_zeros: bool = False) -> str:
     """
-    Transform control ID strings, add leading zeros in forward direction:
+    Transform control ID strings, add leading zeros in forward direction::
 
-    AC-12(2) <==> ac-12.02
+      AC-12(2) <==> ac-12.02
+
+    Caller should filter zero-length input or handle IndexError as needed.
     """
     if string[0].isupper():
         idp = re.compile(r'[)(-]')  # regex character class id separators
