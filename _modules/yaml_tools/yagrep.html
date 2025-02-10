@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.yagrep &mdash; yaml_tools 0.4.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+  <title>yaml_tools.yagrep &mdash; yaml_tools 0.4.3.dev1+g7d21fb0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=ff822928"></script>
+      <script src="../../_static/documentation_options.js?v=49084c10"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -76,16 +76,16 @@
   <h1>Source code for yaml_tools.yagrep</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Console script for searching YAML or XML files.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">import</span> <span class="nn">dpath</span>
-<span class="kn">from</span> <span class="nn">munch</span> <span class="kn">import</span> <span class="n">Munch</span>
-<span class="kn">from</span> <span class="nn">nested_lookup</span> <span class="kn">import</span> <span class="n">nested_lookup</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dpath</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">munch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Munch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nested_lookup</span><span class="w"> </span><span class="kn">import</span> <span class="n">nested_lookup</span>
 
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">__version__</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">FileTypeError</span><span class="p">,</span>
     <span class="n">load_config</span><span class="p">,</span>
     <span class="n">text_data_writer</span><span class="p">,</span>
@@ -97,7 +97,7 @@
 
 <div class="viewcode-block" id="process_inputs">
 <a class="viewcode-back" href="../../api/yaml_tools.yagrep.html#yaml_tools.yagrep.process_inputs">[docs]</a>
-<span class="k">def</span> <span class="nf">process_inputs</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">grep_args</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_inputs</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">grep_args</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Handle file arguments and process them. Return any input data for use</span>
 <span class="sd">    with ``dpath`` search.</span>
@@ -111,7 +111,7 @@
 <span class="sd">    :handles FileTypeError: if input file is not yaml or xml</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">glob_filter</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">glob_filter</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Basic search glob to use with dpath functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -149,7 +149,7 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../api/yaml_tools.yagrep.html#yaml_tools.yagrep.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process args and execute search.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

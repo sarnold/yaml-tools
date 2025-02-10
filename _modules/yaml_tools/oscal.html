@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.oscal &mdash; yaml_tools 0.4.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+  <title>yaml_tools.oscal &mdash; yaml_tools 0.4.3.dev1+g7d21fb0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=ff822928"></script>
+      <script src="../../_static/documentation_options.js?v=49084c10"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -78,19 +78,19 @@
 <span class="sd">The main init, run, and self-test functions for oscal extract.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">munch</span> <span class="kn">import</span> <span class="n">Munch</span>
-<span class="kn">from</span> <span class="nn">natsort</span> <span class="kn">import</span> <span class="n">os_sorted</span>
-<span class="kn">from</span> <span class="nn">nested_lookup</span> <span class="kn">import</span> <span class="n">nested_lookup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">munch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Munch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">os_sorted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nested_lookup</span><span class="w"> </span><span class="kn">import</span> <span class="n">nested_lookup</span>
 
-<span class="kn">from</span> <span class="nn">.templates</span> <span class="kn">import</span> <span class="n">xform_id</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.templates</span><span class="w"> </span><span class="kn">import</span> <span class="n">xform_id</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">VERSION</span><span class="p">,</span>
     <span class="n">FileTypeError</span><span class="p">,</span>
     <span class="n">SortedSet</span><span class="p">,</span>
@@ -104,7 +104,7 @@
 
 <div class="viewcode-block" id="csv_append_id_data">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.csv_append_id_data">[docs]</a>
-<span class="k">def</span> <span class="nf">csv_append_id_data</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">csv_append_id_data</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Append/update column data using ID sets and write a new csv file using</span>
 <span class="sd">    the given filename with ``.modified`` appended to the filename stem.</span>
@@ -141,7 +141,7 @@
 
 <div class="viewcode-block" id="csv_row_match">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.csv_row_match">[docs]</a>
-<span class="k">def</span> <span class="nf">csv_row_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">ctl</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">csv_row_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">ctl</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extracted ctl munging from ``csv_append_id_data`` loop for testing.</span>
 
@@ -164,7 +164,7 @@
 
 <div class="viewcode-block" id="load_input_data">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.load_input_data">[docs]</a>
-<span class="k">def</span> <span class="nf">load_input_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">use_ssg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_input_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">use_ssg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find and gather the inputs, ie, content file(s) and user control IDs,</span>
 <span class="sd">    into a tuple of lists (id_list, file_tuple_list). Load up the queues</span>
@@ -231,7 +231,7 @@
 
 <div class="viewcode-block" id="munge_file">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.munge_file">[docs]</a>
-<span class="k">def</span> <span class="nf">munge_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">munge_file</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Munge a CSV file by appending columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -242,7 +242,7 @@
 
 <div class="viewcode-block" id="process_data">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.process_data">[docs]</a>
-<span class="k">def</span> <span class="nf">process_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Process inputs, print some output.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -266,7 +266,7 @@
 
 <div class="viewcode-block" id="ssg_ctrl_from_nist">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.ssg_ctrl_from_nist">[docs]</a>
-<span class="k">def</span> <span class="nf">ssg_ctrl_from_nist</span><span class="p">(</span><span class="n">in_id</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ssg_ctrl_from_nist</span><span class="p">(</span><span class="n">in_id</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a new control in SSG format using the given ID. Give it some</span>
 <span class="sd">    levels if it exists in the relevant NIST profiles.</span>
@@ -277,7 +277,7 @@
 
 <div class="viewcode-block" id="id_set_match">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.id_set_match">[docs]</a>
-<span class="k">def</span> <span class="nf">id_set_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">id_q</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">id_set_match</span><span class="p">(</span><span class="n">in_ids</span><span class="p">,</span> <span class="n">id_q</span><span class="p">,</span> <span class="n">uargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Quick set match analysis of ID sets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -322,7 +322,7 @@
 
 <div class="viewcode-block" id="self_test">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.self_test">[docs]</a>
-<span class="k">def</span> <span class="nf">self_test</span><span class="p">(</span><span class="n">ucfg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">self_test</span><span class="p">(</span><span class="n">ucfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Basic sanity check using ``import_module``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -356,7 +356,7 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../api/yaml_tools.oscal.html#yaml_tools.oscal.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Collect and process command options/arguments and then process data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

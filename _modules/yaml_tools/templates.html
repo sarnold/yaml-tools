@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.templates &mdash; yaml_tools 0.4.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+  <title>yaml_tools.templates &mdash; yaml_tools 0.4.3.dev1+g7d21fb0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=ff822928"></script>
+      <script src="../../_static/documentation_options.js?v=49084c10"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -78,9 +78,9 @@
 <span class="sd">Template bits for generating SSG-style controls in YAML.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">pystache_render</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">pystache_render</span>
 
 <span class="n">PROFILES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LOW&#39;</span><span class="p">,</span> <span class="s1">&#39;MODERATE&#39;</span><span class="p">,</span> <span class="s1">&#39;HIGH&#39;</span><span class="p">,</span> <span class="s1">&#39;PRIVACY&#39;</span><span class="p">]</span>
 
@@ -124,7 +124,7 @@
 
 <div class="viewcode-block" id="generate_control">
 <a class="viewcode-back" href="../../api/yaml_tools.templates.html#yaml_tools.templates.generate_control">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_control</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_control</span><span class="p">(</span><span class="n">context</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Render an ID template string given a context dict.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -135,7 +135,7 @@
 
 <div class="viewcode-block" id="xform_id">
 <a class="viewcode-back" href="../../api/yaml_tools.templates.html#yaml_tools.templates.xform_id">[docs]</a>
-<span class="k">def</span> <span class="nf">xform_id</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">strip_trailing_zeros</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">xform_id</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">strip_trailing_zeros</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Transform control ID strings, add leading zeros in forward direction:</span>
 
