@@ -1,3 +1,5 @@
+# internal coverage with pylint badge v0.0.7
+
 name: Pylint
 
 on:
@@ -9,7 +11,7 @@ on:
 jobs:
   pylint:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     defaults:
       run:
         shell: bash
@@ -73,7 +75,7 @@ jobs:
     #   - This is a pull request event and the pull actor is the same as the repo owner
     #     if: ${{ ( github.event_name == 'pull_request' && github.actor == github.repository_owner ) || github.ref == 'refs/heads/main' }}
     name: Generate badge image with pylint score
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [pylint]
     if: ${{ github.event_name == 'push' }}
 
