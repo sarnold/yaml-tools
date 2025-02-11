@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.templates module &mdash; yaml_tools 0.4.3.dev6+gd51dd5d documentation</title>
+  <title>yaml_tools.templates module &mdash; yaml_tools 0.4.3.dev11+g9628c4d documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=a4e2a7b8"></script>
+      <script src="../_static/documentation_options.js?v=7bf10ef2"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -98,15 +98,18 @@
 <p>Template bits for generating SSG-style controls in YAML.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.templates.generate_control">
-<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">generate_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/templates.html#generate_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.generate_control" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">generate_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../_modules/yaml_tools/templates.html#generate_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.generate_control" title="Link to this definition"></a></dt>
 <dd><p>Render an ID template string given a context dict.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="yaml_tools.templates.xform_id">
-<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">xform_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_trailing_zeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/templates.html#xform_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.xform_id" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">xform_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_trailing_zeros</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../_modules/yaml_tools/templates.html#xform_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.xform_id" title="Link to this definition"></a></dt>
 <dd><p>Transform control ID strings, add leading zeros in forward direction:</p>
-<p>AC-12(2) &lt;==&gt; ac-12.02</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AC</span><span class="o">-</span><span class="mi">12</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;==&gt;</span> <span class="n">ac</span><span class="o">-</span><span class="mf">12.02</span>
+</pre></div>
+</div>
+<p>Caller should filter zero-length input or handle IndexError as needed.</p>
 </dd></dl>
 
 </section>

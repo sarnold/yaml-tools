@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>yaml_tools.utils &mdash; yaml_tools 0.4.3.dev6+gd51dd5d documentation</title>
+  <title>yaml_tools.utils &mdash; yaml_tools 0.4.3.dev11+g9628c4d documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=a4e2a7b8"></script>
+      <script src="../../_static/documentation_options.js?v=7bf10ef2"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -84,6 +84,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yaml_loader</span>
@@ -435,7 +436,7 @@
 
 <div class="viewcode-block" id="text_file_reader">
 <a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_file_reader">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">text_file_reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_file_reader</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Text file reader for specific data types including raw text. Tries</span>
 <span class="sd">    to handle YAML, JSON, CSV, text files with IDs, and plain ASCII</span>
@@ -450,7 +451,7 @@
 <span class="sd">    :return object: file data as dict or list</span>
 <span class="sd">    :raises FileTypeError: if input file extension is not in EXTENSIONS</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data_in</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data_in</span><span class="p">:</span> <span class="n">Any</span>
     <span class="n">infile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
     <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;;&#39;</span>
 
