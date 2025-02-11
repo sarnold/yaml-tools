@@ -1,4 +1,4 @@
-# internal coverage with PR comment and badge v0.0.6
+# internal coverage with PR comment and badge v0.0.7
 # Note this works for public orgs but only for "internal" pull
 # requests. In the case of fork PRs, there needs to be org-level
 # github app with private key => ACCESS_TOKEN, with more job isolation
@@ -19,7 +19,7 @@ on:
 jobs:
   pre_ci:
     name: Prepare CI environment
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       #commit_message: ${{ steps.get_commit_message.outputs.commit_message }}
       branch: ${{ steps.extract_branch.outputs.branch }}
@@ -60,7 +60,7 @@ jobs:
 
   base:
     name: Base coverage
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       base_branch: ${{ steps.get_base.outputs.base_branch }}
       base_cov: ${{ steps.get_base.outputs.base_cov }}
@@ -100,7 +100,7 @@ jobs:
 
   check:
     name: Pre CI check
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [pre_ci, base]
 
     steps:
@@ -119,7 +119,7 @@ jobs:
 
   cov_data:
     name: Generate test coverage data
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [check]
     defaults:
       run:
@@ -128,8 +128,7 @@ jobs:
       coverage: ${{ steps.coverage.outputs.coverage }}
       coverage-rounded-display: ${{ steps.coverage.outputs.coverage-rounded-display }}
     env:
-      PLATFORM: ubuntu-20.04
-      PYTHON: '3.11'
+      PLATFORM: ubuntu-22.04
       PYTHONIOENCODING: utf-8
       PIP_DOWNLOAD_CACHE: ${{ github.workspace }}/../.pip_download_cache
 
@@ -140,21 +139,16 @@ jobs:
 
     - uses: actions/setup-python@v5
       with:
-        python-version: ${{ env.PYTHON }}
+        python-version: '3.12'
 
     - name: Add python requirements
       run: |
         python -m pip install --upgrade pip
         pip install tox
 
-    - name: Setup old python for test
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.8
-
     - name: Generate coverage
       run: |
-        tox -e coverage,py38,py311
+        tox -e coverage,py312
 
     - name: Code Coverage Summary Report (data)
       uses: irongut/CodeCoverageSummary@v1.3.0
@@ -168,7 +162,7 @@ jobs:
         path: |
           coverage.xml
           code-coverage-results.txt
-        retention-days: 1
+        retention-days: 30
 
     - name: Check code coverage
       id: coverage
@@ -198,7 +192,7 @@ jobs:
 
   test:
     name: Coverage check
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [cov_data, base]
     outputs:
       coverage: ${{ needs.cov_data.outputs.coverage }}
@@ -220,7 +214,7 @@ jobs:
 
   comment_cov_change:
     name: Comment on PR with coverage delta
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [test, base]
 
     steps:
@@ -298,7 +292,7 @@ jobs:
     #   - This is a pull request event and the pull actor is the same as the repo owner
     #     if: ${{ ( github.event_name == 'pull_request' && github.actor == github.repository_owner ) || github.ref == 'refs/heads/main' }}
     name: Generate badge image with test coverage value
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: [test, pre_ci]
     if: github.event_name == 'push'
     outputs:

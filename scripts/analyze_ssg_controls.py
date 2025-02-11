@@ -62,11 +62,11 @@ ctl_queue = Deque(get_cachedir(dir_name='ctl_queue'))
 input_ids = Path(FILE).read_text(encoding='utf-8').splitlines()
 
 if input_ids[0].islower():
-    up_ids = [xform_id(x) for x in input_ids]
+    up_ids = [xform_id(x) for x in input_ids if len(x) > 0]
 else:
     up_ids = input_ids
 
-in_set = set(up_ids)
+in_set = set_unique(up_ids)
 
 if DEBUG:
     print(f'Input Ids: {input_ids}')
