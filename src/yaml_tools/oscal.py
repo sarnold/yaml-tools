@@ -12,7 +12,6 @@ from typing import Deque, Dict, List, Tuple
 
 from munch import Munch
 from natsort import os_sorted
-
 from nested_lookup import nested_lookup
 
 from .templates import xform_id

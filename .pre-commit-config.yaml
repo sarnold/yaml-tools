@@ -28,20 +28,25 @@ repos:
         exclude: '(conda/meta.yaml|.pep8speaks.yml)'
 
   - repo: https://github.com/ambv/black
-    rev: 24.10.0
+    rev: 25.1.0
     hooks:
       - id: black
         name: "Format code"
         language_version: python3
 
+  - repo: https://github.com/fsfe/reuse-tool
+    rev: v5.0.2
+    hooks:
+    - id: reuse
+
   - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
+    rev: 6.0.1
     hooks:
       - id: isort
         args: ["--settings-path=pyproject.toml"]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    rev: v1.15.0
     hooks:
     - id: mypy
       additional_dependencies:
@@ -98,14 +103,14 @@ repos:
           - --remove-unused-variables
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.1
+    rev: 7.1.2
     hooks:
       - id: flake8
         files: src/yaml_tools/
         additional_dependencies: ["flake8-bugbear"]
 
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.10
+    rev: 1.8.3
     hooks:
       - id: bandit
         args: ["-ll", "-q"]
