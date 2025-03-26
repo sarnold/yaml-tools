@@ -4,7 +4,7 @@
 
 |ci| |wheels| |release| |badge| |coverage|
 
-|pre| |cov| |pylint|
+|pre| |reuse| |cov| |pylint|
 
 |tag| |license| |python| |contributors|
 
@@ -467,8 +467,43 @@ It's usually a good idea to update the hooks to the latest version::
     pre-commit autoupdate
 
 
+SBOM and license info
+=====================
+
+This project is now compliant with the REUSE Specification Version 3.3, so the
+corresponding license information for all files can be found in the ``REUSE.toml``
+configuration file with license text(s) in the ``LICENSES/`` folder.
+
+Related metadata can be (re)generated with the following tools and command
+examples.
+
+* reuse-tool_ - REUSE_ compliance linting and sdist (source files) SBOM generation
+* sbom4python_ - generate SBOM with full dependency chain
+
+Commands
+--------
+
+Use tox to create the environment and run the lint command::
+
+  $ tox -e reuse                      # --or--
+  $ tox -e reuse -- spdx > sbom.txt   # generate sdist files sbom
+
+Note you can pass any of the other reuse commands after the ``--`` above.
+
+Use the above environment to generate the full SBOM in text format::
+
+  $ source .tox/reuse/bin/activate
+  $ sbom4python --system --use-pip -o <file_name>.txt
+
+Be patient; the last command above may take several minutes. See the
+doc links above for more detailed information on the tools and
+specifications.
+
+.. _pre-commit: https://pre-commit.com/index.html
+.. _reuse-tool: https://github.com/fsfe/reuse-tool
+.. _REUSE: https://reuse.software/spec-3.3/
+.. _sbom4python: https://github.com/anthonyharrison/sbom4python
 .. _gitchangelog: https://github.com/sarnold/gitchangelog
-.. _pre-commit: http://pre-commit.com/
 
 
 License
@@ -508,11 +543,15 @@ details.
     :target: https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml
     :alt: Pylint score
 
-.. |license| image:: https://img.shields.io/github/license/sarnold/yaml-tools
-    :target: https://github.com/sarnold/yaml-tools/blob/master/LICENSE
-    :alt: License
+.. |reuse| image:: https://api.reuse.software/badge/git.fsfe.org/reuse/api
+    :target: https://api.reuse.software/info/git.fsfe.org/reuse/api
+    :alt: REUSE status
 
-.. |tag| image:: https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=green&include_prereleases&label=latest%20release
+.. |license| image:: https://img.shields.io/badge/license-LGPL_2.1-blue
+    :target: https://github.com/sarnold/yaml-tools/blob/main/LICENSE
+    :alt: License (static)
+
+.. |tag| image:: https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=blue&include_prereleases&label=latest%20release
     :target: https://github.com/sarnold/yaml-tools/releases
     :alt: GitHub tag
 
