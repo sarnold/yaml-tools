@@ -11,6 +11,7 @@ ext/
 .oscal.y*
 in.*
 out.*
+*ids*.txt
 sorted-out/
 munch/
 nested_lookup/
