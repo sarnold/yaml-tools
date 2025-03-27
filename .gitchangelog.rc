@@ -161,11 +161,8 @@ tag_filter_regexp = r'^[0-9]+\.[0-9]+(\.[0-9]+)?$'
 ## This label will be used as the changelog Title of the last set of changes
 ## between last valid tag and HEAD if any.
 #unreleased_version_label = "(unreleased)"
-unreleased_version_label = lambda: swrap(
-    ["git", "describe", "--tags"],
-    shell=False,
-)
-
+import setuptools_scm
+unreleased_version_label = setuptools_scm.get_version()
 
 ## ``output_engine`` is a callable
 ##

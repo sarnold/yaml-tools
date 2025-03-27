@@ -57,8 +57,9 @@ adjustable via environment variables, eg:
 Install with pip
 ----------------
 
-This package is *not* yet published on PyPI, thus use one of the following
-to install yaml-tools on any platform. Install from the main branch::
+This package is *not* yet published on PyPI, thus use one of the
+following to install yaml-tools on any platform. Install from the
+main branch::
 
   $ pip install https://github.com/sarnold/yaml-tools/archive/refs/heads/main.tar.gz
 
@@ -67,7 +68,8 @@ or use this command to install a specific release version::
   $ pip install https://github.com/sarnold/yaml-tools/releases/download/0.4.0/yaml_tools-0.4.0.tar.gz
 
 The ``yaml_tools`` package provides the modules shown above as well as
-module-specific reference configuration files with defaults for all values.
+module-specific reference configuration files with defaults for all
+values.
 
 If you'd rather work from the source repository, it supports the common
 idiom to install it on your system in a virtual env after cloning::
@@ -79,8 +81,8 @@ idiom to install it on your system in a virtual env after cloning::
   (env) $ ymltoxml --dump-config
   (env) $ deactivate
 
-The alternative to python venv is the ``tox`` test driver.  If you have it
-installed already, see the example tox commands below.
+The alternative to python venv is the ``tox`` test driver.  If you have
+it installed already, see the example tox commands below.
 
 ymltoxml
 --------
@@ -122,10 +124,10 @@ type::
   + when passing input files as arguments, the output file names/paths
     are the same as the input files but with the (new) output extension
 
-By default it will process one or more input files as command args, typically
-in the current directory, however, the ``--infile`` option will only
-process a single file path, optionally with an output file path, with no
-extra (file) arguments.
+By default it will process one or more input files as command args,
+typically in the current directory, however, the ``--infile`` option
+will only process a single file path, optionally with an output file
+path, with no extra (file) arguments.
 
 The main processing tweaks for yml/xml output formatting are specified
 in the default configuration file; if you need to change something, you
@@ -216,9 +218,9 @@ named ``.yasort.yaml``. The above applies equally to this config file.
     -s, --save-config  save active config to default filename (.yasort.yml) and
                        exit (default: False)
 
-All of the optional arguments for ``yasort`` are essentially orthogonal to
+all of the optional arguments for ``yasort`` are essentially orthogonal to
 sorting, thus the only required argument for normal usage is one or more
-input files. All of the user settings are in the default configuration file
+input files. all of the user settings are in the default configuration file
 shown below; use the ``--save-config`` option to create your own config file.
 
 Default yasort.yaml:
@@ -245,10 +247,10 @@ Features and limitations
 
 **NIST control ID munging**
 
-The demo scripts and ``oscal`` module illustrate various forms of control ID
-normalization in order to match control IDs from multiple input sources.
-Currently, there are 2 primary ID formats, and which one to use is mainly
-a user choice:
+The demo scripts and ``oscal`` module illustrate various forms of
+control ID normalization in order to match control IDs from multiple
+input sources. Currently, there are 2 primary ID formats, and which one
+to use is mainly a user choice:
 
 * AC-01(01)(a) - uppercase with parentheses
 * ac-01.01.a - lowercase with dots
@@ -290,8 +292,8 @@ Mavlink use case
 The ymltoxml tools are intended to be part of a larger workflow, ie,
 developing custom mavlink message dialects and generating/deploying the
 resulting mavlink language interfaces.  To be more specific, for this
-example we use a mavlink-compatible component running on a micro-controller,
-thus the target language bindings are C and C++.
+example we use a mavlink-compatible component running on a
+micro-controller, thus the target language bindings are C and C++.
 
 Tool requirements for the full mavlink workflow:
 
@@ -315,10 +317,10 @@ source files (or just content_). It is currently used to sort profiles
 with large numbers of rules, as well as create control files and analyze
 existing controls.
 
-The yasort configuration file defaults are based on existing yaml structure,
-but feel free to change them for another use case. To adjust how the sorting
-works, make a local config file (see above) and edit as needed the following
-options:
+The yasort configuration file defaults are based on existing yaml
+structure, but feel free to change them for another use case. To adjust
+how the sorting works, make a local config file (see above) and edit as
+needed the following options:
 
 :output_dirname: directory for output file(s)
 :default_parent_key: parent key if sort target is sublist
@@ -383,11 +385,11 @@ Local Tox upgrade
 -----------------
 
 Some required Linux environments can be old enough to require "special"
-handling (eg, Ubuntu bionic or focal) as shown below. If the Tox_ package
-version available via system package manager is less than 4.x, it may be
-possible to install the latest Tox version into XDG $HOME directories, eg,
-``$HOME/.local/bin``. Note that Ubuntu allows this but Debian frowns on it
-so this option may not available.
+handling (eg, Ubuntu bionic or focal) as shown below. If the Tox_
+package version available via system package manager is less than 4.x,
+it may be possible to install the latest Tox version into XDG $HOME
+directories, eg, ``$HOME/.local/bin``. Note that Ubuntu allows this but
+Debian frowns on it so this option may not available.
 
 If the above procedure is supported, try something like the following::
 
@@ -470,12 +472,13 @@ It's usually a good idea to update the hooks to the latest version::
 SBOM and license info
 =====================
 
-This project is now compliant with the REUSE Specification Version 3.3, so the
-corresponding license information for all files can be found in the ``REUSE.toml``
-configuration file with license text(s) in the ``LICENSES/`` folder.
+This project is now compliant with the REUSE Specification Version 3.3,
+and the corresponding license information for all files can be found in
+the ``REUSE.toml`` configuration file with license text(s) in the
+``LICENSES/`` folder.
 
-Related metadata can be (re)generated with the following tools and command
-examples.
+Related metadata can be (re)generated with the following tools and
+command examples.
 
 * reuse-tool_ - REUSE_ compliance linting and sdist (source files) SBOM generation
 * sbom4python_ - generate SBOM with full dependency chain
@@ -485,7 +488,7 @@ Commands
 
 Use tox to create the environment and run the lint command::
 
-  $ tox -e reuse                      # --or--
+  $ tox -e reuse                      # to run reuse lint   --or--
   $ tox -e reuse -- spdx > sbom.txt   # generate sdist files sbom
 
 Note you can pass any of the other reuse commands after the ``--`` above.
