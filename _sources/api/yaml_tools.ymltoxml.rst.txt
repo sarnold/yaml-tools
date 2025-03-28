@@ -1,0 +1,7 @@
+yaml\_tools.ymltoxml module
+===========================
+
+.. automodule:: yaml_tools.ymltoxml
+   :members:
+   :show-inheritance:
+   :undoc-members:

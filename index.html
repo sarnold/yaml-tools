@@ -1,0 +1,252 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to the yaml-tools documentation! &mdash; yaml_tools 0.4.3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5bfaad31"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yaml-tools (and more for CSV and XML)" href="readme_include.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            yaml_tools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">yaml_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">yaml_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to the yaml-tools documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-the-yaml-tools-documentation">
+<h1>Welcome to the yaml-tools documentation!<a class="headerlink" href="#welcome-to-the-yaml-tools-documentation" title="Link to this heading"></a></h1>
+<p><dl class="field-list simple">
+<dt class="field-odd">Commit<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://github.com/sarnold/yaml-tools/commit/5c5051529f115b2b2dc790fc32b237df0436d8a9">5c5051529f</a></p>
+</dd>
+</dl>
+</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme_include.html">yaml-tools (and more for CSV and XML)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="readme_include.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#install-with-pip">Install with pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#ymltoxml">ymltoxml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#yagrep">yagrep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#yasort">yasort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#features-and-limitations">Features and limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="readme_include.html#dev-workflows">Dev workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#mavlink-use-case">Mavlink use case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#scap-use-case">SCAP use case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#in-repo-workflow-with-tox">In-repo workflow with Tox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#local-tox-upgrade">Local Tox upgrade</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="readme_include.html#making-changes-contributing">Making Changes &amp; Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme_include.html#sbom-and-license-info">SBOM and license info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme_include.html#commands">Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="readme_include.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/generate-changelog.html#git-tags">Git Tags</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/generate-changelog.html#sections">Sections</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/pre-commit-config.html#some-hook-descriptions">Some Hook Descriptions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#end-of-file-fixer"><code class="docutils literal notranslate"><span class="pre">end-of-file-fixer</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#trailing-whitespace"><code class="docutils literal notranslate"><span class="pre">trailing-whitespace</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#mixed-line-ending"><code class="docutils literal notranslate"><span class="pre">mixed-line-ending</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#check-yaml"><code class="docutils literal notranslate"><span class="pre">check-yaml</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#beautysh"><code class="docutils literal notranslate"><span class="pre">beautysh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="dev/pre-commit-config.html#doc-formatting-rst-files">Doc formatting (.rst files)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-usage.html">Using Pre-Commit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/pre-commit-usage.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/pre-commit-usage.html#automatic-usage">Automatic Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/pre-commit-usage.html#manual-usage">Manual Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">yaml_tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/yaml_tools.html">yaml_tools package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/yaml_tools.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.oscal.html">yaml_tools.oscal module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.templates.html">yaml_tools.templates module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.utils.html">yaml_tools.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.yagrep.html">yaml_tools.yagrep module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.yasort.html">yaml_tools.yasort module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api/yaml_tools.ymltoxml.html">yaml_tools.ymltoxml module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api/yaml_tools.html#module-yaml_tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id1">0.4.2 (2024-11-03)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#changes">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#fixes">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id2">0.4.1 (2024-08-27)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id3">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id4">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id5">0.4.0 (2024-05-16)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id6">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id7">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id8">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id9">0.3.0 (2024-03-12)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id10">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id11">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id12">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id13">0.2.2 (2023-09-05)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id14">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id15">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id16">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id17">0.2.1 (2023-07-16)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id18">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id19">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id20">0.2.0 (2023-07-15)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id22">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id23">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id24">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id25">0.1.0 (2022-06-22)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id26">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id27">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id28">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id29">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="CHANGELOG.html#id30">0.0.0 (2022-06-19)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id31">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id32">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="CHANGELOG.html#id33">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="readme_include.html" class="btn btn-neutral float-right" title="yaml-tools (and more for CSV and XML)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Stephen L Arnold.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
