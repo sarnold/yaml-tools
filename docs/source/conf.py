@@ -20,6 +20,8 @@
 import os
 import sys
 
+from datetime import datetime
+
 if sys.version_info < (3, 8):
     from importlib_metadata import version
 else:
@@ -29,14 +31,15 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 # -- Project information -----------------------------------------------------
 
-project = 'yaml_tools'
-copyright = '2024, Stephen L Arnold'
-author = 'Stephen Arnold'
-
-# The full version, including alpha/beta/rc tags
-release = version('yaml_tools')
+# The full version, including alpha/beta/rc tags with setuptols-scm
+# workaround for extra-long dirty version string
+release = version('yaml_tools').split("+")[0]
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
+
+project = 'yaml_tools'
+author = 'Stephen Arnold'
+copyright = str(datetime.now().year) + f' {author}'
 
 # -- General configuration ------------------------------------------------
 
@@ -49,8 +52,8 @@ version = '.'.join(release.split('.')[:2])
 # ones.
 extensions = [
     'sphinx_git',
-    'sphinxcontrib.apidoc',
-    'sphinx.ext.autodoc',
+    'autoapi.extension',
+    'sphinx.ext.autodoc.typehints',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
@@ -58,10 +61,8 @@ extensions = [
     'recommonmark',
 ]
 
-apidoc_module_dir = '../../src/yaml_tools/'
-apidoc_output_dir = 'api'
-apidoc_excluded_paths = ['test', 'scripts']
-apidoc_separate_modules = True
+autoapi_dirs = ['../../src']
+autodoc_typehints = 'description'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -69,8 +70,7 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The master toctree document.
 master_doc = 'index'
@@ -94,7 +94,7 @@ language = 'en'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'manni'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
@@ -105,28 +105,13 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'classic'  # still has a version
 
-# Theme options are theme-specific and customize the look and feel of a theme
-# further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-#html_static_path = ['_static']
-
-# Custom sidebar templates, must be a dictionary that maps document names
-# to template names.
-#
-# This is required for the alabaster theme
-# refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
     '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
         'searchbox.html',
+        'globaltoc.html',
+        'relations.html',
     ]
 }
 
