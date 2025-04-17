@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>yaml_tools.ymltoxml &#8212; yaml_tools 0.4.3.dev23 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=55b73dce" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    
+    <script src="../../_static/documentation_options.js?v=c03e58db"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.ymltoxml</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for yaml_tools.ymltoxml</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2022 Stephen L Arnold</span>
+<span class="c1">#</span>
+<span class="c1"># This is free software, licensed under the LGPL-2.1 license</span>
+<span class="c1"># available in the accompanying LICENSE file.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Transform mavlink-style xml files to/from xml and yaml. Note yaml</span>
+<span class="sd">format uses custom markup for XML attributes and comments. See the</span>
+<span class="sd">xmltodict docs for details.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">xmltodict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yaml_loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">munch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Munch</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">VERSION</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">FileTypeError</span><span class="p">,</span>
+    <span class="n">load_config</span><span class="p">,</span>
+    <span class="n">restore_xml_comments</span><span class="p">,</span>
+    <span class="n">str_yaml_dumper</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="get_input_type">
+<a class="viewcode-back" href="../../autoapi/yaml_tools/ymltoxml/index.html#yaml_tools.ymltoxml.get_input_type">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_input_type</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check filename extension, open and process by file type, return type</span>
+<span class="sd">    flag and data from appropriate loader.</span>
+
+<span class="sd">    :param filepath: filename as Path obj</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :type prog_opts: dict</span>
+<span class="sd">    :return tuple: destination type flag and file data</span>
+<span class="sd">    :raises FileTypeError: if the input file is not xml or yml</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">to_xml</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">data_in</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yaml&#39;</span><span class="p">)):</span>
+        <span class="k">with</span> <span class="n">filepath</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">yaml_loader</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">infile</span><span class="p">)</span>
+        <span class="n">to_xml</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">filepath</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">filepath</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;r+b&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">infile</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span>
+                <span class="n">infile</span><span class="p">,</span> <span class="n">process_comments</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;process_comments&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">FileTypeError</span><span class="p">(</span><span class="s2">&quot;FileTypeError: unknown input file extension&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">to_xml</span><span class="p">,</span> <span class="n">data_in</span></div>
+
+
+
+<div class="viewcode-block" id="transform_data">
+<a class="viewcode-back" href="../../autoapi/yaml_tools/ymltoxml/index.html#yaml_tools.ymltoxml.transform_data">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">transform_data</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">to_xml</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Produce output data from dict-ish object using ``direction``.</span>
+
+<span class="sd">    :param payload: input from xmltodict or yaml loader.</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :type prog_opts: dict</span>
+<span class="sd">    :param to_xml: output direction, ie, if to_xml is True then output is XML.</span>
+<span class="sd">    :type to_xml: bool</span>
+<span class="sd">    :return res: output file data in specified format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">to_xml</span><span class="p">:</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="n">xmltodict</span><span class="o">.</span><span class="n">unparse</span><span class="p">(</span>
+            <span class="n">payload</span><span class="p">,</span>
+            <span class="n">short_empty_elements</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;short_empty_elements&#39;</span><span class="p">],</span>
+            <span class="n">pretty</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;pretty&#39;</span><span class="p">],</span>
+            <span class="n">indent</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;indent&#39;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">xml</span>
+        <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;process_comments&#39;</span><span class="p">]:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">restore_xml_comments</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">str_yaml_dumper</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span></div>
+
+
+
+<div class="viewcode-block" id="process_inputs">
+<a class="viewcode-back" href="../../autoapi/yaml_tools/ymltoxml/index.html#yaml_tools.ymltoxml.process_inputs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_inputs</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">outpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Handle file arguments and process them.</span>
+
+<span class="sd">    :param filepath: filename as Path obj</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :type prog_opts: dict</span>
+<span class="sd">    :param outpath: output file name/path if provided</span>
+<span class="sd">    :type outpath: str</span>
+<span class="sd">    :param debug: enable extra processing info</span>
+<span class="sd">    :return None:</span>
+<span class="sd">    :handles FileTypeError: input file is not xml or yml</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">opath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">outpath</span><span class="p">)</span> <span class="k">if</span> <span class="n">outpath</span> <span class="k">else</span> <span class="n">fpath</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Input file </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s1"> not found! Skipping...&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Processing data from </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">from_yml</span><span class="p">,</span> <span class="n">indata</span> <span class="o">=</span> <span class="n">get_input_type</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">FileTypeError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1"> =&gt; </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">outdata</span> <span class="o">=</span> <span class="n">transform_data</span><span class="p">(</span><span class="n">indata</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">,</span> <span class="n">to_xml</span><span class="o">=</span><span class="n">from_yml</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">from_yml</span><span class="p">:</span>
+            <span class="n">new_opath</span> <span class="o">=</span> <span class="n">opath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_xml_ext&#39;</span><span class="p">])</span>
+            <span class="n">outdata</span> <span class="o">=</span> <span class="n">outdata</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_opath</span> <span class="o">=</span> <span class="n">opath</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_yml_ext&#39;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Writing processed data to </span><span class="si">{</span><span class="n">new_opath</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">new_opath</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../autoapi/yaml_tools/ymltoxml/index.html#yaml_tools.ymltoxml.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">argv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transform YAML to XML and XML to YAML.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">argv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">argv</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">formatter_class</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentDefaultsHelpFormatter</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;Transform YAML to XML and XML to YAML&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;--version&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;%(prog)s </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Display more processing info&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-d&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--dump-config&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;dump&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Dump default configuration file to stdout&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-s&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--save-config&#39;</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span>
+        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;save&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;save active config to default filename (.ymltoxml.yml) and exit&#39;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-i&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--infile&#39;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to single input file (use with --outfile)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;--outfile&#39;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Path to single output file (use with --infile)&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+        <span class="s1">&#39;file&#39;</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Process input file(s) to target extension&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">outfile</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">infile</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;missing infile argument&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
+        <span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">pcfg</span><span class="p">,</span> <span class="n">pfile</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+    <span class="n">popts</span> <span class="o">=</span> <span class="n">Munch</span><span class="o">.</span><span class="n">toDict</span><span class="p">(</span><span class="n">pcfg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+        <span class="n">cfg_data</span> <span class="o">=</span> <span class="n">pfile</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+        <span class="n">def_config</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;.ymltoxml.yml&#39;</span><span class="p">)</span>
+        <span class="n">def_config</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">cfg_data</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">dump</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pfile</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">popts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">]))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">infile</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">:</span>
+            <span class="n">process_inputs</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">infile</span><span class="p">,</span> <span class="n">popts</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">outfile</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">process_inputs</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">infile</span><span class="p">,</span> <span class="n">popts</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">filearg</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="n">process_inputs</span><span class="p">(</span><span class="n">filearg</span><span class="p">,</span> <span class="n">popts</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.ymltoxml</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025 Stephen Arnold.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

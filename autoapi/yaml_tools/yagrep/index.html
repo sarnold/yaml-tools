@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>yaml_tools.yagrep &#8212; yaml_tools 0.4.3.dev23 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=55b73dce" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    
+    <script src="../../../_static/documentation_options.js?v=c03e58db"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="yaml_tools.yasort" href="../yasort/index.html" />
+    <link rel="prev" title="yaml_tools.utils" href="../utils/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../yasort/index.html" title="yaml_tools.yasort"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../utils/index.html" title="yaml_tools.utils"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.yagrep</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-yaml_tools.yagrep">
+<span id="yaml-tools-yagrep"></span><h1>yaml_tools.yagrep<a class="headerlink" href="#module-yaml_tools.yagrep" title="Link to this heading">¶</a></h1>
+<p>Console script for searching YAML or XML files.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.yagrep.process_inputs" title="yaml_tools.yagrep.process_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_inputs</span></code></a>(filepath, grep_args, prog_opts[, debug])</p></td>
+<td><p>Handle file arguments and process them. Return any input data for use</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.yagrep.main" title="yaml_tools.yagrep.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>([argv])</p></td>
+<td><p>Process args and execute search.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.yagrep.process_inputs">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.yagrep.</span></span><span class="sig-name descname"><span class="pre">process_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grep_args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/yagrep.html#process_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.yagrep.process_inputs" title="Link to this definition">¶</a></dt>
+<dd><p>Handle file arguments and process them. Return any input data for use
+with <code class="docutils literal notranslate"><span class="pre">dpath</span></code> search.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – filename as path str</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+<li><p><strong>debug</strong> – enable extra processing info</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>data and source type boolean or None</p>
+</dd>
+<dt class="field-odd">Handles FileTypeError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if input file is not yaml or xml</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.yagrep.main">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.yagrep.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/yagrep.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.yagrep.main" title="Link to this definition">¶</a></dt>
+<dd><p>Process args and execute search.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">yaml_tools</a></li>
+</ul>
+</li>
+</ul>
+
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../utils/index.html"
+                          title="previous chapter">yaml_tools.utils</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../yasort/index.html"
+                          title="next chapter">yaml_tools.yasort</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../yasort/index.html" title="yaml_tools.yasort"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../utils/index.html" title="yaml_tools.utils"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.yagrep</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025 Stephen Arnold.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

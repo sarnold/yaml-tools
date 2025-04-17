@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>yaml_tools.ymltoxml &#8212; yaml_tools 0.4.3.dev23 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=55b73dce" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    
+    <script src="../../../_static/documentation_options.js?v=c03e58db"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="prev" title="yaml_tools.yasort" href="../yasort/index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../yasort/index.html" title="yaml_tools.yasort"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.ymltoxml</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-yaml_tools.ymltoxml">
+<span id="yaml-tools-ymltoxml"></span><h1>yaml_tools.ymltoxml<a class="headerlink" href="#module-yaml_tools.ymltoxml" title="Link to this heading">¶</a></h1>
+<p>Transform mavlink-style xml files to/from xml and yaml. Note yaml
+format uses custom markup for XML attributes and comments. See the
+xmltodict docs for details.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.ymltoxml.get_input_type" title="yaml_tools.ymltoxml.get_input_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_input_type</span></code></a>(filepath, prog_opts)</p></td>
+<td><p>Check filename extension, open and process by file type, return type</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.ymltoxml.transform_data" title="yaml_tools.ymltoxml.transform_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform_data</span></code></a>(payload, prog_opts[, to_xml])</p></td>
+<td><p>Produce output data from dict-ish object using <code class="docutils literal notranslate"><span class="pre">direction</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.ymltoxml.process_inputs" title="yaml_tools.ymltoxml.process_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_inputs</span></code></a>(filepath, prog_opts[, outpath, debug])</p></td>
+<td><p>Handle file arguments and process them.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.ymltoxml.main" title="yaml_tools.ymltoxml.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>([argv])</p></td>
+<td><p>Transform YAML to XML and XML to YAML.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.ymltoxml.get_input_type">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.ymltoxml.</span></span><span class="sig-name descname"><span class="pre">get_input_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/ymltoxml.html#get_input_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.ymltoxml.get_input_type" title="Link to this definition">¶</a></dt>
+<dd><p>Check filename extension, open and process by file type, return type
+flag and data from appropriate loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – filename as Path obj</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return tuple<span class="colon">:</span></dt>
+<dd class="field-even"><p>destination type flag and file data</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../utils/index.html#yaml_tools.utils.FileTypeError" title="yaml_tools.utils.FileTypeError"><strong>FileTypeError</strong></a> – if the input file is not xml or yml</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.ymltoxml.transform_data">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.ymltoxml.</span></span><span class="sig-name descname"><span class="pre">transform_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_xml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/ymltoxml.html#transform_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.ymltoxml.transform_data" title="Link to this definition">¶</a></dt>
+<dd><p>Produce output data from dict-ish object using <code class="docutils literal notranslate"><span class="pre">direction</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>payload</strong> – input from xmltodict or yaml loader.</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+<li><p><strong>to_xml</strong> (<em>bool</em>) – output direction, ie, if to_xml is True then output is XML.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return res<span class="colon">:</span></dt>
+<dd class="field-even"><p>output file data in specified format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.ymltoxml.process_inputs">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.ymltoxml.</span></span><span class="sig-name descname"><span class="pre">process_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outpath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/ymltoxml.html#process_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.ymltoxml.process_inputs" title="Link to this definition">¶</a></dt>
+<dd><p>Handle file arguments and process them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – filename as Path obj</p></li>
+<li><p><strong>prog_opts</strong> (<em>dict</em>) – configuration options</p></li>
+<li><p><strong>outpath</strong> (<em>str</em>) – output file name/path if provided</p></li>
+<li><p><strong>debug</strong> – enable extra processing info</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return None<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+<dt class="field-odd">Handles FileTypeError<span class="colon">:</span></dt>
+<dd class="field-odd"><p>input file is not xml or yml</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.ymltoxml.main">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.ymltoxml.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/ymltoxml.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.ymltoxml.main" title="Link to this definition">¶</a></dt>
+<dd><p>Transform YAML to XML and XML to YAML.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">yaml_tools</a></li>
+</ul>
+</li>
+</ul>
+
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../yasort/index.html"
+                          title="previous chapter">yaml_tools.yasort</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../yasort/index.html" title="yaml_tools.yasort"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.ymltoxml</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025 Stephen Arnold.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

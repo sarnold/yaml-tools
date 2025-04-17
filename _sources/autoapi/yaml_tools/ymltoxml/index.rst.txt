@@ -1,0 +1,70 @@
+yaml_tools.ymltoxml
+===================
+
+.. py:module:: yaml_tools.ymltoxml
+
+.. autoapi-nested-parse::
+
+   Transform mavlink-style xml files to/from xml and yaml. Note yaml
+   format uses custom markup for XML attributes and comments. See the
+   xmltodict docs for details.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   yaml_tools.ymltoxml.get_input_type
+   yaml_tools.ymltoxml.transform_data
+   yaml_tools.ymltoxml.process_inputs
+   yaml_tools.ymltoxml.main
+
+
+Module Contents
+---------------
+
+.. py:function:: get_input_type(filepath, prog_opts)
+
+   Check filename extension, open and process by file type, return type
+   flag and data from appropriate loader.
+
+   :param filepath: filename as Path obj
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :return tuple: destination type flag and file data
+   :raises FileTypeError: if the input file is not xml or yml
+
+
+.. py:function:: transform_data(payload, prog_opts, to_xml=True)
+
+   Produce output data from dict-ish object using ``direction``.
+
+   :param payload: input from xmltodict or yaml loader.
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :param to_xml: output direction, ie, if to_xml is True then output is XML.
+   :type to_xml: bool
+   :return res: output file data in specified format.
+
+
+.. py:function:: process_inputs(filepath, prog_opts, outpath=None, debug=False)
+
+   Handle file arguments and process them.
+
+   :param filepath: filename as Path obj
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :param outpath: output file name/path if provided
+   :type outpath: str
+   :param debug: enable extra processing info
+   :return None:
+   :handles FileTypeError: input file is not xml or yml
+
+
+.. py:function:: main(argv=None)
+
+   Transform YAML to XML and XML to YAML.
+
+

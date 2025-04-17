@@ -1,0 +1,67 @@
+yaml_tools.yasort
+=================
+
+.. py:module:: yaml_tools.yasort
+
+.. autoapi-nested-parse::
+
+   Console script for sorting YAML lists.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   yaml_tools.yasort.get_input_yaml
+   yaml_tools.yasort.sort_list_data
+   yaml_tools.yasort.process_inputs
+   yaml_tools.yasort.main
+
+
+Module Contents
+---------------
+
+.. py:function:: get_input_yaml(filepath, prog_opts)
+
+   Check filename extension, open and munge the contents, return data
+   (where in this context we "munge" the curly braces to make it valid
+   YAML).
+
+   :param filepath: filename as Path obj
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :return data_in: file data
+   :raises FileTypeError: if the input file is not yaml
+
+
+.. py:function:: sort_list_data(payload, prog_opts)
+
+   Set YAML formatting and sort keys from config, produce output data
+   from input dict-ish object.
+
+   :param payload: Dict obj representing YAML input data
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :return res: yaml dump of sorted input
+
+
+.. py:function:: process_inputs(filepath, prog_opts, debug=False)
+
+   Handle file arguments and process them. Write new (sorted) files to
+   the 'sorted-out/' directory in the current working directory.
+
+   :param filepath: filename as Path obj
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :param debug: enable extra processing info
+   :return None:
+   :handles FileTypeError: if input file is not yml
+
+
+.. py:function:: main(argv=None)
+
+   Read/write YAML files with sorted list(s).
+
+

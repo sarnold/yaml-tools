@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>yaml_tools.oscal &#8212; yaml_tools 0.4.3.dev23 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=55b73dce" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css?v=2bf1fcf8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    
+    <script src="../../../_static/documentation_options.js?v=c03e58db"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="yaml_tools.templates" href="../templates/index.html" />
+    <link rel="prev" title="yaml_tools" href="../index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../templates/index.html" title="yaml_tools.templates"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="yaml_tools"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" accesskey="U">yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.oscal</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-yaml_tools.oscal">
+<span id="yaml-tools-oscal"></span><h1>yaml_tools.oscal<a class="headerlink" href="#module-yaml_tools.oscal" title="Link to this heading">¶</a></h1>
+<p>The main init, run, and self-test functions for oscal extract.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.oscal.csv_append_id_data" title="yaml_tools.oscal.csv_append_id_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">csv_append_id_data</span></code></a>(in_ids, prog_opts, uargs)</p></td>
+<td><p>Append/update column data using ID sets and write a new csv file using</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.oscal.csv_row_match" title="yaml_tools.oscal.csv_row_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">csv_row_match</span></code></a>(in_ids, ctl)</p></td>
+<td><p>Extracted ctl munging from <code class="docutils literal notranslate"><span class="pre">csv_append_id_data</span></code> loop for testing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.oscal.load_input_data" title="yaml_tools.oscal.load_input_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_input_data</span></code></a>(filepath, prog_opts[, use_ssg, debug])</p></td>
+<td><p>Find and gather the inputs, ie, content file(s) and user control IDs,</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.oscal.munge_file" title="yaml_tools.oscal.munge_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">munge_file</span></code></a>(filepath, prog_opts, uargs)</p></td>
+<td><p>Munge a CSV file by appending columns.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.oscal.process_data" title="yaml_tools.oscal.process_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process_data</span></code></a>(filepath, prog_opts, uargs)</p></td>
+<td><p>Process inputs, print some output.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.oscal.ssg_ctrl_from_nist" title="yaml_tools.oscal.ssg_ctrl_from_nist"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssg_ctrl_from_nist</span></code></a>(in_id, prog_opts, uargs)</p></td>
+<td><p>Create a new control in SSG format using the given ID. Give it some</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.oscal.id_set_match" title="yaml_tools.oscal.id_set_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">id_set_match</span></code></a>(in_ids, id_q, uargs)</p></td>
+<td><p>Quick set match analysis of ID sets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#yaml_tools.oscal.self_test" title="yaml_tools.oscal.self_test"><code class="xref py py-obj docutils literal notranslate"><span class="pre">self_test</span></code></a>(ucfg)</p></td>
+<td><p>Basic sanity check using <code class="docutils literal notranslate"><span class="pre">import_module</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#yaml_tools.oscal.main" title="yaml_tools.oscal.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>([argv])</p></td>
+<td><p>Collect and process command options/arguments and then process data.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.csv_append_id_data">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">csv_append_id_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#csv_append_id_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.csv_append_id_data" title="Link to this definition">¶</a></dt>
+<dd><p>Append/update column data using ID sets and write a new csv file using
+the given filename with <code class="docutils literal notranslate"><span class="pre">.modified</span></code> appended to the filename stem.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_ids</strong> (<em>List</em>)</p></li>
+<li><p><strong>prog_opts</strong> (<em>Dict</em>)</p></li>
+<li><p><strong>uargs</strong> (<em>munch.Munch</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.csv_row_match">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">csv_row_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#csv_row_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.csv_row_match" title="Link to this definition">¶</a></dt>
+<dd><p>Extracted ctl munging from <code class="docutils literal notranslate"><span class="pre">csv_append_id_data</span></code> loop for testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_ids</strong> (<em>List</em>)</p></li>
+<li><p><strong>ctl</strong> (<em>List</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.load_input_data">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">load_input_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_ssg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#load_input_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.load_input_data" title="Link to this definition">¶</a></dt>
+<dd><p>Find and gather the inputs, ie, content file(s) and user control IDs,
+into a tuple of lists (id_list, file_tuple_list). Load up the queues
+and return a tuple of both queues and the list of normalized user IDs
+from <code class="docutils literal notranslate"><span class="pre">filepath</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>pathlib.Path</em>)</p></li>
+<li><p><strong>prog_opts</strong> (<em>Dict</em>)</p></li>
+<li><p><strong>use_ssg</strong> (<em>bool</em>)</p></li>
+<li><p><strong>debug</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[List, Deque, Deque]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.munge_file">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">munge_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#munge_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.munge_file" title="Link to this definition">¶</a></dt>
+<dd><p>Munge a CSV file by appending columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>pathlib.Path</em>)</p></li>
+<li><p><strong>prog_opts</strong> (<em>Dict</em>)</p></li>
+<li><p><strong>uargs</strong> (<em>munch.Munch</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.process_data">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">process_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#process_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.process_data" title="Link to this definition">¶</a></dt>
+<dd><p>Process inputs, print some output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>pathlib.Path</em>)</p></li>
+<li><p><strong>prog_opts</strong> (<em>Dict</em>)</p></li>
+<li><p><strong>uargs</strong> (<em>munch.Munch</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.ssg_ctrl_from_nist">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">ssg_ctrl_from_nist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prog_opts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#ssg_ctrl_from_nist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.ssg_ctrl_from_nist" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new control in SSG format using the given ID. Give it some
+levels if it exists in the relevant NIST profiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_id</strong> (<em>str</em>)</p></li>
+<li><p><strong>prog_opts</strong> (<em>Dict</em>)</p></li>
+<li><p><strong>uargs</strong> (<em>munch.Munch</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.id_set_match">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">id_set_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_ids</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#id_set_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.id_set_match" title="Link to this definition">¶</a></dt>
+<dd><p>Quick set match analysis of ID sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_ids</strong> (<em>List</em>)</p></li>
+<li><p><strong>id_q</strong> (<em>Deque</em>)</p></li>
+<li><p><strong>uargs</strong> (<em>munch.Munch</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[List, List]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.self_test">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">self_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ucfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#self_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.self_test" title="Link to this definition">¶</a></dt>
+<dd><p>Basic sanity check using <code class="docutils literal notranslate"><span class="pre">import_module</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ucfg</strong> (<em>munch.Munch</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.oscal.main">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.oscal.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/yaml_tools/oscal.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.oscal.main" title="Link to this definition">¶</a></dt>
+<dd><p>Collect and process command options/arguments and then process data.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<search id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+<h3><a href="../../../index.html">Table of Contents</a></h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">yaml_tools</a></li>
+</ul>
+</li>
+</ul>
+
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../index.html"
+                          title="previous chapter">yaml_tools</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../templates/index.html"
+                          title="next chapter">yaml_tools.templates</a></p>
+  </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../templates/index.html" title="yaml_tools.templates"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="yaml_tools"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">yaml_tools 0.4.3.dev23 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >API Reference</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../index.html" >yaml_tools</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">yaml_tools.oscal</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2025 Stephen Arnold.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    </div>
+  </body>
+</html>

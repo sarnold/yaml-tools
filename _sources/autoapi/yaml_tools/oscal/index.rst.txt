@@ -1,0 +1,80 @@
+yaml_tools.oscal
+================
+
+.. py:module:: yaml_tools.oscal
+
+.. autoapi-nested-parse::
+
+   The main init, run, and self-test functions for oscal extract.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   yaml_tools.oscal.csv_append_id_data
+   yaml_tools.oscal.csv_row_match
+   yaml_tools.oscal.load_input_data
+   yaml_tools.oscal.munge_file
+   yaml_tools.oscal.process_data
+   yaml_tools.oscal.ssg_ctrl_from_nist
+   yaml_tools.oscal.id_set_match
+   yaml_tools.oscal.self_test
+   yaml_tools.oscal.main
+
+
+Module Contents
+---------------
+
+.. py:function:: csv_append_id_data(in_ids, prog_opts, uargs)
+
+   Append/update column data using ID sets and write a new csv file using
+   the given filename with ``.modified`` appended to the filename stem.
+
+
+.. py:function:: csv_row_match(in_ids, ctl)
+
+   Extracted ctl munging from ``csv_append_id_data`` loop for testing.
+
+
+.. py:function:: load_input_data(filepath, prog_opts, use_ssg = False, debug = False)
+
+   Find and gather the inputs, ie, content file(s) and user control IDs,
+   into a tuple of lists (id_list, file_tuple_list). Load up the queues
+   and return a tuple of both queues and the list of normalized user IDs
+   from ``filepath``.
+
+
+.. py:function:: munge_file(filepath, prog_opts, uargs)
+
+   Munge a CSV file by appending columns.
+
+
+.. py:function:: process_data(filepath, prog_opts, uargs)
+
+   Process inputs, print some output.
+
+
+.. py:function:: ssg_ctrl_from_nist(in_id, prog_opts, uargs)
+
+   Create a new control in SSG format using the given ID. Give it some
+   levels if it exists in the relevant NIST profiles.
+
+
+.. py:function:: id_set_match(in_ids, id_q, uargs)
+
+   Quick set match analysis of ID sets.
+
+
+.. py:function:: self_test(ucfg)
+
+   Basic sanity check using ``import_module``.
+
+
+.. py:function:: main(argv=None)
+
+   Collect and process command options/arguments and then process data.
+
+

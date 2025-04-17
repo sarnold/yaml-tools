@@ -1,0 +1,120 @@
+yaml_tools.templates
+====================
+
+.. py:module:: yaml_tools.templates
+
+.. autoapi-nested-parse::
+
+   Template bits for generating SSG-style controls in YAML.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   yaml_tools.templates.PROFILES
+   yaml_tools.templates.IMPACT_LVLS
+   yaml_tools.templates.CTL_FIELD_MAP
+   yaml_tools.templates.PREAMBLE
+   yaml_tools.templates.ID_TEMPLATE
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   yaml_tools.templates.generate_control
+   yaml_tools.templates.xform_id
+
+
+Module Contents
+---------------
+
+.. py:data:: PROFILES
+   :type:  List
+   :value: ['LOW', 'MODERATE', 'HIGH', 'PRIVACY']
+
+
+.. py:data:: IMPACT_LVLS
+   :type:  List
+   :value: ['low', 'moderate', 'high']
+
+
+.. py:data:: CTL_FIELD_MAP
+   :type:  Dict
+
+.. py:data:: PREAMBLE
+   :type:  str
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """
+      policy: NIST
+      title: Configuration Recommendations for Yocto- and OpenEmbedded-based Linux Variants
+      id: nist_openembedded
+      version: Revision 5
+      source: https://csrc.nist.gov/files/pubs/sp/800/53/r5/upd1/final/docs/sp800-53r5-control-catalog.xlsx
+      levels:
+      - id: low
+      - id: moderate
+      - id: high
+      """
+
+   .. raw:: html
+
+      </details>
+
+
+
+.. py:data:: ID_TEMPLATE
+   :type:  str
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """
+      controls:
+        - id: {{caps}}
+          status: {{status}}
+          notes: |-
+            {{notes}}
+          rules: []
+          description: |-
+            {{description}}
+          title: >-
+            {{caps}} - {{name}}
+          levels: []
+      """
+
+   .. raw:: html
+
+      </details>
+
+
+
+.. py:function:: generate_control(context)
+
+   Render an ID template string given a context dict.
+
+
+.. py:function:: xform_id(string, strip_trailing_zeros = False)
+
+   Transform control ID strings, add leading zeros in forward direction::
+
+     AC-12(2) <==> ac-12.02
+
+   Caller should filter zero-length input or handle IndexError as needed.
+
+

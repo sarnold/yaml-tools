@@ -1,0 +1,42 @@
+yaml_tools.yagrep
+=================
+
+.. py:module:: yaml_tools.yagrep
+
+.. autoapi-nested-parse::
+
+   Console script for searching YAML or XML files.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   yaml_tools.yagrep.process_inputs
+   yaml_tools.yagrep.main
+
+
+Module Contents
+---------------
+
+.. py:function:: process_inputs(filepath, grep_args, prog_opts, debug=False)
+
+   Handle file arguments and process them. Return any input data for use
+   with ``dpath`` search.
+
+   :param filepath: filename as path str
+   :type filepath: str
+   :param prog_opts: configuration options
+   :type prog_opts: dict
+   :param debug: enable extra processing info
+   :return: data and source type boolean or None
+   :handles FileTypeError: if input file is not yaml or xml
+
+
+.. py:function:: main(argv=None)
+
+   Process args and execute search.
+
+
