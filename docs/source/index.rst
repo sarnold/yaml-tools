@@ -9,15 +9,15 @@ Welcome to the yaml-tools documentation!
     :untracked:
 
 .. toctree::
-    :maxdepth: 4
-    :caption: Contents:
+   :caption: Contents:
+   :maxdepth: 2
 
-    readme_include
-    dev/generate-changelog
-    dev/pre-commit-config
-    dev/pre-commit-usage
-    api/modules
-    CHANGELOG
+   readme_include
+   dev/generate-changelog
+   dev/pre-commit-config
+   dev/pre-commit-usage
+   CHANGELOG
+
 
 Indices and tables
 ==================

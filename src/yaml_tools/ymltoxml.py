@@ -94,7 +94,7 @@ def process_inputs(filepath, prog_opts, outpath=None, debug=False):
     :type outpath: str
     :param debug: enable extra processing info
     :return None:
-    :handlles FileTypeError: input file is not xml or yml
+    :handles FileTypeError: input file is not xml or yml
     """
     fpath = Path(filepath)
     opath = Path(outpath) if outpath else fpath

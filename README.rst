@@ -409,12 +409,12 @@ Ensure the above version is 4.x and the path displayed starts with
 Making Changes & Contributing
 =============================
 
-We use the gitchangelog_ action to generate our changelog file and GH
-Release page, as well as the gitchangelog commit message prefix "tag"
-modifiers to help it categorize/filter commits for a tidier changelog.
-Please use the appropriate ACTION modifiers in any Pull Requests. Some
-examples of commit message summary "tags" are shown in ``.gitchangelog.rc``
-file and reproduced below::
+We use the gitchangelog_ action to generate our GitHub Release page, as
+well as the gitchangelog commit message prefix "tag" modifiers to help
+it categorize/filter commits for a tidier changelog. Please use the
+appropriate ACTION modifiers in any Pull Requests. Some examples of
+commit message summary "tags" are shown in ``.gitchangelog.rc`` file
+and reproduced below::
 
   new: usr: support of bazaar implemented
   chg: re-indentend some lines !cosmetic
@@ -422,11 +422,6 @@ file and reproduced below::
   fix: pkg: updated year of licence coverage.
   new: test: added a bunch of test around user usability of feature X.
   fix: typo in spelling my name in comment. !minor
-
-See the following docs page (or generate-changelog.rst_ on Github) for more
-details.
-
-.. _generate-changelog.rst: https://github.com/sarnold/yaml-tools/blob/main/docs/source/dev/generate-changelog.rst
 
 This repo is also pre-commit_ enabled for various linting and format
 checks.  The checks run automatically on commit and will fail the
@@ -437,7 +432,7 @@ types and line numbers. Note you must fix any fatal errors for the
 commit to succeed; some errors should be fixed automatically (use
 ``git status`` and ``git diff`` to review any changes).
 
-See the following pages for more information on gitchangelog and pre-commit.
+See the following pages for more information on using gitchangelog and pre-commit.
 
 .. inclusion-marker-1
 

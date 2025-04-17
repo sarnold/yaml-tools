@@ -66,10 +66,6 @@ def csv_append_id_data(
 def csv_row_match(in_ids: List, ctl: List) -> List:
     """
     Extracted ctl munging from ``csv_append_id_data`` loop for testing.
-
-    :param: ctl
-    :type ctl: csv row data
-    :return ctl: munged ctl
     """
     ctl_id = xform_id(ctl[0])
     sub_ids = [s for s in in_ids if ctl_id in s]
