@@ -8,7 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 import pystache
 import yaml as yaml_loader
@@ -141,8 +141,11 @@ def get_profile_type(filename, debug=False):
 
 
 def load_config(
-    prog_name='ymltoxml', pkg='yaml_tools.data', file_encoding='utf-8', debug=False
-):
+    prog_name: str = 'ymltoxml',
+    pkg: str = 'yaml_tools.data',
+    file_encoding: str = 'utf-8',
+    debug: bool = False,
+) -> Tuple[Munch, Path]:
     """
     Load yaml configuration file and munchify the data. If local file is
     not found in current directory, the default will be loaded.
@@ -151,20 +154,17 @@ def load_config(
     :param pkg: name of calling package.path for importlib
     :param file_encoding: file encoding of config file
     :param debug: enable extra processing info
-    :type prog_name: str
-    :type file_encoding: str
-    :type debug: bool
-    :return: Munch cfg obj and cfg file as Path obj
-    :rtype: tuple
     """
     defconfig = Path(f'.{prog_name}.yml')
 
     cfgfile = defconfig if defconfig.exists() else Path(f'.{prog_name}.yaml')
     if not cfgfile.exists():
-        cfgfile = importlib_resources.files(pkg).joinpath(f'{prog_name}.yaml')
+        file_ref = importlib_resources.files(pkg).joinpath(f'{prog_name}.yaml')
+        with importlib_resources.as_file(file_ref) as path:
+            cfgfile = path
     if debug:
         print(f'Using config: {str(cfgfile.resolve())}')
-    cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))
+    cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))  # type: ignore
 
     return cfgobj, cfgfile
 
