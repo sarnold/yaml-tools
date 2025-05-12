@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 from munch import Munch
+from natsort import os_sorted
 
 from yaml_tools import utils
 from yaml_tools.templates import ID_TEMPLATE, generate_control, xform_id
@@ -216,6 +217,14 @@ def test_get_filelist_debug():
     assert isinstance(files, list)
     assert len(files) == 9
     assert str(test_path) in files
+
+
+def test_get_filelist_sorted():
+    """
+    Sort the files we found.
+    """
+    files = os_sorted((get_filelist('tests/data', '*')))
+    print(f'files: {files}')
 
 
 def test_gen_control():
