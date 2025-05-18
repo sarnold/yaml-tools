@@ -15,11 +15,11 @@ from yaml_tools.utils import (
     FileTypeError,
     SortedSet,
     StrYAML,
+    find_mdfiles,
     get_filelist,
     get_profile_ids,
     get_profile_type,
     load_config,
-    process_template,
     pystache_render,
     text_data_writer,
     text_file_reader,
@@ -207,7 +207,7 @@ def test_get_filelist():
     test_path = Path('tests') / 'data' / 'catalog.json'
     files = get_filelist('tests/data', '*')
     assert isinstance(files, list)
-    assert len(files) == 9
+    assert len(files) == 10
     assert str(test_path) in files
 
 
@@ -215,7 +215,7 @@ def test_get_filelist_debug():
     test_path = Path('tests') / 'data' / 'catalog.json'
     files = get_filelist('tests/data', '*', debug=True)
     assert isinstance(files, list)
-    assert len(files) == 9
+    assert len(files) == 10
     assert str(test_path) in files
 
 
@@ -224,6 +224,14 @@ def test_get_filelist_sorted():
     Sort the files we found.
     """
     files = os_sorted((get_filelist('tests/data', '*')))
+    print(f'files: {files}')
+
+
+def test_find_mdfiles():
+    """
+    Find the markdown bits.
+    """
+    files = find_mdfiles('tests')
     print(f'files: {files}')
 
 
@@ -328,17 +336,3 @@ def test_load_oscal_config():
     assert isinstance(popts, Munch)
     assert hasattr(popts, 'default_ssg_path')
     assert pfile.stem == 'oscal' or '.oscal'
-
-
-def test_process_template(tmp_path):
-    yaml = StrYAML()
-    popts = yaml.load(defconfig_str)
-    test_files = [
-        'tests/data/ctx.yaml',
-        'tests/data/yaml.tmpl',
-    ]
-    out = process_template(test_files[1], test_files[0], popts)
-    assert "R016" in out
-    assert "step: 2" in out
-    assert "voltage" in out
-    print(out)

@@ -8,11 +8,10 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 import pystache
 import yaml as yaml_loader
-from jinja2 import Environment as Env
 from munch import Munch
 from natsort import os_sorted
 from ruamel.yaml import YAML
@@ -54,10 +53,10 @@ class SortedSet(collections.abc.Set):
     """
 
     def __init__(self, iterable):
-        self.elements = lst = []
+        self.elements: List = []
         for value in iterable:
-            if value not in lst:
-                lst.append(value)
+            if value not in self.elements:
+                self.elements.append(value)
 
     def __iter__(self):
         return iter(self.elements)
@@ -69,6 +68,7 @@ class SortedSet(collections.abc.Set):
         return len(self.elements)
 
     def sort(self):
+        """Why not be sorted?"""
         return sorted(self.elements)
 
     def __repr__(self):
@@ -89,17 +89,35 @@ class StrYAML(YAML):
         return stream.getvalue()
 
 
-def get_filelist(dirpath, filepattern='*.txt', debug=False):
+def find_mdfiles(
+    start: str = '.', fglob: str = '*.md', excludes: Tuple = ('.git', '.tox', '.venv')
+) -> List:
+    """
+    Find markdown files subject to specified exclude paths.
+
+    :param start: directory to start file search
+    :param fglob: file extension glob
+    :param excludes: tuple of excludes
+    """
+    target_files: List = []
+    file_list: List = get_filelist(start, fglob)
+    for file in file_list:
+        if str(file).startswith(excludes):
+            continue
+        target_files.append(file)
+    return target_files
+
+
+def get_filelist(dirpath: str, filepattern: str = '*.txt', debug: bool = False) -> List:
     """
     Get path objects matching ``filepattern`` starting at ``dirpath`` and
     return a list of matching paths for any files found.
 
-    :param dirpath: directory name to start file search
-    :param filepattern: str of the form ``*.<ext>``
+    :param dirpath: directory to start file search
+    :param filepattern: file extension glob
     :param debug: increase output verbosity
-    :return: list of path strings
     """
-    file_list = []
+    file_list: List = []
     filenames = Path(dirpath).rglob(filepattern)
     for pfile in list(filenames):
         file_list.append(str(pfile))
@@ -167,32 +185,6 @@ def load_config(
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))  # type: ignore
 
     return cfgobj, cfgfile
-
-
-def process_template(tmpl_file, data_file, prog_opts):
-    """
-    Process jinja2 template file and context data and return rendered
-    data. Context data is typically provided in a YAML file. Output
-    data should be written to a new file matching the content type and
-    using the same name as ``data_file`` with appropriate extension.
-    Uses ``text_file_reader`` for supported file types or just plain
-    text with any other extension names.
-
-    :param tmpl_file: jinja template file (yaml or rst)
-    :param data_file: context data for template (also yaml)
-    :param prog_opts: configuration options
-    :type prog_opts: dict
-    :return data_out: rendered template data
-    """
-    envd = {"lstrip_blocks": True, "trim_blocks": True}
-    if prog_opts["jinja2_line_statements"]:
-        envd["line_statement_prefix"] = '#'
-        envd["line_comment_prefix"] = '##'
-
-    template = text_file_reader(tmpl_file, prog_opts)
-    context = text_file_reader(data_file, prog_opts)
-    data_out = Env(autoescape=True, **envd).from_string(template).render(context)
-    return data_out
 
 
 def pystache_render(*args, **kwargs):
