@@ -34,12 +34,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 # The full version, including alpha/beta/rc tags with setuptols-scm
 # workaround for extra-long dirty version string
 release = version('yaml_tools').split("+")[0]
-# The short X.Y version.
-version = '.'.join(release.split('.')[:2])
+# screw the short X.Y version.
+version = release
 
 project = 'yaml_tools'
 author = 'Stephen Arnold'
-copyright = str(datetime.now().year) + f' {author}'
+copyright = '2022 - ' + str(datetime.now().year) + f' {author}'
 
 # -- General configuration ------------------------------------------------
 
@@ -52,16 +52,26 @@ copyright = str(datetime.now().year) + f' {author}'
 # ones.
 extensions = [
     'sphinx_git',
-    'autoapi.extension',
+    'sphinxcontrib.apidoc',
+    'sphinx.ext.autodoc',
     'sphinx.ext.autodoc.typehints',
     'sphinx.ext.doctest',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
-    'recommonmark',
+    'myst_parser',
 ]
 
-autoapi_dirs = ['../../src']
+myst_suppress_warnings = ["myst.header"]
+myst_enable_extensions = ["attrs_inline", "deflist", "fieldlist", "substitution",]
+
+# sphinxcontrib.apidoc
+apidoc_module_dir = '../../src/yaml_tools'
+apidoc_output_dir = 'api'
+apidoc_excluded_paths = ['scripts', 'tests']
+apidoc_include_private = True
+apidoc_separate_modules = True
+
 autodoc_typehints = 'description'
 
 # Add any paths that contain templates here, relative to this directory.
@@ -70,7 +80,10 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-source_suffix = {'.rst': 'restructuredtext'}
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -95,6 +108,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'manni'
+#pygments_style = 'sphinx'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
@@ -105,7 +119,8 @@ todo_include_todos = True
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'classic'  # still has a version
+#html_theme = 'classic'  # still has a version
+html_theme = 'sphinx_rtd_theme'
 
 html_sidebars = {
     '**': [
