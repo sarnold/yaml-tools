@@ -15,7 +15,6 @@ from yaml_tools.utils import (
     FileTypeError,
     SortedSet,
     StrYAML,
-    find_mdfiles,
     get_filelist,
     get_profile_ids,
     get_profile_type,
@@ -186,7 +185,7 @@ def test_get_profile_type_bad():
     bad = 'BAD-ids.txt'
     ret = get_profile_type(bad)
     print(ret)
-    assert ret is None
+    assert ret == ''
 
 
 def test_sorted_set():
@@ -224,14 +223,6 @@ def test_get_filelist_sorted():
     Sort the files we found.
     """
     files = os_sorted((get_filelist('tests/data', '*')))
-    print(f'files: {files}')
-
-
-def test_find_mdfiles():
-    """
-    Find the markdown bits.
-    """
-    files = find_mdfiles('tests')
     print(f'files: {files}')
 
 

@@ -89,25 +89,6 @@ class StrYAML(YAML):
         return stream.getvalue()
 
 
-def find_mdfiles(
-    start: str = '.', fglob: str = '*.md', excludes: Tuple = ('.git', '.tox', '.venv')
-) -> List:
-    """
-    Find markdown files subject to specified exclude paths.
-
-    :param start: directory to start file search
-    :param fglob: file extension glob
-    :param excludes: tuple of excludes
-    """
-    target_files: List = []
-    file_list: List = get_filelist(start, fglob)
-    for file in file_list:
-        if str(file).startswith(excludes):
-            continue
-        target_files.append(file)
-    return target_files
-
-
 def get_filelist(dirpath: str, filepattern: str = '*.txt', debug: bool = False) -> List:
     """
     Get path objects matching ``filepattern`` starting at ``dirpath`` and
@@ -126,12 +107,12 @@ def get_filelist(dirpath: str, filepattern: str = '*.txt', debug: bool = False) 
     return file_list
 
 
-def get_profile_ids(prog_opts, debug=False):
+def get_profile_ids(prog_opts: Dict, debug: bool = False) -> List[str]:
     """
     Replacement for ``get_filelist()`` when using the NIST profile ID text
     files (which are now packaged with the YAML config files).
     """
-    id_str_data = []
+    id_str_data: List = []
     id_data = importlib_resources.files('yaml_tools').joinpath('data')
     for file in PROFILE_ID_FILES:
         ptype = get_profile_type(file, debug=debug)
@@ -144,12 +125,12 @@ def get_profile_ids(prog_opts, debug=False):
     return id_str_data
 
 
-def get_profile_type(filename, debug=False):
+def get_profile_type(filename: str, debug: bool = False) -> str:
     """
     Get oscal profile type from filename, where profile type is one of the
     exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.
     """
-    pmatch = None
+    pmatch: str = ''
     for x in PROFILE_NAMES:
         if x in filename:
             pmatch = x
@@ -187,7 +168,7 @@ def load_config(
     return cfgobj, cfgfile
 
 
-def pystache_render(*args, **kwargs):
+def pystache_render(*args, **kwargs) -> Any:
     """
     Render pystache template with strict mode enabled.
     """
@@ -195,7 +176,7 @@ def pystache_render(*args, **kwargs):
     return render.render(*args, **kwargs)
 
 
-def replace_angles(data):
+def replace_angles(data: str) -> str:
     """
     Replace angle bracket with original curly brace.
     """
@@ -203,7 +184,7 @@ def replace_angles(data):
     return re.sub(r'\}}>\s', '}}} ', data)
 
 
-def replace_curlys(data):
+def replace_curlys(data: str) -> str:
     """
     Replace original outside curly brace with angle bracket.
     """
@@ -211,7 +192,7 @@ def replace_curlys(data):
     return re.sub(r'\}}}\s', '}}> ', data)
 
 
-def restore_xml_comments(xmls):
+def restore_xml_comments(xmls: str) -> str:
     """
     Turn tagged comment elements back into xml comments.
 
@@ -225,7 +206,7 @@ def restore_xml_comments(xmls):
     return xmls
 
 
-def sort_from_parent(input_data, prog_opts):
+def sort_from_parent(input_data: Dict, prog_opts: Dict) -> Dict:
     """
     Sort a list based on whether the target sort key has a parent key.
 
@@ -249,7 +230,7 @@ def sort_from_parent(input_data, prog_opts):
     return input_data
 
 
-def str_yaml_dumper(data, prog_opts):
+def str_yaml_dumper(data: Dict, prog_opts: Dict) -> Any:
     """
     Small StrYAML() dump wrapper.
     """
@@ -263,7 +244,7 @@ def str_yaml_dumper(data, prog_opts):
     return yaml.dump(data)
 
 
-def text_data_writer(outdata, prog_opts):
+def text_data_writer(outdata: Dict, prog_opts: Dict):
     """
     Text data writer with optional formatting (default is raw); uses config
     setting for output format. Supports the same text data formats supported
@@ -276,7 +257,7 @@ def text_data_writer(outdata, prog_opts):
 
     Sends formatted data to stdout; redirect to a file as needed.
 
-    :param outdata: data written to stdout
+    :param outdata: data to be written to stdout
     :param prog_opts: configuration options
     :type prog_opts: dict
     """
@@ -302,7 +283,7 @@ def text_data_writer(outdata, prog_opts):
         sys.stdout.write(out + '\n')
 
 
-def text_file_reader(file: Path, prog_opts: Dict):
+def text_file_reader(file: Path, prog_opts: Dict) -> Any:
     """
     Text file reader for specific data types including raw text. Tries
     to handle YAML, JSON, CSV, text files with IDs, and plain ASCII
@@ -322,7 +303,8 @@ def text_file_reader(file: Path, prog_opts: Dict):
     delim = prog_opts['csv_delimiter'] if prog_opts['csv_delimiter'] else ';'
 
     if infile.suffix not in EXTENSIONS:
-        raise FileTypeError("FileTypeError: unknown input file extension")
+        msg = f"invalid input file extension: {infile.name}"
+        raise FileTypeError(msg)
     with infile.open("r", encoding=prog_opts['file_encoding']) as dfile:
         if infile.suffix == '.csv':
             data_in = list(csv.DictReader(dfile, delimiter=delim))
@@ -333,6 +315,6 @@ def text_file_reader(file: Path, prog_opts: Dict):
         elif 'ids' in infile.name and infile.suffix == '.txt':
             data_in = list(dfile.read().splitlines())
         else:
-            data_in = dfile.read()
+            data_in = dfile.readlines()
 
     return data_in
