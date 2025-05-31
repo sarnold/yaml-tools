@@ -2,6 +2,62 @@ Changelog
 =========
 
 
+0.5.0 (2025-05-31)
+------------------
+
+New
+~~~
+- Add reuse config and LICENSES folder, update readme. [Stephen L
+  Arnold]
+- Start adding type hints, update mypy config. [Stephen Arnold]
+
+Changes
+~~~~~~~
+- Cleanup type annotations, doc strings, and docs build. [Stephen L
+  Arnold]
+
+  * revert to rtd<3 to get version display, update api extensions
+  * add small markdown helpers for massaging diagram files in CI
+  * remove unused jinja2 bits, update tests and mypy config
+- Update config handling, add test for natsort paths. [Stephen L Arnold]
+
+  * cleanup type annotations and importlib resource handling
+- Use autoapi extension, cleanup doc bits and dependencies. [Stephen L
+  Arnold]
+- Use setuptools-scm get_version in gitchangelog.rc, cleanup readme.
+  [Stephen L Arnold]
+
+  * install base deps in tox changes env for setuptools-scm import
+- Update pre-commit hooks and apply fomrat changes. [Stephen L Arnold]
+- Add teuse tox cmd and make toxfile.py reuse compliant. [Stephen L
+  Arnold]
+- Update versions and permissions ion workflows. [Stephen L Arnold]
+- Cleanup on metadata and tox. [Stephen L Arnold]
+- Update idchk script to de-duplicate before sorting. [Stephen L Arnold]
+- Cleanup doc examples and script output. [Stephen L Arnold]
+
+  * check for zero-length string in input IDs
+
+Fixes
+~~~~~
+- Cleanup docstrings, let autodoc fill in type info, update readme.
+  [Stephen L Arnold]
+- Add more type hints until clean, add py.typed marker, adjust tests.
+  [Stephen L Arnold]
+- Use correct package metadata and cleanup workflows. [Stephen L Arnold]
+
+  * simplify test coverage workflow on py3.12 only
+
+Other
+~~~~~
+- Create codeql.yml. [Steve Arnold]
+
+  Cleanup default advanced config
+- Create dependabot.yml. [Steve Arnold]
+
+  Only for actions so far
+
+
 0.4.2 (2024-11-03)
 ------------------
 
@@ -14,6 +70,10 @@ Fixes
 - Cleanup more docstrings and parameter names. [Stephen Arnold]
 
   * also bump pre-commit deps
+
+Other
+~~~~~
+- Update changelog for patch release. [Stephen L Arnold]
 
 
 0.4.1 (2024-08-27)
