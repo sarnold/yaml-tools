@@ -389,7 +389,7 @@ handling (eg, Ubuntu bionic or focal) as shown below. If the Tox_
 package version available via system package manager is less than 4.x,
 it may be possible to install the latest Tox version into XDG $HOME
 directories, eg, ``$HOME/.local/bin``. Note that Ubuntu allows this but
-Debian frowns on it so this option may not available.
+Debian frowns on it so this option may not be "officially" supported.
 
 If the above procedure is supported, try something like the following::
 

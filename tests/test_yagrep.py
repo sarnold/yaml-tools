@@ -21,7 +21,7 @@ sequence: 6
 offset: 4
 """
 
-file_type_err = "FileTypeError: unknown input file extension"
+file_type_err = "invalid input file extension"
 
 yaml_str = """\
 policy: Security Requirements Guide - General Purpose Operating System

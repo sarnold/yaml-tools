@@ -13,6 +13,7 @@ Welcome to the yaml-tools documentation!
    :maxdepth: 2
 
    readme_include
+   api/modules
    dev/generate-changelog
    dev/pre-commit-config
    dev/pre-commit-usage

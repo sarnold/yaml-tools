@@ -6,12 +6,14 @@ import argparse
 import csv
 import importlib
 import sys
+from argparse import Namespace
 from collections import deque
 from pathlib import Path
 from typing import Deque, Dict, List, Tuple
 
 from munch import Munch
 from natsort import os_sorted
+
 from nested_lookup import nested_lookup
 
 from .templates import xform_id
@@ -28,7 +30,7 @@ from .utils import (
 
 
 def csv_append_id_data(
-    in_ids: List, prog_opts: Dict, uargs: Munch
+    in_ids: List, prog_opts: Dict, uargs: Namespace
 ) -> None:  # pragma: no cover
     """
     Append/update column data using ID sets and write a new csv file using
@@ -145,7 +147,7 @@ def load_input_data(
     return in_ids, id_queue, ctl_queue
 
 
-def munge_file(filepath: Path, prog_opts: Dict, uargs: Munch):
+def munge_file(filepath: Path, prog_opts: Dict, uargs: Namespace):
     """
     Munge a CSV file by appending columns.
     """
@@ -153,7 +155,7 @@ def munge_file(filepath: Path, prog_opts: Dict, uargs: Munch):
     csv_append_id_data(input_ids, prog_opts=prog_opts, uargs=uargs)
 
 
-def process_data(filepath: Path, prog_opts: Dict, uargs: Munch):
+def process_data(filepath: Path, prog_opts: Dict, uargs: Namespace):
     """
     Process inputs, print some output.
     """
@@ -182,7 +184,7 @@ def ssg_ctrl_from_nist(in_id: str, prog_opts: Dict, uargs: Munch):
     raise NotImplementedError()
 
 
-def id_set_match(in_ids: List, id_q: Deque, uargs: Munch) -> Tuple[List, List]:
+def id_set_match(in_ids: List, id_q: Deque, uargs: Namespace) -> Tuple[List, List]:
     """
     Quick set match analysis of ID sets.
     """
@@ -346,7 +348,7 @@ def main(argv=None):  # pragma: no cover
         Path(f'.oscal{cfg.default_ext}').write_bytes(cfg_data)
         sys.exit(0)
     if args.dump:
-        sys.stdout.write(Munch.toYAML(cfg))
+        sys.stdout.write(Munch.toYAML(cfg))  # type: ignore
         sys.exit(0)
     if args.test:
         self_test(cfg)
