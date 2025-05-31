@@ -197,9 +197,7 @@ def restore_xml_comments(xmls: str) -> str:
     Turn tagged comment elements back into xml comments.
 
     :param xmls: xml (file) output from ``unparse``
-    :type xmls: str
-    :return xmls: processed xml string
-    :rtype: str
+    :returns: processed xml string
     """
     for rep in (("<#comment>", "<!-- "), ("</#comment>", " -->")):
         xmls = xmls.replace(*rep)
@@ -212,8 +210,7 @@ def sort_from_parent(input_data: Dict, prog_opts: Dict) -> Dict:
 
     :param input_data: Dict obj representing YAML input data
     :param prog_opts: configuration options
-    :type prog_opts: dict
-    :return input_data: sorted input
+    :returns: sorted input
     """
     # this should work for list/sublist structure
     is_sublist = prog_opts['has_parent_key']
@@ -259,7 +256,6 @@ def text_data_writer(outdata: Dict, prog_opts: Dict):
 
     :param outdata: data to be written to stdout
     :param prog_opts: configuration options
-    :type prog_opts: dict
     """
     out = ''
     csv_hdr = prog_opts['default_csv_hdr']
@@ -292,10 +288,8 @@ def text_file_reader(file: Path, prog_opts: Dict) -> Any:
     data, return a dictionary (or a list if input is a sequence).
 
     :param file: filename/path to read
-    :type file: str
     :param prog_opts: configuration options
-    :type prog_opts: dict
-    :return object: file data as dict or list
+    :returns: file data as dict or list
     :raises FileTypeError: if input file extension is not in EXTENSIONS
     """
     data_in: Any
