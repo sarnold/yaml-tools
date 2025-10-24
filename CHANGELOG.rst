@@ -2,6 +2,22 @@ Changelog
 =========
 
 
+0.5.1 (2025-10-24)
+------------------
+
+Changes
+~~~~~~~
+- Extend python workflow matrix to 3.14. [Stephen L Arnold]
+
+Fixes
+~~~~~
+- Remove deprecated option, make score visible in ci, add ignores.
+  [Stephen L Arnold]
+
+  * ignore both specific pytest warnings and some very specific pylint
+    warnings about open without using with
+
+
 0.5.0 (2025-05-31)
 ------------------
 
