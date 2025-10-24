@@ -62,7 +62,7 @@ jobs:
         BADGE_PATH: badges/pylint-score.svg
       run: |
         rating=$(bash -c 'tox -e lint' | grep 'Your code has been rated at' | cut -f7 -d " ")
-        echo "Pylint score: ${rating}"
+        echo Pylint score: $rating
         echo "rating=${rating}" >> $GITHUB_OUTPUT
         echo "path=${BADGE_PATH}" >> $GITHUB_OUTPUT
 
