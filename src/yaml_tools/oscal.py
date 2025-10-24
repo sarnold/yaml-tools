@@ -48,11 +48,11 @@ def csv_append_id_data(
         print(f'Writing munged csv data to {new_opath}')
 
     writer = csv.writer(
-        open(new_opath, 'w', newline='', encoding='utf-8'),
+        open(new_opath, 'w', newline='', encoding='utf-8'),  # pylint: disable=R1732
         delimiter=delim,
     )
     reader = csv.reader(
-        open(uargs.munge, 'r', newline='', encoding='utf-8'),
+        open(uargs.munge, 'r', newline='', encoding='utf-8'),  # pylint: disable=R1732
         delimiter=delim,
     )
     headers = next(reader)
