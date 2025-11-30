@@ -1,16 +1,19 @@
-tcid: {{tcid}}
-title: {{title}}
-purpose: {{purpose}}
-description: >
-  {{description}}
+id: ${tcid}
+title: ${title}
+purpose: ${purpose}
+description:
+  ${description}
 reqs:
-  - id: {{reqid}}
-    method: {{vermethod}}
+  - id: ${reqid}
+    method: ${vermethod}
 steps:
-# for step in steps:
-  - step: {{loop.index}}
+  - step: 1
     action: |
       Multiline unicode text string
     expected_result: |
       Multiline unicode text string
-# endfor
+  - step: 2
+    action: |
+      Multiline unicode text string
+    expected_result: |
+      Multiline unicode text string

@@ -3,7 +3,7 @@ Template bits for generating SSG-style controls in YAML.
 """
 
 import re
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from .utils import pystache_render
 
@@ -47,9 +47,19 @@ controls:
 '''
 
 
-def generate_control(context: Dict) -> Any:
+def generate_control(context: Dict) -> str:
     """
-    Render an ID template string given a context dict.
+    Render an ID template string given a context dict with key names for
+    Control ID template fields, eg::
+
+        'caps': 'AC-12(2)',
+        'name': 'Control (or Control Enhancement) Name',
+        'notes': 'Discussion',
+        'description': 'Control Text',
+        'status': 'pending',
+
+    :param context: dict providing keys,values for ID_TEMPLATE fields
+    :returns: yaml control ID string
     """
     id_yaml = pystache_render(ID_TEMPLATE, context)
     return id_yaml
@@ -62,6 +72,10 @@ def xform_id(string: str, strip_trailing_zeros: bool = False) -> str:
       AC-12(2) <==> ac-12.02
 
     Caller should filter zero-length input or handle IndexError as needed.
+
+    :param string: id string in one of the above formats
+    :param strip_trailing_zeros: off by default
+    :returns: opposite ID format string
     """
     if string[0].isupper():
         idp = re.compile(r'[)(-]')  # regex character class id separators
