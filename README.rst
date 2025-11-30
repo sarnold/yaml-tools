@@ -541,9 +541,9 @@ details.
     :target: https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml
     :alt: Pylint score
 
-.. |reuse| image:: https://api.reuse.software/badge/git.fsfe.org/reuse/api
-    :target: https://api.reuse.software/info/git.fsfe.org/reuse/api
-    :alt: REUSE status
+.. |reuse| image:: https://img.shields.io/badge/REUSE-compliant-blue.svg
+    :target: https://reuse.software/spec-3.3/
+    :alt: REUSE (static)
 
 .. |license| image:: https://img.shields.io/badge/license-LGPL_2.1-blue
     :target: https://github.com/sarnold/yaml-tools/blob/main/LICENSE

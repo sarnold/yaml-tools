@@ -314,7 +314,7 @@ def text_data_writer(outdata: Dict, prog_opts: Dict):
         sys.stdout.write(out + '\n')
 
 
-def text_file_reader(file: Path, prog_opts: Dict) -> Any:
+def text_file_reader(file: str, prog_opts: Dict) -> Any:
     """
     Text file reader for specific data types including raw text. Tries
     to handle YAML, JSON, CSV, text files with IDs, and plain ASCII
