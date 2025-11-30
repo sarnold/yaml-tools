@@ -19,6 +19,7 @@ from yaml_tools.utils import (
     get_profile_ids,
     get_profile_type,
     load_config,
+    process_template,
     pystache_render,
     text_data_writer,
     text_file_reader,
@@ -30,7 +31,6 @@ from yaml_tools.utils import (
 defconfig_str = """\
 # comments should be preserved
 file_encoding: 'utf-8'
-jinja2_line_statements: true
 default_ext: '.yaml'
 default_separator: '/'
 default_content_path: 'ext/oscal-content/nist.gov/SP800-53/rev5'
@@ -327,3 +327,15 @@ def test_load_oscal_config():
     assert isinstance(popts, Munch)
     assert hasattr(popts, 'default_ssg_path')
     assert pfile.stem == 'oscal' or '.oscal'
+
+
+def test_process_template(tmp_path):
+    yaml = StrYAML()
+    popts = yaml.load(defconfig_str)
+    ctx_str = 'tests/data/ctx.yaml'
+    tmpl_str = 'tests/data/yaml.tmpl'
+    out = process_template(tmpl_str, ctx_str, popts)
+    assert "R016" in out
+    assert "step: 2" in out
+    assert "voltage" in out
+    print(f"\n{out}")

@@ -54,7 +54,7 @@ repos:
         - importlib_resources
         - natsort
         - munch
-        - munch-stubs
+        - "munch-stubs @ git+https://github.com/VCTLabs/munch-stubs.git@main"
         - PyYAML
         - ruamel.yaml
         - dpath
@@ -64,6 +64,7 @@ repos:
         - --follow-imports=normal
         - --install-types
         - --non-interactive
+        - --check-untyped-defs
       files: src/yaml_tools/
 
   - repo: "https://github.com/asottile/blacken-docs"
@@ -113,7 +114,8 @@ repos:
     rev: 1.8.3
     hooks:
       - id: bandit
-        args: ["-ll", "-q"]
+        args: ["-ll", "-q", "-r", "-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
         files: src/yaml_tools/
 
 #  - repo: https://github.com/lovesegfault/beautysh

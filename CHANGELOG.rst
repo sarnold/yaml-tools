@@ -2,12 +2,27 @@ Changelog
 =========
 
 
+0.5.2 (2025-11-30)
+------------------
+
+Changes
+~~~~~~~
+- Restore process_template using string Template from std lib. [Stephen
+  L Arnold]
+
+  * update dumper subclass and init template processing with default loader
+  * update bandit config due to false positive using the above
+  * adjust mypy deps, cleanup some lint and docstrings
+
+
 0.5.1 (2025-10-24)
 ------------------
 
 Changes
 ~~~~~~~
 - Extend python workflow matrix to 3.14. [Stephen L Arnold]
+
+  * update changes file for patch release
 
 Fixes
 ~~~~~
