@@ -11,7 +11,7 @@ output_dirname: 'sorted-out'
 default_parent_key: 'controls'
 default_sort_key: 'rules'
 has_parent_key: true
-preserve_quotes: true
+preserve_quotes: false
 process_comments: true
 mapping: 4
 sequence: 6
@@ -151,6 +151,7 @@ def test_sort_list():
 
 def test_sort_format():
     yaml = StrYAML()
+    yaml.preserve_quotes = False
 
     data = yaml.load(inner_sort_out)
     popts = yaml.load(defconfig_str)

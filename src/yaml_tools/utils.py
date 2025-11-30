@@ -8,6 +8,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from string import Template
 from typing import Any, Dict, List, Tuple
 
 import pystache
@@ -79,9 +80,19 @@ class SortedSet(collections.abc.Set):
 
 class StrYAML(YAML):
     """
-    New API likes dumping straight to file/stdout, so we subclass and
-    create 'inefficient' custom string dumper.
+    Simple YAML subclass with default indenting. Useful in old RHEL
+    environments with ``ruamel.yaml==0.16.6``. The API likes dumping
+    straight to file/stdout, so we also create 'inefficient' custom
+    string dumper.
     """
+
+    def __init__(self, **kwargs):
+        """
+        Init with specific indenting and quote preservation.
+        """
+        super().__init__(**kwargs)
+        self.preserve_quotes = False
+        self.indent(mapping=2, sequence=4, offset=2)
 
     def dump(self, data, stream=None, **kw):
         stream = StringIO()
@@ -166,6 +177,29 @@ def load_config(
     cfgobj = Munch.fromYAML(cfgfile.read_text(encoding=file_encoding))  # type: ignore
 
     return cfgobj, cfgfile
+
+
+def process_template(tmpl_file: str, data_file: str, prog_opts: Dict) -> str:
+    """
+    Process string template file and context data and return rendered
+    data. Context data is typically provided in a YAML file. Output
+    data should be written to a new file matching the content type and
+    using the same name as ``data_file`` with appropriate extension.
+
+    .. importanf:: Default loader was never unsafe; the old CVE is
+                   inherently mistaken about the risk of using the
+                   default lodaer in ``ruamel.yaml``.
+
+    :param tmpl_file: string template file (yaml or rst)
+    :param data_file: context data for template (also yaml)
+    :param prog_opts: configuration options
+    :returns: rendered template string
+    """
+    yaml = StrYAML(typ="safe")
+    yaml.preserve_quotes = prog_opts['preserve_quotes']
+    template = Path(tmpl_file).resolve().read_text()
+    context = yaml.load(Path(data_file).resolve())
+    return Template(template).substitute(context)
 
 
 def pystache_render(*args, **kwargs) -> Any:
