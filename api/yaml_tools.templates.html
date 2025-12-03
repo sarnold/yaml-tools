@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yaml_tools.templates module &mdash; yaml_tools 0.5.3.dev3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=55b73dce" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f35231c8"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="yaml_tools.utils module" href="yaml_tools.utils.html" />
+    <link rel="prev" title="yaml_tools.oscal module" href="yaml_tools.oscal.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            yaml_tools
+          </a>
+              <div class="version">
+                0.5.3.dev3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">yaml_tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="yaml_tools.html">yaml_tools package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="yaml_tools.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="yaml_tools.oscal.html">yaml_tools.oscal module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">yaml_tools.templates module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yaml_tools.utils.html">yaml_tools.utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yaml_tools.yagrep.html">yaml_tools.yagrep module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yaml_tools.yasort.html">yaml_tools.yasort module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="yaml_tools.ymltoxml.html">yaml_tools.ymltoxml module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="yaml_tools.html#module-yaml_tools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">yaml_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">yaml_tools</a></li>
+          <li class="breadcrumb-item"><a href="yaml_tools.html">yaml_tools package</a></li>
+      <li class="breadcrumb-item active">yaml_tools.templates module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/yaml_tools.templates.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-yaml_tools.templates">
+<span id="yaml-tools-templates-module"></span><h1>yaml_tools.templates module<a class="headerlink" href="#module-yaml_tools.templates" title="Link to this heading"></a></h1>
+<p>Template bits for generating SSG-style controls in YAML.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.templates.generate_control">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">generate_control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/templates.html#generate_control"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.generate_control" title="Link to this definition"></a></dt>
+<dd><p>Render an ID template string given a context dict with key names for
+Control ID template fields, eg:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;caps&#39;</span><span class="p">:</span> <span class="s1">&#39;AC-12(2)&#39;</span><span class="p">,</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Control (or Control Enhancement) Name&#39;</span><span class="p">,</span>
+<span class="s1">&#39;notes&#39;</span><span class="p">:</span> <span class="s1">&#39;Discussion&#39;</span><span class="p">,</span>
+<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="s1">&#39;Control Text&#39;</span><span class="p">,</span>
+<span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;pending&#39;</span><span class="p">,</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>context</strong> (<em>Dict</em>) – dict providing keys,values for ID_TEMPLATE fields</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>yaml control ID string</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="yaml_tools.templates.xform_id">
+<span class="sig-prename descclassname"><span class="pre">yaml_tools.templates.</span></span><span class="sig-name descname"><span class="pre">xform_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strip_trailing_zeros</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/yaml_tools/templates.html#xform_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#yaml_tools.templates.xform_id" title="Link to this definition"></a></dt>
+<dd><p>Transform control ID strings, add leading zeros in forward direction:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AC</span><span class="o">-</span><span class="mi">12</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">&lt;==&gt;</span> <span class="n">ac</span><span class="o">-</span><span class="mf">12.02</span>
+</pre></div>
+</div>
+<p>Caller should filter zero-length input or handle IndexError as needed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>string</strong> (<em>str</em>) – id string in one of the above formats</p></li>
+<li><p><strong>strip_trailing_zeros</strong> (<em>bool</em>) – off by default</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>opposite ID format string</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="yaml_tools.oscal.html" class="btn btn-neutral float-left" title="yaml_tools.oscal module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="yaml_tools.utils.html" class="btn btn-neutral float-right" title="yaml_tools.utils module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 - 2025 Stephen Arnold.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

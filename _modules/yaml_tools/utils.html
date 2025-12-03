@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yaml_tools.utils &mdash; yaml_tools 0.5.3.dev3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=55b73dce" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=f35231c8"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            yaml_tools
+          </a>
+              <div class="version">
+                0.5.3.dev3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">yaml_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">yaml_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">yaml_tools.utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for yaml_tools.utils</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Shared utility code.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">string</span><span class="w"> </span><span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pystache</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">yaml_loader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">munch</span><span class="w"> </span><span class="kn">import</span> <span class="n">Munch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">natsort</span><span class="w"> </span><span class="kn">import</span> <span class="n">os_sorted</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ruamel.yaml</span><span class="w"> </span><span class="kn">import</span> <span class="n">YAML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ruamel.yaml.compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">importlib_metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib_resources</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">importlib_resources</span>
+
+<span class="n">EXTENSIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;.json&#39;</span><span class="p">,</span> <span class="s1">&#39;.rst&#39;</span><span class="p">,</span> <span class="s1">&#39;.tmpl&#39;</span><span class="p">,</span> <span class="s1">&#39;.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">]</span>
+<span class="n">PROFILE_ID_FILES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;HIGH-ids.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;MODERATE-ids.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;LOW-ids.txt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PRIVACY-ids.txt&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">PROFILE_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HIGH&#39;</span><span class="p">,</span> <span class="s1">&#39;MODERATE&#39;</span><span class="p">,</span> <span class="s1">&#39;LOW&#39;</span><span class="p">,</span> <span class="s1">&#39;PRIVACY&#39;</span><span class="p">]</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="n">version</span><span class="p">(</span><span class="s1">&#39;yaml_tools&#39;</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FileTypeError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Raise when the file extension is not &#39;.xml&#39;, &#39;.yml&#39;, or &#39;.yaml&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="vm">__module__</span> <span class="o">=</span> <span class="ne">Exception</span><span class="o">.</span><span class="vm">__module__</span>
+
+
+<div class="viewcode-block" id="SortedSet">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.SortedSet">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SortedSet</span><span class="p">(</span><span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Set</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Alternate set implementation favoring space over speed, while not</span>
+<span class="sd">    requiring the set elements to be hashable. We also add a sort method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SortedSet.sort">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.SortedSet.sort">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Why not be sorted?&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">()&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,)</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">(</span><span class="si">%r</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="StrYAML">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.StrYAML">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StrYAML</span><span class="p">(</span><span class="n">YAML</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simple YAML subclass with default indenting. Useful in old RHEL</span>
+<span class="sd">    environments with ``ruamel.yaml==0.16.6``. The API likes dumping</span>
+<span class="sd">    straight to file/stdout, so we also create &#39;inefficient&#39; custom</span>
+<span class="sd">    string dumper.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Init with specific indenting and quote preservation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">mapping</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StrYAML.dump">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.StrYAML.dump">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+        <span class="n">YAML</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stream</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_filelist">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.get_filelist">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_filelist</span><span class="p">(</span><span class="n">dirpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filepattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;*.txt&#39;</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get path objects matching ``filepattern`` starting at ``dirpath`` and</span>
+<span class="sd">    return a list of matching paths for any files found.</span>
+
+<span class="sd">    :param dirpath: directory to start file search</span>
+<span class="sd">    :param filepattern: file extension glob</span>
+<span class="sd">    :param debug: increase output verbosity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_list</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">filenames</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="n">filepattern</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pfile</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">filenames</span><span class="p">):</span>
+        <span class="n">file_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pfile</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Found file list: </span><span class="si">{</span><span class="n">file_list</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">file_list</span></div>
+
+
+
+<div class="viewcode-block" id="get_profile_ids">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.get_profile_ids">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_profile_ids</span><span class="p">(</span><span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replacement for ``get_filelist()`` when using the NIST profile ID text</span>
+<span class="sd">    files (which are now packaged with the YAML config files).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">id_str_data</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">id_data</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s1">&#39;yaml_tools&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">PROFILE_ID_FILES</span><span class="p">:</span>
+        <span class="n">ptype</span> <span class="o">=</span> <span class="n">get_profile_type</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+        <span class="n">pdata</span> <span class="o">=</span> <span class="n">os_sorted</span><span class="p">(</span>
+            <span class="n">id_data</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span>
+            <span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">id_str_data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ptype</span><span class="p">,</span> <span class="n">pdata</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">id_str_data</span></div>
+
+
+
+<div class="viewcode-block" id="get_profile_type">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.get_profile_type">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_profile_type</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get oscal profile type from filename, where profile type is one of the</span>
+<span class="sd">    exported profile names, ie, HIGH, MODERATE, LOW, or PRIVACY.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pmatch</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">PROFILE_NAMES</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">pmatch</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Found profile type: </span><span class="si">{</span><span class="n">pmatch</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pmatch</span></div>
+
+
+
+<div class="viewcode-block" id="load_config">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.load_config">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span>
+    <span class="n">prog_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ymltoxml&#39;</span><span class="p">,</span>
+    <span class="n">pkg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;yaml_tools.data&#39;</span><span class="p">,</span>
+    <span class="n">file_encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+    <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Munch</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load yaml configuration file and munchify the data. If local file is</span>
+<span class="sd">    not found in current directory, the default will be loaded.</span>
+
+<span class="sd">    :param prog_name: filename of calling script (no extension)</span>
+<span class="sd">    :param pkg: name of calling package.path for importlib</span>
+<span class="sd">    :param file_encoding: file encoding of config file</span>
+<span class="sd">    :param debug: enable extra processing info</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">defconfig</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yml&#39;</span><span class="p">)</span>
+
+    <span class="n">cfgfile</span> <span class="o">=</span> <span class="n">defconfig</span> <span class="k">if</span> <span class="n">defconfig</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;.</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">cfgfile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">file_ref</span> <span class="o">=</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">pkg</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">prog_name</span><span class="si">}</span><span class="s1">.yaml&#39;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">importlib_resources</span><span class="o">.</span><span class="n">as_file</span><span class="p">(</span><span class="n">file_ref</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">cfgfile</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Using config: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">cfgobj</span> <span class="o">=</span> <span class="n">Munch</span><span class="o">.</span><span class="n">fromYAML</span><span class="p">(</span><span class="n">cfgfile</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">file_encoding</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">cfgobj</span><span class="p">,</span> <span class="n">cfgfile</span></div>
+
+
+
+<div class="viewcode-block" id="process_template">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.process_template">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_template</span><span class="p">(</span><span class="n">tmpl_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Process string template file and context data and return rendered</span>
+<span class="sd">    data. Context data is typically provided in a YAML file. Output</span>
+<span class="sd">    data should be written to a new file matching the content type and</span>
+<span class="sd">    using the same name as ``data_file`` with appropriate extension.</span>
+
+<span class="sd">    .. important:: Default loader was never unsafe; the old CVE is</span>
+<span class="sd">                   inherently mistaken about the risk of using the</span>
+<span class="sd">                   default lodaer in ``ruamel.yaml``.</span>
+
+<span class="sd">    :param tmpl_file: string template file (yaml or rst)</span>
+<span class="sd">    :param data_file: context data for template (also yaml)</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :returns: rendered template string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="n">StrYAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">&quot;safe&quot;</span><span class="p">)</span>
+    <span class="n">yaml</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;preserve_quotes&#39;</span><span class="p">]</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">tmpl_file</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">data_file</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span><span class="o">.</span><span class="n">substitute</span><span class="p">(</span><span class="n">context</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="pystache_render">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.pystache_render">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pystache_render</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render pystache template with strict mode enabled.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">renderer</span> <span class="o">=</span> <span class="n">pystache</span><span class="o">.</span><span class="n">Renderer</span><span class="p">(</span><span class="n">missing_tags</span><span class="o">=</span><span class="s1">&#39;strict&#39;</span><span class="p">)</span>
+    <span class="n">out_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out_str</span></div>
+
+
+
+<div class="viewcode-block" id="replace_angles">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.replace_angles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">replace_angles</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace angle bracket with original curly brace.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s&lt;{{\s&#39;</span><span class="p">,</span> <span class="s1">&#39; {{{ &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\}}&gt;\s&#39;</span><span class="p">,</span> <span class="s1">&#39;}}} &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="replace_curlys">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.replace_curlys">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">replace_curlys</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace original outside curly brace with angle bracket.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s{{{\s&#39;</span><span class="p">,</span> <span class="s1">&#39; &lt;{{ &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\}}}\s&#39;</span><span class="p">,</span> <span class="s1">&#39;}}&gt; &#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="restore_xml_comments">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.restore_xml_comments">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">restore_xml_comments</span><span class="p">(</span><span class="n">xmls</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Turn tagged comment elements back into xml comments.</span>
+
+<span class="sd">    :param xmls: xml (file) output from ``unparse``</span>
+<span class="sd">    :returns: processed xml string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">&quot;&lt;#comment&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;!-- &quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;&lt;/#comment&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot; --&gt;&quot;</span><span class="p">)):</span>
+        <span class="n">xmls</span> <span class="o">=</span> <span class="n">xmls</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="o">*</span><span class="n">rep</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xmls</span></div>
+
+
+
+<div class="viewcode-block" id="sort_from_parent">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.sort_from_parent">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sort_from_parent</span><span class="p">(</span><span class="n">input_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sort a list based on whether the target sort key has a parent key.</span>
+
+<span class="sd">    :param input_data: Dict obj representing YAML input data</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :returns: sorted input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># this should work for list/sublist structure</span>
+    <span class="n">is_sublist</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;has_parent_key&#39;</span><span class="p">]</span>
+    <span class="n">pkey_name</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_parent_key&#39;</span><span class="p">]</span>
+    <span class="n">skey_name</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_sort_key&#39;</span><span class="p">]</span>
+    <span class="n">pkey_list</span> <span class="o">=</span> <span class="n">input_data</span><span class="p">[</span><span class="n">pkey_name</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">is_sublist</span><span class="p">:</span>  <span class="c1"># sort one or more sublists</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pkey_list</span><span class="p">)):</span>
+            <span class="n">input_data</span><span class="p">[</span><span class="n">pkey_name</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">skey_name</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># one top-level list</span>
+        <span class="n">input_data</span><span class="p">[</span><span class="n">skey_name</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">input_data</span></div>
+
+
+
+<div class="viewcode-block" id="str_yaml_dumper">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.str_yaml_dumper">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">str_yaml_dumper</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Small StrYAML() dump wrapper.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="n">StrYAML</span><span class="p">()</span>
+    <span class="n">yaml</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span>
+        <span class="n">mapping</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;mapping&#39;</span><span class="p">],</span>
+        <span class="n">sequence</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;sequence&#39;</span><span class="p">],</span>
+        <span class="n">offset</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">yaml</span><span class="o">.</span><span class="n">preserve_quotes</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;preserve_quotes&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="text_data_writer">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_data_writer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_data_writer</span><span class="p">(</span><span class="n">outdata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Text data writer with optional formatting (default is raw); uses config</span>
+<span class="sd">    setting for output format. Supports the same text data formats supported</span>
+<span class="sd">    by the ``text_file_reader()`` input function:</span>
+
+<span class="sd">    * csv</span>
+<span class="sd">    * json</span>
+<span class="sd">    * yaml</span>
+<span class="sd">    * raw</span>
+
+<span class="sd">    Sends formatted data to stdout; redirect to a file as needed.</span>
+
+<span class="sd">    :param outdata: data to be written to stdout</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">csv_hdr</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;default_csv_hdr&#39;</span><span class="p">]</span>
+    <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;;&#39;</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;output_format&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;output_format&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;raw&#39;</span>
+
+    <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;csv&#39;</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span><span class="o">.</span><span class="n">Sequence</span><span class="p">):</span>
+        <span class="n">field_names</span> <span class="o">=</span> <span class="n">csv_hdr</span> <span class="k">if</span> <span class="n">csv_hdr</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">outdata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">)</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+        <span class="n">w</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">outdata</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;json&#39;</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;yaml&#39;</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">str_yaml_dumper</span><span class="p">(</span><span class="n">outdata</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">outdata</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">out</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="text_file_reader">
+<a class="viewcode-back" href="../../api/yaml_tools.utils.html#yaml_tools.utils.text_file_reader">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">text_file_reader</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prog_opts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Text file reader for specific data types including raw text. Tries</span>
+<span class="sd">    to handle YAML, JSON, CSV, text files with IDs, and plain ASCII</span>
+<span class="sd">    text. Read and parse the file data if ``file`` is one of the</span>
+<span class="sd">    expected types and return data objects. For all supported types of</span>
+<span class="sd">    data, return a dictionary (or a list if input is a sequence).</span>
+
+<span class="sd">    :param file: filename/path to read</span>
+<span class="sd">    :param prog_opts: configuration options</span>
+<span class="sd">    :returns: file data as dict or list</span>
+<span class="sd">    :raises FileTypeError: if input file extension is not in EXTENSIONS</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data_in</span><span class="p">:</span> <span class="n">Any</span>
+    <span class="n">infile</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">delim</span> <span class="o">=</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;csv_delimiter&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="s1">&#39;;&#39;</span>
+
+    <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXTENSIONS</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;invalid input file extension: </span><span class="si">{</span><span class="n">infile</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">FileTypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">infile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">prog_opts</span><span class="p">[</span><span class="s1">&#39;file_encoding&#39;</span><span class="p">])</span> <span class="k">as</span> <span class="n">dfile</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.csv&#39;</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">dfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.json&#39;</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">dfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">}:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">yaml_loader</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">dfile</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s1">&#39;ids&#39;</span> <span class="ow">in</span> <span class="n">infile</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="n">infile</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dfile</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data_in</span> <span class="o">=</span> <span class="n">dfile</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">data_in</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 - 2025 Stephen Arnold.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

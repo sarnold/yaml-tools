@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>yaml-tools (and more for CSV and XML) &mdash; yaml_tools 0.5.3.dev3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=55b73dce" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f35231c8"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="yaml_tools" href="api/modules.html" />
+    <link rel="prev" title="Welcome to the yaml-tools documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yaml_tools
+          </a>
+              <div class="version">
+                0.5.3.dev3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">yaml-tools (and more for CSV and XML)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-with-pip">Install with pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ymltoxml">ymltoxml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yagrep">yagrep</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yasort">yasort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#features-and-limitations">Features and limitations</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#dev-workflows">Dev workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mavlink-use-case">Mavlink use case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scap-use-case">SCAP use case</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in-repo-workflow-with-tox">In-repo workflow with Tox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#local-tox-upgrade">Local Tox upgrade</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#making-changes-contributing">Making Changes &amp; Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sbom-and-license-info">SBOM and license info</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#commands">Commands</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">yaml_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yaml_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">yaml-tools (and more for CSV and XML)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/readme_include.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="yaml-tools-and-more-for-csv-and-xml">
+<h1>yaml-tools (and more for CSV and XML)<a class="headerlink" href="#yaml-tools-and-more-for-csv-and-xml" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml"><img alt="CI Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/ci.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml"><img alt="Wheel Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/wheels.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/release.yml"><img alt="Release Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/release.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml"><img alt="Pylint Status" src="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml/badge.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml"><img alt="Coverage workflow" src="https://github.com/sarnold/yaml-tools/actions/workflows/coverage.yml/badge.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/pre-commit/pre-commit"><img alt="pre-commit" src="https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&amp;logoColor=white" /></a> <a class="reference external" href="https://reuse.software/spec-3.3/"><img alt="REUSE (static)" src="https://img.shields.io/badge/REUSE-compliant-blue.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/"><img alt="Test coverage" src="https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/test-coverage.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/actions/workflows/pylint.yml"><img alt="Pylint score" src="https://raw.githubusercontent.com/sarnold/yaml-tools/badges/main/pylint-score.svg" /></a></p>
+<p><a class="reference external" href="https://github.com/sarnold/yaml-tools/releases"><img alt="GitHub tag" src="https://img.shields.io/github/v/tag/sarnold/yaml-tools?color=blue&amp;include_prereleases&amp;label=latest%20release" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/blob/main/LICENSE"><img alt="License (static)" src="https://img.shields.io/badge/license-LGPL_2.1-blue" /></a> <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python" src="https://img.shields.io/badge/python-3.8+-blue.svg" /></a> <a class="reference external" href="https://github.com/sarnold/yaml-tools/"><img alt="Contributors" src="https://img.shields.io/github/contributors/sarnold/yaml-tools" /></a></p>
+<p>Python command line tools for working with YAML and similar structured
+text data, eg, round-trip conversion between <a class="reference external" href="https://en.wikipedia.org/wiki/Extensible_Markup_Language">XML</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/YAML">YAML</a>, preserving
+attributes and comments (with minor corrections).  The default file
+encoding for all types is UTF-8 without a BOM. Now includes more
+console entry points to grep or sort interesting YAML files (eg, lists
+of rules found in the <a class="reference external" href="https://github.com/ComplianceAsCode/content">SCAP Security Guide</a>) and support for more
+input file types to ingest SSG and other upstream data, eg, NIST
+<a class="reference external" href="https://github.com/usnistgov/oscal-content">oscal-content</a>.</p>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<p>Available modules, console commands, and scripts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ymltoxml</span></code> - YAML / XML round-trip conversion and cleanup</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yasort</span></code> - sort large lists in YAML files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">yagrep</span></code> - grep for keys/values in YAML files</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">oscal</span></code> (<em>WIP</em>) - ingest NIST 800-53 content in multiple formats</p></li>
+</ul>
+<p>Experimental “demo” scripts:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">analyze_control_ids.py</span></code> - analyze control ID sets with optional fuzzy match</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">analyze_ssg_controls.py</span></code> - analyze NIST controls from SSG content</p></li>
+</ul>
+<p>For the above “demo” scripts, check the top of the source file for any knobs
+adjustable via environment variables, eg:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
+    <span class="s2">&quot;ID_FILE&quot;</span><span class="p">,</span>
+    <span class="n">default</span><span class="o">=</span><span class="s2">&quot;tests/data/OE-expanded-profile-all-ids.txt&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">SSG_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SSG_PATH&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;ext/content/controls&quot;</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Text files with a single “column” of IDs have a special read mode
+but the files must be named with the string “ids” in the filename
+and the extension “.txt” for this mode to be used (as in the example
+above).</p>
+</div>
+<section id="install-with-pip">
+<h3>Install with pip<a class="headerlink" href="#install-with-pip" title="Link to this heading"></a></h3>
+<p>This package is <em>not</em> yet published on PyPI, thus use one of the
+following to install yaml-tools on any platform. Install from the
+main branch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install https://github.com/sarnold/yaml-tools/archive/refs/heads/main.tar.gz
+</pre></div>
+</div>
+<p>or use this command to install a specific release version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install https://github.com/sarnold/yaml-tools/releases/download/0.4.0/yaml_tools-0.4.0.tar.gz
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">yaml_tools</span></code> package provides the modules shown above as well as
+module-specific reference configuration files with defaults for all
+values.</p>
+<p>If you’d rather work from the source repository, it supports the common
+idiom to install it on your system in a virtual env after cloning:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m venv env
+$ source env/bin/activate
+(env) $ pip install .
+(env) $ ymltoxml --version
+(env) $ ymltoxml --dump-config
+(env) $ deactivate
+</pre></div>
+</div>
+<p>The alternative to python venv is the <code class="docutils literal notranslate"><span class="pre">tox</span></code> test driver.  If you have
+it installed already, see the example tox commands below.</p>
+</section>
+<section id="ymltoxml">
+<h3>ymltoxml<a class="headerlink" href="#ymltoxml" title="Link to this heading"></a></h3>
+<p>The current version supports minimal command options; if no options are
+provided, the only required arguments are one or more files of a single
+type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ymltoxml
+usage: ymltoxml [-h] [--version] [-v] [-d] [-s] [-i [FILE]] [-o [FILE]]
+                [FILE ...]
+
+Transform YAML to XML and XML to YAML
+
+positional arguments:
+  FILE                  Process input file(s) to target extension (default:
+                        None)
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program&#39;s version number and exit
+  -v, --verbose         Display more processing info (default: False)
+  -d, --dump-config     Dump default configuration file to stdout (default:
+                        False)
+  -s, --save-config     save active config to default filename (.ymltoxml.yml)
+                        and exit (default: False)
+  -i [FILE], --infile [FILE]
+                        Path to single input file (use with --outfile)
+                        (default: None)
+  -o [FILE], --outfile [FILE]
+                        Path to single output file (use with --infile)
+                        (default: None)
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>for processing individual files/paths, use the <code class="docutils literal notranslate"><span class="pre">--infile</span></code> option,
+either with or without the <code class="docutils literal notranslate"><span class="pre">--outfile</span></code> option</p></li>
+<li><p>for processing multiple files, pass all files as arguments (paths
+can be relative or absolute)</p>
+<ul>
+<li><p>when passing input files as arguments, the output file names/paths
+are the same as the input files but with the (new) output extension</p></li>
+</ul>
+</li>
+</ul>
+<p>By default it will process one or more input files as command args,
+typically in the current directory, however, the <code class="docutils literal notranslate"><span class="pre">--infile</span></code> option
+will only process a single file path, optionally with an output file
+path, with no extra (file) arguments.</p>
+<p>The main processing tweaks for yml/xml output formatting are specified
+in the default configuration file; if you need to change something, you
+can use your own config file in the working directory; note the local
+copy must be named <code class="docutils literal notranslate"><span class="pre">.ymltoxml.yaml</span></code>.  To get a copy of the default
+configuration file, do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd path/to/work/dir/
+$ ymltoxml --save-config
+$ $EDITOR .ymltoxml.yaml
+</pre></div>
+</div>
+</section>
+<section id="yagrep">
+<h3>yagrep<a class="headerlink" href="#yagrep" title="Link to this heading"></a></h3>
+<p>A new module is now included for searching keys and values in
+YAML files. The <code class="docutils literal notranslate"><span class="pre">yagrep</span></code> script also has its own built-in config
+file, which can be copied and edited as shown above. In this case the
+script is intended to feel more-or-less like <code class="docutils literal notranslate"><span class="pre">grep</span></code> so the default
+config should Just Work. That said, the script uses the <code class="docutils literal notranslate"><span class="pre">dpath</span></code>
+python library, so you may need to change the default “path” separator
+if your data has keys containing forward slashes (see the <a class="reference external" href="https://github.com/dpath-maintainers/dpath-python">upstream
+docs</a> for details).</p>
+<p>General usage guidelines:</p>
+<ul class="simple">
+<li><p>use the <code class="docutils literal notranslate"><span class="pre">-f</span></code> (filter) arg to search for a value string</p></li>
+<li><p>follow the (json) output from above to find the key name</p></li>
+<li><p>then use the <code class="docutils literal notranslate"><span class="pre">-l</span></code> (lookup) arg to extract the values for the key</p></li>
+</ul>
+<p>Useful yagrep config file settings:</p>
+<dl class="field-list simple">
+<dt class="field-odd">default_separator<span class="colon">:</span></dt>
+<dd class="field-odd"><p>change the path separator to something like <code class="docutils literal notranslate"><span class="pre">;</span></code> if data
+has forward slashes</p>
+</dd>
+<dt class="field-even">output_format<span class="colon">:</span></dt>
+<dd class="field-even"><p>set the output format to <code class="docutils literal notranslate"><span class="pre">raw</span></code> for unformatted output</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ yagrep -h
+usage: yagrep [-h] [--version] [-v] [-d] [-s] [-f | -l] TEXT FILE [FILE ...]
+
+Search in YAML files for keys and values.
+
+positional arguments:
+  TEXT               Text string to look for (one-only, required) (default:
+                     None)
+  FILE               Look in file(s) for text string (at least one, required)
+                     (default: None)
+
+options:
+  -h, --help         show this help message and exit
+  --version          show program&#39;s version number and exit
+  -v, --verbose      Display more processing info (default: False)
+  -d, --dump-config  Dump default configuration file to stdout (default:
+                     False)
+  -s, --save-config  save active config to default filename (.yagrep.yml) and
+                     exit (default: False)
+  -f, --filter       Filter out data not matching input string (no paths)
+                     (default: False)
+  -l, --lookup       Lookup by key and return list of values for any matches
+                     (default: False)
+</pre></div>
+</div>
+</section>
+<section id="yasort">
+<h3>yasort<a class="headerlink" href="#yasort" title="Link to this heading"></a></h3>
+<p>Yet another helper script is included for sorting large (YAML) lists.
+The <code class="docutils literal notranslate"><span class="pre">yasort</span></code> script also uses its own configuration file, creatively
+named <code class="docutils literal notranslate"><span class="pre">.yasort.yaml</span></code>. The above applies equally to this config file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ yasort -h
+usage: yasort [-h] [--version] [-v] [-d] [-s] [FILE ...]
+
+Sort YAML lists and write new files.
+
+positional arguments:
+  FILE               Process input file(s) to target directory (default: None)
+
+options:
+  -h, --help         show this help message and exit
+  --version          show program&#39;s version number and exit
+  -v, --verbose      Display more processing info (default: False)
+  -d, --dump-config  Dump default configuration file to stdout (default:
+                     False)
+  -s, --save-config  save active config to default filename (.yasort.yml) and
+                     exit (default: False)
+</pre></div>
+</div>
+<p>all of the optional arguments for <code class="docutils literal notranslate"><span class="pre">yasort</span></code> are essentially orthogonal to
+sorting, thus the only required argument for normal usage is one or more
+input files. all of the user settings are in the default configuration file
+shown below; use the <code class="docutils literal notranslate"><span class="pre">--save-config</span></code> option to create your own config file.</p>
+<p>Default yasort.yaml:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># comments should be preserved</span>
+<span class="nt">file_encoding</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;utf-8&#39;</span>
+<span class="nt">default_yml_ext</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;.yaml&#39;</span>
+<span class="nt">output_dirname</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;sorted-out&#39;</span>
+<span class="nt">default_parent_key</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;controls&#39;</span>
+<span class="nt">default_sort_key</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;rules&#39;</span>
+<span class="nt">has_parent_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">preserve_quotes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="nt">process_comments</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">mapping</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nt">sequence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6</span>
+<span class="nt">offset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+</pre></div>
+</div>
+</section>
+<section id="features-and-limitations">
+<h3>Features and limitations<a class="headerlink" href="#features-and-limitations" title="Link to this heading"></a></h3>
+<p><strong>NIST control ID munging</strong></p>
+<p>The demo scripts and <code class="docutils literal notranslate"><span class="pre">oscal</span></code> module illustrate various forms of
+control ID normalization in order to match control IDs from multiple
+input sources. Currently, there are 2 primary ID formats, and which one
+to use is mainly a user choice:</p>
+<ul class="simple">
+<li><p>AC-01(01)(a) - uppercase with parentheses</p></li>
+<li><p>ac-01.01.a - lowercase with dots</p></li>
+</ul>
+<p>Nested controls follow the <a class="reference external" href="https://github.com/usnistgov/oscal-content">upstream</a> pattern of alternating lettered and
+numbered sub-bullets for each level, and the latest rev5 controls add
+leading zeros.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">xform_id</span></code> function is <em>idempotent</em> with the following caveats:</p>
+<ul class="simple">
+<li><p>extraneous whitespace is always dropped</p></li>
+<li><p>leading zeros are added to single digit values where needed</p></li>
+</ul>
+<p><strong>XML &lt;==&gt; YAML</strong> conversion</p>
+<p>We mainly test ymltoxml on mavlink XML message definitions and NIST/SSG
+content files, so round-trip conversion <em>may not</em> work at all on
+arbitrarily complex XML files with namespaces, etc.  The current
+round-trip is not exact, due to the following:</p>
+<ul class="simple">
+<li><p>missing encoding is added to version tag</p></li>
+<li><p>leading/trailing whitespace in text elements and comments is not preserved</p></li>
+<li><p>XML - elements with self-closing tags are converted to full closing tags</p></li>
+<li><p>XML - empty elements on more than one line are not preserved</p></li>
+</ul>
+<p>For the files tested (eg, mavlink) the end result is cleaner/shinier XML.</p>
+</section>
+</section>
+<section id="dev-workflows">
+<h2>Dev workflows<a class="headerlink" href="#dev-workflows" title="Link to this heading"></a></h2>
+<p>The following covers two types of workflows, one for tool usage in other
+(external) projects, and one for (internal) tool development.</p>
+<section id="mavlink-use-case">
+<h3>Mavlink use case<a class="headerlink" href="#mavlink-use-case" title="Link to this heading"></a></h3>
+<p>The ymltoxml tools are intended to be part of a larger workflow, ie,
+developing custom mavlink message dialects and generating/deploying the
+resulting mavlink language interfaces.  To be more specific, for this
+example we use a mavlink-compatible component running on a
+micro-controller, thus the target language bindings are C and C++.</p>
+<p>Tool requirements for the full mavlink workflow:</p>
+<ul class="simple">
+<li><p>initially just recent pymavlink, Python, and <a class="reference external" href="https://github.com/tox-dev/tox">Tox</a></p></li>
+</ul>
+<p>Both mavlink and pymavlink require a (host) GCC toolchain for full builds,
+however, the basic workflow to generate mavlink library headers requires
+only Git, Python, and Tox.</p>
+</section>
+<section id="scap-use-case">
+<h3>SCAP use case<a class="headerlink" href="#scap-use-case" title="Link to this heading"></a></h3>
+<p>The yasort/yagrep tools are also intended to be part of a larger
+workflow, mainly working with SCAP content, ie, the scap-security-guide
+source files (or just <a class="reference external" href="https://complianceascode.readthedocs.io/en/latest/">content</a>). It is currently used to sort profiles
+with large numbers of rules, as well as create control files and analyze
+existing controls.</p>
+<p>The yasort configuration file defaults are based on existing yaml
+structure, but feel free to change them for another use case. To adjust
+how the sorting works, make a local config file (see above) and edit as
+needed the following options:</p>
+<dl class="field-list simple">
+<dt class="field-odd">output_dirname<span class="colon">:</span></dt>
+<dd class="field-odd"><p>directory for output file(s)</p>
+</dd>
+<dt class="field-even">default_parent_key<span class="colon">:</span></dt>
+<dd class="field-even"><p>parent key if sort target is sublist</p>
+</dd>
+<dt class="field-odd">default_sort_key<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the key you want to sort</p>
+</dd>
+<dt class="field-even">has_parent_key<span class="colon">:</span></dt>
+<dd class="field-even"><p>set true if sorting a sublist</p>
+</dd>
+<dt class="field-odd">default_yml_ext<span class="colon">:</span></dt>
+<dd class="field-odd"><p>change the output file extension</p>
+</dd>
+</dl>
+<p>The rest of the options are for YAML formatting/flow style (see the <a class="reference external" href="https://yaml.readthedocs.io/en/latest/">ruamel</a>
+documentation for formatting details)</p>
+</section>
+<section id="in-repo-workflow-with-tox">
+<h3>In-repo workflow with Tox<a class="headerlink" href="#in-repo-workflow-with-tox" title="Link to this heading"></a></h3>
+<p>As long as you have git and at least Python 3.8, then the “easy” dev
+workflow is to clone this repository and install Tox via your system
+package manager, eg:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get install tox
+</pre></div>
+</div>
+<p>After cloning this repository, you can run the repo checks with the
+<code class="docutils literal notranslate"><span class="pre">tox</span></code> command.  It will build a virtual python environment with
+all the dependencies and run the specified commands, eg:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/sarnold/yaml-tools.git
+$ cd yaml-tools/
+$ tox -e py
+</pre></div>
+</div>
+<p>The above will run the tests using your (default) system Python;
+to specify the Python version and host OS type, run something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e py39-linux
+</pre></div>
+</div>
+<p>To generate a coverage file, run something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e py,coverage
+</pre></div>
+</div>
+<p>Additional <code class="docutils literal notranslate"><span class="pre">tox</span></code> commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">changes</span></code> (re)generate the changelog file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">conv</span></code> round-trip conversion test on mavlink dialect</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">dev</span></code> pip “developer” install</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">style</span></code> will run flake8 style checks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">lint</span></code> will run pylint (somewhat less permissive than PEP8/flake8 checks)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">mypy</span></code> will run mypy import and type checking</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">isort</span></code> will run isort import checks</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">clean</span></code> will remove temporary test files</p></li>
+</ul>
+<p>To build/lint the api docs, use the following tox commands:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">docs</span></code> build the documentation using sphinx and the api-doc plugin</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">ldocs</span></code> build the docs and run the sphinx link checking</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-e</span> <span class="pre">cdocs</span></code> clean all the generated doc files</p></li>
+</ul>
+</section>
+<section id="local-tox-upgrade">
+<h3>Local Tox upgrade<a class="headerlink" href="#local-tox-upgrade" title="Link to this heading"></a></h3>
+<p>Some required Linux environments can be old enough to require “special”
+handling (eg, Ubuntu bionic or focal) as shown below. If the <a class="reference external" href="https://github.com/tox-dev/tox">Tox</a>
+package version available via system package manager is less than 4.x,
+it may be possible to install the latest Tox version into XDG $HOME
+directories, eg, <code class="docutils literal notranslate"><span class="pre">$HOME/.local/bin</span></code>. Note that Ubuntu allows this but
+Debian frowns on it so this option may not be “officially” supported.</p>
+<p>If the above procedure is supported, try something like the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get update
+$ sudo apt-get install python3-venv python3-pip
+$ sudo apt-get purge python3-virtualenv
+$ python3 -m pip install -U pip
+$ source ~/.profile
+$ which pip3
+/home/user/.local/bin/pip3
+$ pip3 install tox
+$ tox --version
+</pre></div>
+</div>
+<p>Ensure the above version is 4.x and the path displayed starts with
+<code class="docutils literal notranslate"><span class="pre">$HOME/.local</span></code>.</p>
+</section>
+</section>
+<section id="making-changes-contributing">
+<h2>Making Changes &amp; Contributing<a class="headerlink" href="#making-changes-contributing" title="Link to this heading"></a></h2>
+<p>We use the <a class="reference external" href="https://github.com/sarnold/gitchangelog">gitchangelog</a> action to generate our GitHub Release page, as
+well as the gitchangelog commit message prefix “tag” modifiers to help
+it categorize/filter commits for a tidier changelog. Please use the
+appropriate ACTION modifiers in any Pull Requests. Some examples of
+commit message summary “tags” are shown in <code class="docutils literal notranslate"><span class="pre">.gitchangelog.rc</span></code> file
+and reproduced below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>new: usr: support of bazaar implemented
+chg: re-indentend some lines !cosmetic
+new: dev: updated code to be compatible with last version of killer lib.
+fix: pkg: updated year of licence coverage.
+new: test: added a bunch of test around user usability of feature X.
+fix: typo in spelling my name in comment. !minor
+</pre></div>
+</div>
+<p>This repo is also <a class="reference external" href="https://pre-commit.com/index.html">pre-commit</a> enabled for various linting and format
+checks.  The checks run automatically on commit and will fail the
+commit (if not clean) with some checks performing simple file corrections.</p>
+<p>If other checks fail on commit, the failure display should explain the error
+types and line numbers. Note you must fix any fatal errors for the
+commit to succeed; some errors should be fixed automatically (use
+<code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">diff</span></code> to review any changes).</p>
+<p>See the following pages for more information on using gitchangelog and pre-commit.</p>
+<p>You will need to install pre-commit before contributing any changes;
+installing it using your system’s package manager is recommended,
+otherwise install with pip into your usual virtual environment using
+something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sudo emerge pre-commit  --or--
+$ pip install pre-commit
+</pre></div>
+</div>
+<p>then install it into the repo you just cloned:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/sarnold/yaml-tools
+$ cd yaml-tools/
+$ pre-commit install
+</pre></div>
+</div>
+<p>It’s usually a good idea to update the hooks to the latest version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">autoupdate</span>
+</pre></div>
+</div>
+</section>
+<section id="sbom-and-license-info">
+<h2>SBOM and license info<a class="headerlink" href="#sbom-and-license-info" title="Link to this heading"></a></h2>
+<p>This project is now compliant with the REUSE Specification Version 3.3,
+and the corresponding license information for all files can be found in
+the <code class="docutils literal notranslate"><span class="pre">REUSE.toml</span></code> configuration file with license text(s) in the
+<code class="docutils literal notranslate"><span class="pre">LICENSES/</span></code> folder.</p>
+<p>Related metadata can be (re)generated with the following tools and
+command examples.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/fsfe/reuse-tool">reuse-tool</a> - <a class="reference external" href="https://reuse.software/spec-3.3/">REUSE</a> compliance linting and sdist (source files) SBOM generation</p></li>
+<li><p><a class="reference external" href="https://github.com/anthonyharrison/sbom4python">sbom4python</a> - generate SBOM with full dependency chain</p></li>
+</ul>
+<section id="commands">
+<h3>Commands<a class="headerlink" href="#commands" title="Link to this heading"></a></h3>
+<p>Use tox to create the environment and run the lint command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ tox -e reuse                      # to run reuse lint   --or--
+$ tox -e reuse -- spdx &gt; sbom.txt   # generate sdist files sbom
+</pre></div>
+</div>
+<p>Note you can pass any of the other reuse commands after the <code class="docutils literal notranslate"><span class="pre">--</span></code> above.</p>
+<p>Use the above environment to generate the full SBOM in text format:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ source .tox/reuse/bin/activate
+$ sbom4python --system --use-pip -o &lt;file_name&gt;.txt
+</pre></div>
+</div>
+<p>Be patient; the last command above may take several minutes. See the
+doc links above for more detailed information on the tools and
+specifications.</p>
+</section>
+</section>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>This project is licensed under the LGPL license - see the <a class="reference external" href="https://github.com/sarnold/yaml-tools/blob/main/LICENSE">LICENSE file</a> for
+details.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to the yaml-tools documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api/modules.html" class="btn btn-neutral float-right" title="yaml_tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 - 2025 Stephen Arnold.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

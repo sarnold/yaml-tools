@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog &mdash; yaml_tools 0.5.3.dev3 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=55b73dce" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f35231c8"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Using Pre-Commit" href="dev/pre-commit-usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            yaml_tools
+          </a>
+              <div class="version">
+                0.5.3.dev3
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_include.html">yaml-tools (and more for CSV and XML)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/modules.html">yaml_tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/generate-changelog.html">Changelog Generation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-config.html">Contents of the <code class="docutils literal notranslate"><span class="pre">.pre-commit-config.yaml</span></code> file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev/pre-commit-usage.html">Using Pre-Commit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.5.2 (2025-11-30)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#changes">Changes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.5.1 (2025-10-24)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fixes">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">0.5.0 (2025-05-31)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#new">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id7">0.4.2 (2024-11-03)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id11">0.4.1 (2024-08-27)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id13">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id14">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id15">0.4.0 (2024-05-16)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id20">0.3.0 (2024-03-12)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id21">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id22">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id23">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id24">0.2.2 (2023-09-05)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id25">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id26">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id27">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id28">0.2.1 (2023-07-16)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id29">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id30">Fixes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id31">0.2.0 (2023-07-15)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id32">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id33">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id34">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id35">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id36">0.1.0 (2022-06-22)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id37">New</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id38">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id39">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id40">Other</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id41">0.0.0 (2022-06-19)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id42">Changes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id43">Fixes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id44">Other</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">yaml_tools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Changelog</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CHANGELOG.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h1>
+<section id="id1">
+<h2>0.5.2 (2025-11-30)<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="changes">
+<h3>Changes<a class="headerlink" href="#changes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Restore process_template using string Template from std lib. [Stephen
+L Arnold]</p>
+<ul>
+<li><p>update dumper subclass and init template processing with default loader</p></li>
+<li><p>update bandit config due to false positive using the above</p></li>
+<li><p>adjust mypy deps, cleanup some lint and docstrings</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id2">
+<h2>0.5.1 (2025-10-24)<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Changes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Extend python workflow matrix to 3.14. [Stephen L Arnold]</p>
+<ul>
+<li><p>update changes file for patch release</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="fixes">
+<h3>Fixes<a class="headerlink" href="#fixes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Remove deprecated option, make score visible in ci, add ignores.
+[Stephen L Arnold]</p>
+<ul>
+<li><p>ignore both specific pytest warnings and some very specific pylint
+warnings about open without using with</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2>0.5.0 (2025-05-31)<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<section id="new">
+<h3>New<a class="headerlink" href="#new" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add reuse config and LICENSES folder, update readme. [Stephen L
+Arnold]</p></li>
+<li><p>Start adding type hints, update mypy config. [Stephen Arnold]</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>Changes<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup type annotations, doc strings, and docs build. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>revert to rtd&lt;3 to get version display, update api extensions</p></li>
+<li><p>add small markdown helpers for massaging diagram files in CI</p></li>
+<li><p>remove unused jinja2 bits, update tests and mypy config</p></li>
+</ul>
+</li>
+<li><p>Update config handling, add test for natsort paths. [Stephen L Arnold]</p>
+<ul>
+<li><p>cleanup type annotations and importlib resource handling</p></li>
+</ul>
+</li>
+<li><p>Use autoapi extension, cleanup doc bits and dependencies. [Stephen L
+Arnold]</p></li>
+<li><p>Use setuptools-scm get_version in gitchangelog.rc, cleanup readme.
+[Stephen L Arnold]</p>
+<ul>
+<li><p>install base deps in tox changes env for setuptools-scm import</p></li>
+</ul>
+</li>
+<li><p>Update pre-commit hooks and apply fomrat changes. [Stephen L Arnold]</p></li>
+<li><p>Add teuse tox cmd and make toxfile.py reuse compliant. [Stephen L
+Arnold]</p></li>
+<li><p>Update versions and permissions ion workflows. [Stephen L Arnold]</p></li>
+<li><p>Cleanup on metadata and tox. [Stephen L Arnold]</p></li>
+<li><p>Update idchk script to de-duplicate before sorting. [Stephen L Arnold]</p></li>
+<li><p>Cleanup doc examples and script output. [Stephen L Arnold]</p>
+<ul>
+<li><p>check for zero-length string in input IDs</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id6">
+<h3>Fixes<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup docstrings, let autodoc fill in type info, update readme.
+[Stephen L Arnold]</p></li>
+<li><p>Add more type hints until clean, add py.typed marker, adjust tests.
+[Stephen L Arnold]</p></li>
+<li><p>Use correct package metadata and cleanup workflows. [Stephen L Arnold]</p>
+<ul>
+<li><p>simplify test coverage workflow on py3.12 only</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="other">
+<h3>Other<a class="headerlink" href="#other" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Create codeql.yml. [Steve Arnold]</p>
+<p>Cleanup default advanced config</p>
+</li>
+<li><p>Create dependabot.yml. [Steve Arnold]</p>
+<p>Only for actions so far</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>0.4.2 (2024-11-03)<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<section id="id8">
+<h3>Changes<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Signature refactor and test,lint cleanup. [Stephen Arnold]</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Fixes<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup more docstrings and parameter names. [Stephen Arnold]</p>
+<ul>
+<li><p>also bump pre-commit deps</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id10">
+<h3>Other<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Update changelog for patch release. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2>0.4.1 (2024-08-27)<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<section id="id12">
+<h3>New<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add config option for jinja2 line statements in template func.
+[Stephen Arnold]</p>
+<ul>
+<li><p>cleanup template test data and test func</p></li>
+</ul>
+</li>
+<li><p>Add new_csv_file option, update tests and readme. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>Changes<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Update .gitchangelog.rc and regenerate changelog. [Stephen Arnold]</p>
+<ul>
+<li><p>now we can match on more commit messages including dev: tag</p></li>
+</ul>
+</li>
+<li><p>Cleanup jinja template environment, enable block trim. [Stephen
+Arnold]</p></li>
+<li><p>Add initial test data and template func, update text reader. [Stephen
+Arnold]</p>
+<ul>
+<li><p>make sure text_file_reader handles both ID files and normal text files</p></li>
+</ul>
+</li>
+<li><p>Update tox docs envs and make default separator a semicolon. [Steve
+Arnold]</p>
+<ul>
+<li><p>do not forget to use a comma separator for test cfg</p></li>
+</ul>
+</li>
+<li><p>Cleanup readme and docstrings. [Stephen L Arnold]</p></li>
+<li><p>Allow for adjustable CSV delimiter in oscal.yaml. [Stephen L Arnold]</p></li>
+<li><p>Cleanup unnecessary branches, update expected test output. [Stephen L
+Arnold]</p></li>
+<li><p>Refactor for testing, cleanup script imports and test data. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>add some new control data files for test support</p></li>
+</ul>
+</li>
+<li><p>Improve xform_id, update tests, cleanup some lint. [Stephen L Arnold]</p></li>
+<li><p>Switch oscal text report output to semicolon instead of comma.
+[Stephen L Arnold]</p></li>
+<li><p>Add quiet cmdline arg, update attr arg so arg takes precedence.
+[Stephen L Arnold]</p>
+<ul>
+<li><p>make sure arg overrides file value, no value means no report</p></li>
+</ul>
+</li>
+<li><p>Remove py38 from test matrix. [Stephen L Arnold]</p>
+<ul>
+<li><p>xform_id(id, strip) needs at least py39 if strip is True, so
+fallback to nothing if no member attribute</p></li>
+<li><p>skip strip test on &lt; py39</p></li>
+</ul>
+</li>
+<li><p>Make id-strip default off, update pre-commit cfg, add cleanup.
+[Stephen L Arnold]</p></li>
+<li><p>Allow xform_id to strip trailing zeros from ID strings. [Stephen L
+Arnold]</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>Fixes<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup test data for new args and output. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id15">
+<h2>0.4.0 (2024-05-16)<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<section id="id16">
+<h3>New<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Move nist profile ids from tests to pkg data, update srcs/tests.
+[Steve Arnold]</p>
+<ul>
+<li><p>move profile ID text files to package data</p></li>
+<li><p>add some helper funcs for profile ID handling</p></li>
+<li><p>add related test code to test_misc</p></li>
+<li><p>minor refactoring in templates and text_data_writer</p></li>
+<li><p>cleanup tests and test data</p></li>
+</ul>
+</li>
+<li><p>Add ID set analysis to oscal module, update tests and default cfg.
+[Steve Arnold]</p></li>
+<li><p>Add set subclass based on list, with ordering and sort. [Steve Arnold]</p>
+<ul>
+<li><p>add tests and cleanup code</p></li>
+</ul>
+</li>
+<li><p>Give oscal module its own config, refactor load_config and tests.
+[Steve Arnold]</p>
+<ul>
+<li><p>refactor modules for updated load_config args !minor</p></li>
+<li><p>migrate appropriate config settings to new oscal</p></li>
+</ul>
+</li>
+<li><p>Add analysis script using SSG nist control files. [Steve Arnold]</p>
+<ul>
+<li><p>update project files for new dependencies</p></li>
+</ul>
+</li>
+<li><p>Add templates module with tests, update project files. [Steve Arnold]</p>
+<ul>
+<li><p>note this is still WIP (with bugs even)</p></li>
+</ul>
+</li>
+<li><p>Add output formatter func with tests, add support for pystache. [Steve
+Arnold]</p>
+<ul>
+<li><p>pystache is currently a simple render func for template-y yaml</p></li>
+</ul>
+</li>
+<li><p>Add file reader to handle csv, json, yaml, and simple text files.
+[Steve Arnold]</p>
+<ul>
+<li><p>for each type, parse into a list of objects and return the list</p></li>
+<li><p>where simple text files are something like the control IDs
+in tests/data</p></li>
+</ul>
+</li>
+<li><p>Test fuzzy-match for analyze script, consolidate code. [Steve Arnold]</p>
+<ul>
+<li><p>limit fuzzy match results using startswith input ID string</p></li>
+<li><p>cleanup package modules and tests, move initial profile funcs</p></li>
+</ul>
+</li>
+<li><p>Add stub module for oscal data, update packaging and tox files. [Steve
+Arnold]</p>
+<ul>
+<li><p>add .repolite.yml for syncing oscal-content repo</p></li>
+<li><p>update tests and vendor tox plugin for shared envs</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id17">
+<h3>Changes<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Restore missing py version and update package name. [Steve Arnold]</p>
+<ul>
+<li><p>fixes ci release workflow</p></li>
+</ul>
+</li>
+<li><p>Add more control status reporting, update oscal yaml config. [Steve
+Arnold]</p></li>
+<li><p>Cleanup deps and docstrings, add set compare to demo script. [Steve
+Arnold]</p></li>
+<li><p>Still more readme cleanup. [Steve Arnold]</p></li>
+<li><p>Move main module and rename leftover refs, cleanup some lint. [Steve
+Arnold]</p></li>
+<li><p>Commit initail name changes; package, imports, readme. [Steve Arnold]</p></li>
+<li><p>Make new_csv_hdrs a list again, add ID column. [Steve Arnold]</p>
+<ul>
+<li><p>allow substring match in between exact match and none</p></li>
+<li><p>save chk script and update default oscal.yaml</p></li>
+</ul>
+</li>
+<li><p>Oscal module and test cleanup, update packaging. [Steve Arnold]</p>
+<ul>
+<li><p>add sorted output option for ssg control set match</p></li>
+<li><p>eliminate unnecessary variable in yasort module</p></li>
+<li><p>update test data and move most output to verbose only</p></li>
+<li><p>update project files with natsort package dep</p></li>
+</ul>
+</li>
+<li><p>Wire up alternate content and use-ssg arg, update tests. [Steve
+Arnold]</p>
+<ul>
+<li><p>update default config keys for oscal module</p></li>
+</ul>
+</li>
+<li><p>Add csv output format, flesh out oscal, cleanup code/tests. [Steve
+Arnold]</p>
+<ul>
+<li><p>make sure text data read/write supports the same formats</p></li>
+<li><p>add simple consumer test script for the above</p></li>
+</ul>
+</li>
+<li><p>Make sure yagrep uses new output func, cleanup readme. [Steve Arnold]</p></li>
+<li><p>Bump tox workflow deps and cleanup/improve readme. [Steve Arnold]</p></li>
+<li><p>Bump all workflow action versions. [Steve Arnold]</p></li>
+<li><p>Add another text_file_reader consumer and cleanup some lint. [Steve
+Arnold]</p></li>
+<li><p>Flesh out argparse and yaml config keys. [Steve Arnold]</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>Fixes<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Make sure ID lookup works for both content sources. [Steve Arnold]</p>
+<ul>
+<li><p>account for differences in SSG vs NIST control formats, at least
+enough for the basic ID set matching</p></li>
+<li><p>oscal default glob should limit the search to either resolved profiles
+only or use the catalog sources</p></li>
+</ul>
+</li>
+<li><p>Cleanup pylint cruft and update test data. [Steve Arnold]</p>
+<ul>
+<li><p>also apply pre-commit formatting fixes</p></li>
+</ul>
+</li>
+<li><p>Add missing test and import, update tox file. [Steve Arnold]</p></li>
+<li><p>Only transform input IDs if lower, add full OE expanded list. [Steve
+Arnold]</p></li>
+<li><p>Account for longer ID strings, update changelog and repolite cfgs.
+[Steve Arnold]</p>
+<ul>
+<li><p>update tests and older analysis script</p></li>
+<li><p>bump requirements-sync.txt for new repolite release</p></li>
+</ul>
+</li>
+<li><p>Add more depth to string xform and tests. [Steve Arnold]</p>
+<ul>
+<li><p>update line length in pep8speaks config</p></li>
+</ul>
+</li>
+<li><p>Cleanup docstrings after sphinx checks. [Steve Arnold]</p></li>
+</ul>
+</section>
+<section id="id19">
+<h3>Other<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Pre-release cleanup, update changelog and fix readme typos. [Steve
+Arnold]</p></li>
+<li><p>Dev: add csv file munge option, cleanup oscal files. [Steve Arnold]</p>
+<ul>
+<li><p>add munge file arg to pass in csv data to compare and append
+a column for id set status, eg, whether ids in the input list
+are present in the csv data, and then mark the new column Y/N</p></li>
+<li><p>short-circuit munge file arg and feed it single column of
+control IDs</p></li>
+</ul>
+</li>
+<li><p>Add small set of test IDs from openembedded profile. [Steve Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id20">
+<h2>0.3.0 (2024-03-12)<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<section id="id21">
+<h3>New<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add new console script, update reqs and packaging. [Steve Arnold]</p></li>
+<li><p>Add support for simple control ID analysis. [Steve Arnold]</p>
+<ul>
+<li><p>add utility functions for file handling and profile from filename</p></li>
+<li><p>update misc tests, add small-ish test data file with IDs</p></li>
+<li><p>add a first-cut script to test input IDs against oscal profile IDs</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id22">
+<h3>Changes<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add dev workflow dependency and update clean args. [Steve Arnold]</p></li>
+<li><p>Cleanup new feature bits and update documentation. [Steve Arnold]</p>
+<ul>
+<li><p>use dpath.values for initial path search, and either dpath or
+nested_lookup for extracting values</p></li>
+<li><p>update readme for new script, update all the usage bits</p></li>
+<li><p>add new tests and update existing tests</p></li>
+<li><p>expand and cleanup tox file</p></li>
+</ul>
+</li>
+<li><p>Add new feature tests, update existing tests. [Steve Arnold]</p></li>
+<li><p>Move input data sort to output var, update tox file. [Steve Arnold]</p></li>
+<li><p>Cleanup script, func, docstrings, update tests. [Steve Arnold]</p></li>
+</ul>
+</section>
+<section id="id23">
+<h3>Fixes<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Re-order yasort arg handling, update analyze script. [Steve Arnold]</p></li>
+<li><p>Remove py37 from workflow matrix, fix test on windows. [Steve Arnold]</p></li>
+<li><p>Cleanup some lint. [Steve Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id24">
+<h2>0.2.2 (2023-09-05)<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
+<section id="id25">
+<h3>New<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add a changelog file and gitchangelog cfg, add to docs build. [Stephen
+L Arnold]</p></li>
+<li><p>Add coverage workflow and update readme. [Stephen L Arnold]</p></li>
+<li><p>Add test fixtures annd more tests, cleanup tox and test cfg. [Stephen
+L Arnold]</p></li>
+</ul>
+</section>
+<section id="id26">
+<h3>Changes<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Bump changelog for release, add tox cmd to (re)generate changes.
+[Stephen L Arnold]</p></li>
+<li><p>Cleanup docstrings and readme usage. [Stephen L Arnold]</p></li>
+<li><p>Still more readme cleanup. [Stephen L Arnold]</p></li>
+<li><p>Organnize the one test, cleanup test cfg, start using pytest. [Stephen
+L Arnold]</p></li>
+<li><p>Post-fix cleanup and simplify list sorts. [Stephen L Arnold]</p></li>
+<li><p>Minor refactoring of sorts, save current check state. [Stephen L
+Arnold]</p></li>
+<li><p>Refactor with importlib and setuptools-scm. [Stephen L Arnold]</p>
+<ul>
+<li><p>sorting is still an issue and apparently very !wip</p></li>
+</ul>
+</li>
+<li><p>Refactor from optparse to argparse, cleanup docs/docstrings. [Stephen
+L Arnold]</p></li>
+</ul>
+</section>
+<section id="id27">
+<h3>Fixes<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<ul>
+<li><p>Clean up docstrings in utils. [Stephen L Arnold]</p></li>
+<li><p>Use sort method instead of sorted() to preserve comments. [S.
+Lockwood-Childs]</p>
+<p>sorted() returs a normal list which loses info in extra members
+of the CommentedSeq object, but the sort method sorts elements
+inside the existing CommentedSeq object</p>
+</li>
+<li><p>Bump importlib-resources version for CI compatibility. [Stephen L
+Arnold]</p>
+<ul class="simple">
+<li><p>sprinkle some pylint: disable for issues that are not issues</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="id28">
+<h2>0.2.1 (2023-07-16)<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
+<section id="id29">
+<h3>New<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Wire up sorting opts, cleanup config file, update readme. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>add sdist artifact to release workflow</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id30">
+<h3>Fixes<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Ci: update artifact conditional. add inspection step. [Stephen L
+Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id31">
+<h2>0.2.0 (2023-07-15)<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<section id="id32">
+<h3>New<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add sorting script and default config, cleanup lint. [Stephen L
+Arnold]</p></li>
+<li><p>Add more project docs to sphinx build. [Stephen L Arnold]</p>
+<ul>
+<li><p>filter out/remove local file links for docs build</p></li>
+</ul>
+</li>
+<li><p>Add more config options, update tool deps and readme. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>allow more user-facing config options, add munch-stubs for mypy</p></li>
+<li><p>update tool deps and cfgs to use new type stubs</p></li>
+<li><p>update readme usage description</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id33">
+<h3>Changes<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Readme cleanup, add note about yasort script. [Stephen L Arnold]</p></li>
+<li><p>Dbg: run tox bare-ass in github runner for workflow debug. [Stephen L
+Arnold]</p></li>
+<li><p>Import cleanup, add tox dev cmd, update workflows. [Stephen L Arnold]</p></li>
+<li><p>Update readme with new usage output. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id34">
+<h3>Fixes<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup GH action deprecation warnings in all workflows. [Stephen L
+Arnold]</p></li>
+<li><p>Add pylint pre-cmd for version, revert debug changes. [Stephen L
+Arnold]</p></li>
+<li><p>Loop through parent key, cleanup spurious warning and typo. [Stephen L
+Arnold]</p></li>
+<li><p>Use new path to source rst for github readme rendering. [Stephen L
+Arnold]</p></li>
+<li><p>Replace sys.argv with option parser, wire up options and args.
+[Stephen L Arnold]</p>
+<ul>
+<li><p>yes, optparse is deprected so may be replaced in the future</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id35">
+<h3>Other<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Adjust importlib version cutoff in reqs. [Stephen L Arnold]</p></li>
+<li><p>Move some shared code to separate module, update pre-commit cfg.
+[Stephen L Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id36">
+<h2>0.1.0 (2022-06-22)<a class="headerlink" href="#id36" title="Link to this heading"></a></h2>
+<section id="id37">
+<h3>New<a class="headerlink" href="#id37" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add pre-commit and pep8speaks configs, apply some cleanup. [Stephen L
+Arnold]</p></li>
+<li><p>Add sphinx api-doc build, update readme and doc strings. [Stephen L
+Arnold]</p></li>
+<li><p>Add arg to dump default config yaml to stdout. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id38">
+<h3>Changes<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Update readme and usage output. [Stephen L Arnold]</p></li>
+<li><p>Flatten cfg file, use single cfg object, cleanup doc strings. [Stephen
+L Arnold]</p></li>
+<li><p>Integrate version, add packaging files, flesh out cfg options.
+[Stephen L Arnold]</p></li>
+<li><p>Install pymavlink using pip without mavnative, rename MDEF var.
+[Stephen L Arnold]</p></li>
+<li><p>Refactor input handling, update tox and readme files. [Stephen L
+Arnold]</p></li>
+<li><p>Flesh out package layout, update readme/project files. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>main module/script currently one direction only</p></li>
+<li><p>update tox file for path changes</p></li>
+<li><p>generate munch type stubs, apply isort fixes</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="id39">
+<h3>Fixes<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Replace old thing/new thing =&gt; use importlib for cfg file. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>use external importlib pkgs first</p></li>
+<li><p>make mypy ignore one of the 2 importlib imports</p></li>
+<li><p>install pkg for command-line test</p></li>
+</ul>
+</li>
+<li><p>Flesh out gh OS matrix. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id40">
+<h3>Other<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add docs workflow, fix broken doc link, update ci workflow. [Stephen L
+Arnold]</p></li>
+<li><p>Cleanup metadata/packaging and workflow files. [Stephen L Arnold]</p></li>
+<li><p>Add more CI workflows for wheels, pylint, release. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+</section>
+<section id="id41">
+<h2>0.0.0 (2022-06-19)<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
+<section id="id42">
+<h3>Changes<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Add simple ci workflow, update tox file with gh-actions. [Stephen L
+Arnold]</p></li>
+<li><p>Apply isort fixes. [Stephen L Arnold]</p></li>
+<li><p>Add tool configs, update readme and tox files. [Stephen L Arnold]</p></li>
+<li><p>Add requirements file and mypy config, update tox file. [Stephen L
+Arnold]</p></li>
+</ul>
+</section>
+<section id="id43">
+<h3>Fixes<a class="headerlink" href="#id43" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Cleanup unused code/imports, add one type ignore for mypy. [Stephen L
+Arnold]</p>
+<ul>
+<li><p>upstream ruamel.yaml preserve_quotes = True type error</p></li>
+</ul>
+</li>
+<li><p>Use paparazzi.xml from pymavlink for test input. [Stephen L Arnold]</p></li>
+</ul>
+</section>
+<section id="id44">
+<h3>Other<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Initial commit with test scripts and tox driver. [Stephen L Arnold]</p></li>
+<li><p>Initial commit. [Steve Arnold]</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dev/pre-commit-usage.html" class="btn btn-neutral float-left" title="Using Pre-Commit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022 - 2025 Stephen Arnold.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
