@@ -1,0 +1,7 @@
+yaml\_tools.yasort module
+=========================
+
+.. automodule:: yaml_tools.yasort
+   :members:
+   :undoc-members:
+   :show-inheritance:
